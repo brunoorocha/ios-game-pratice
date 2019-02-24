@@ -8,26 +8,60 @@
 
 /* Begin PBXBuildFile section */
 		A397A0BD221EDCA400E61051 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A0BC221EDCA400E61051 /* AppDelegate.swift */; };
-		A397A0BF221EDCA400E61051 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = A397A0BE221EDCA400E61051 /* GameScene.sks */; };
-		A397A0C1221EDCA400E61051 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = A397A0C0221EDCA400E61051 /* Actions.sks */; };
-		A397A0C3221EDCA400E61051 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A0C2221EDCA400E61051 /* GameScene.swift */; };
 		A397A0C5221EDCA400E61051 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A0C4221EDCA400E61051 /* GameViewController.swift */; };
 		A397A0C8221EDCA400E61051 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A397A0C6221EDCA400E61051 /* Main.storyboard */; };
 		A397A0CA221EDCA700E61051 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A397A0C9221EDCA700E61051 /* Assets.xcassets */; };
 		A397A0CD221EDCA700E61051 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A397A0CB221EDCA700E61051 /* LaunchScreen.storyboard */; };
+		A397A0DC221EDDF700E61051 /* GesturePad.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A0DB221EDDF700E61051 /* GesturePad.swift */; };
+		A397A0DF221EDE2E00E61051 /* MyScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = A397A0DE221EDE2E00E61051 /* MyScene.sks */; };
+		A397A0E1221EDE5100E61051 /* MyScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A0E0221EDE5100E61051 /* MyScene.swift */; };
+		A397A0E4221EDF2900E61051 /* Fighter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A0E3221EDF2900E61051 /* Fighter.swift */; };
+		A397A0E8221EDFE300E61051 /* SpriteComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A0E7221EDFE300E61051 /* SpriteComponent.swift */; };
+		A397A0EA221EE1E400E61051 /* EntityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A0E9221EE1E400E61051 /* EntityManager.swift */; };
+		A397A0F622208ACD00E61051 /* AtlasTextureBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A0F522208ACD00E61051 /* AtlasTextureBuilder.swift */; };
+		A397A0FB22208C6000E61051 /* FighterIdleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A0FA22208C6000E61051 /* FighterIdleState.swift */; };
+		A397A105222091FF00E61051 /* Idle.atlas in Resources */ = {isa = PBXBuildFile; fileRef = A397A100222091FE00E61051 /* Idle.atlas */; };
+		A397A106222091FF00E61051 /* Run.atlas in Resources */ = {isa = PBXBuildFile; fileRef = A397A101222091FE00E61051 /* Run.atlas */; };
+		A397A107222091FF00E61051 /* Attack.atlas in Resources */ = {isa = PBXBuildFile; fileRef = A397A102222091FE00E61051 /* Attack.atlas */; };
+		A397A108222091FF00E61051 /* Fall.atlas in Resources */ = {isa = PBXBuildFile; fileRef = A397A103222091FE00E61051 /* Fall.atlas */; };
+		A397A109222091FF00E61051 /* Jump.atlas in Resources */ = {isa = PBXBuildFile; fileRef = A397A104222091FE00E61051 /* Jump.atlas */; };
+		A397A10D22209C3700E61051 /* FighterWalkState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A10C22209C3700E61051 /* FighterWalkState.swift */; };
+		A397A10F2220A02700E61051 /* FighterJumpState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A10E2220A02700E61051 /* FighterJumpState.swift */; };
+		A397A1132220C29900E61051 /* CategoryMask.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A1122220C29900E61051 /* CategoryMask.swift */; };
+		A397A1152220C5A300E61051 /* FighterAttackState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A1142220C5A300E61051 /* FighterAttackState.swift */; };
+		A397A11822218EBB00E61051 /* PrepareFightState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A11722218EBB00E61051 /* PrepareFightState.swift */; };
+		A397A11B2222C3E600E61051 /* PreMatchLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A11A2222C3E600E61051 /* PreMatchLabel.swift */; };
+		A397A11D2222DAB200E61051 /* FightingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A11C2222DAB200E61051 /* FightingState.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		A397A0B9221EDCA400E61051 /* spritekit-plataform.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "spritekit-plataform.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A397A0BC221EDCA400E61051 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A397A0BE221EDCA400E61051 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
-		A397A0C0221EDCA400E61051 /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
-		A397A0C2221EDCA400E61051 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		A397A0C4221EDCA400E61051 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		A397A0C7221EDCA400E61051 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A397A0C9221EDCA700E61051 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A397A0CC221EDCA700E61051 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A397A0CE221EDCA700E61051 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A397A0DB221EDDF700E61051 /* GesturePad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GesturePad.swift; sourceTree = "<group>"; };
+		A397A0DE221EDE2E00E61051 /* MyScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MyScene.sks; sourceTree = "<group>"; };
+		A397A0E0221EDE5100E61051 /* MyScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyScene.swift; sourceTree = "<group>"; };
+		A397A0E3221EDF2900E61051 /* Fighter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fighter.swift; sourceTree = "<group>"; };
+		A397A0E7221EDFE300E61051 /* SpriteComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteComponent.swift; sourceTree = "<group>"; };
+		A397A0E9221EE1E400E61051 /* EntityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityManager.swift; sourceTree = "<group>"; };
+		A397A0F522208ACD00E61051 /* AtlasTextureBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AtlasTextureBuilder.swift; sourceTree = "<group>"; };
+		A397A0FA22208C6000E61051 /* FighterIdleState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FighterIdleState.swift; sourceTree = "<group>"; };
+		A397A100222091FE00E61051 /* Idle.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Idle.atlas; sourceTree = "<group>"; };
+		A397A101222091FE00E61051 /* Run.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Run.atlas; sourceTree = "<group>"; };
+		A397A102222091FE00E61051 /* Attack.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Attack.atlas; sourceTree = "<group>"; };
+		A397A103222091FE00E61051 /* Fall.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Fall.atlas; sourceTree = "<group>"; };
+		A397A104222091FE00E61051 /* Jump.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Jump.atlas; sourceTree = "<group>"; };
+		A397A10C22209C3700E61051 /* FighterWalkState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FighterWalkState.swift; sourceTree = "<group>"; };
+		A397A10E2220A02700E61051 /* FighterJumpState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FighterJumpState.swift; sourceTree = "<group>"; };
+		A397A1122220C29900E61051 /* CategoryMask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryMask.swift; sourceTree = "<group>"; };
+		A397A1142220C5A300E61051 /* FighterAttackState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FighterAttackState.swift; sourceTree = "<group>"; };
+		A397A11722218EBB00E61051 /* PrepareFightState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrepareFightState.swift; sourceTree = "<group>"; };
+		A397A11A2222C3E600E61051 /* PreMatchLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreMatchLabel.swift; sourceTree = "<group>"; };
+		A397A11C2222DAB200E61051 /* FightingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FightingState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,17 +94,178 @@
 		A397A0BB221EDCA400E61051 /* spritekit-plataform */ = {
 			isa = PBXGroup;
 			children = (
-				A397A0BC221EDCA400E61051 /* AppDelegate.swift */,
-				A397A0BE221EDCA400E61051 /* GameScene.sks */,
-				A397A0C0221EDCA400E61051 /* Actions.sks */,
-				A397A0C2221EDCA400E61051 /* GameScene.swift */,
-				A397A0C4221EDCA400E61051 /* GameViewController.swift */,
-				A397A0C6221EDCA400E61051 /* Main.storyboard */,
-				A397A0C9221EDCA700E61051 /* Assets.xcassets */,
-				A397A0CB221EDCA700E61051 /* LaunchScreen.storyboard */,
+				A397A0D5221EDD3200E61051 /* application */,
+				A397A0DA221EDDC800E61051 /* utils */,
+				A397A0D9221EDDA900E61051 /* controllers */,
+				A397A0F822208B7200E61051 /* views */,
+				A397A0D8221EDD6600E61051 /* assets */,
+				A397A0F722208B4300E61051 /* models */,
 				A397A0CE221EDCA700E61051 /* Info.plist */,
 			);
 			path = "spritekit-plataform";
+			sourceTree = "<group>";
+		};
+		A397A0D4221EDD2100E61051 /* entities */ = {
+			isa = PBXGroup;
+			children = (
+				A397A0EB221EEE1E00E61051 /* Fighter */,
+				A397A0E9221EE1E400E61051 /* EntityManager.swift */,
+			);
+			path = entities;
+			sourceTree = "<group>";
+		};
+		A397A0D5221EDD3200E61051 /* application */ = {
+			isa = PBXGroup;
+			children = (
+				A397A0BC221EDCA400E61051 /* AppDelegate.swift */,
+			);
+			path = application;
+			sourceTree = "<group>";
+		};
+		A397A0D6221EDD4B00E61051 /* storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				A397A0C6221EDCA400E61051 /* Main.storyboard */,
+				A397A0CB221EDCA700E61051 /* LaunchScreen.storyboard */,
+			);
+			path = storyboards;
+			sourceTree = "<group>";
+		};
+		A397A0D7221EDD5E00E61051 /* scenes */ = {
+			isa = PBXGroup;
+			children = (
+				A397A11622218E6300E61051 /* states */,
+				A397A0DE221EDE2E00E61051 /* MyScene.sks */,
+				A397A0E0221EDE5100E61051 /* MyScene.swift */,
+			);
+			path = scenes;
+			sourceTree = "<group>";
+		};
+		A397A0D8221EDD6600E61051 /* assets */ = {
+			isa = PBXGroup;
+			children = (
+				A397A0FE222091E700E61051 /* Atlas */,
+				A397A0C9221EDCA700E61051 /* Assets.xcassets */,
+			);
+			path = assets;
+			sourceTree = "<group>";
+		};
+		A397A0D9221EDDA900E61051 /* controllers */ = {
+			isa = PBXGroup;
+			children = (
+				A397A0C4221EDCA400E61051 /* GameViewController.swift */,
+			);
+			path = controllers;
+			sourceTree = "<group>";
+		};
+		A397A0DA221EDDC800E61051 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				A397A0F422208AAB00E61051 /* AtlasTextureBuilder */,
+				A397A0DD221EDDFC00E61051 /* GesturePad */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
+		A397A0DD221EDDFC00E61051 /* GesturePad */ = {
+			isa = PBXGroup;
+			children = (
+				A397A0DB221EDDF700E61051 /* GesturePad.swift */,
+			);
+			path = GesturePad;
+			sourceTree = "<group>";
+		};
+		A397A0E6221EDFC800E61051 /* components */ = {
+			isa = PBXGroup;
+			children = (
+				A397A0E7221EDFE300E61051 /* SpriteComponent.swift */,
+			);
+			path = components;
+			sourceTree = "<group>";
+		};
+		A397A0EB221EEE1E00E61051 /* Fighter */ = {
+			isa = PBXGroup;
+			children = (
+				A397A0F922208BDC00E61051 /* states */,
+				A397A0E3221EDF2900E61051 /* Fighter.swift */,
+			);
+			path = Fighter;
+			sourceTree = "<group>";
+		};
+		A397A0F422208AAB00E61051 /* AtlasTextureBuilder */ = {
+			isa = PBXGroup;
+			children = (
+				A397A0F522208ACD00E61051 /* AtlasTextureBuilder.swift */,
+			);
+			path = AtlasTextureBuilder;
+			sourceTree = "<group>";
+		};
+		A397A0F722208B4300E61051 /* models */ = {
+			isa = PBXGroup;
+			children = (
+				A397A1122220C29900E61051 /* CategoryMask.swift */,
+				A397A0D4221EDD2100E61051 /* entities */,
+				A397A0E6221EDFC800E61051 /* components */,
+			);
+			path = models;
+			sourceTree = "<group>";
+		};
+		A397A0F822208B7200E61051 /* views */ = {
+			isa = PBXGroup;
+			children = (
+				A397A1192222C3A900E61051 /* ui-elements */,
+				A397A0D6221EDD4B00E61051 /* storyboards */,
+				A397A0D7221EDD5E00E61051 /* scenes */,
+			);
+			path = views;
+			sourceTree = "<group>";
+		};
+		A397A0F922208BDC00E61051 /* states */ = {
+			isa = PBXGroup;
+			children = (
+				A397A0FA22208C6000E61051 /* FighterIdleState.swift */,
+				A397A10C22209C3700E61051 /* FighterWalkState.swift */,
+				A397A10E2220A02700E61051 /* FighterJumpState.swift */,
+				A397A1142220C5A300E61051 /* FighterAttackState.swift */,
+			);
+			path = states;
+			sourceTree = "<group>";
+		};
+		A397A0FE222091E700E61051 /* Atlas */ = {
+			isa = PBXGroup;
+			children = (
+				A397A0FF222091EF00E61051 /* Fighter */,
+			);
+			path = Atlas;
+			sourceTree = "<group>";
+		};
+		A397A0FF222091EF00E61051 /* Fighter */ = {
+			isa = PBXGroup;
+			children = (
+				A397A102222091FE00E61051 /* Attack.atlas */,
+				A397A103222091FE00E61051 /* Fall.atlas */,
+				A397A100222091FE00E61051 /* Idle.atlas */,
+				A397A104222091FE00E61051 /* Jump.atlas */,
+				A397A101222091FE00E61051 /* Run.atlas */,
+			);
+			path = Fighter;
+			sourceTree = "<group>";
+		};
+		A397A11622218E6300E61051 /* states */ = {
+			isa = PBXGroup;
+			children = (
+				A397A11722218EBB00E61051 /* PrepareFightState.swift */,
+				A397A11C2222DAB200E61051 /* FightingState.swift */,
+			);
+			path = states;
+			sourceTree = "<group>";
+		};
+		A397A1192222C3A900E61051 /* ui-elements */ = {
+			isa = PBXGroup;
+			children = (
+				A397A11A2222C3E600E61051 /* PreMatchLabel.swift */,
+			);
+			path = "ui-elements";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -132,10 +327,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				A397A0C8221EDCA400E61051 /* Main.storyboard in Resources */,
-				A397A0BF221EDCA400E61051 /* GameScene.sks in Resources */,
+				A397A106222091FF00E61051 /* Run.atlas in Resources */,
+				A397A109222091FF00E61051 /* Jump.atlas in Resources */,
 				A397A0CA221EDCA700E61051 /* Assets.xcassets in Resources */,
+				A397A105222091FF00E61051 /* Idle.atlas in Resources */,
+				A397A0DF221EDE2E00E61051 /* MyScene.sks in Resources */,
 				A397A0CD221EDCA700E61051 /* LaunchScreen.storyboard in Resources */,
-				A397A0C1221EDCA400E61051 /* Actions.sks in Resources */,
+				A397A107222091FF00E61051 /* Attack.atlas in Resources */,
+				A397A108222091FF00E61051 /* Fall.atlas in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -146,9 +345,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A397A0C3221EDCA400E61051 /* GameScene.swift in Sources */,
+				A397A10D22209C3700E61051 /* FighterWalkState.swift in Sources */,
+				A397A0E1221EDE5100E61051 /* MyScene.swift in Sources */,
+				A397A0EA221EE1E400E61051 /* EntityManager.swift in Sources */,
+				A397A11B2222C3E600E61051 /* PreMatchLabel.swift in Sources */,
+				A397A0E4221EDF2900E61051 /* Fighter.swift in Sources */,
+				A397A11822218EBB00E61051 /* PrepareFightState.swift in Sources */,
+				A397A1152220C5A300E61051 /* FighterAttackState.swift in Sources */,
 				A397A0C5221EDCA400E61051 /* GameViewController.swift in Sources */,
 				A397A0BD221EDCA400E61051 /* AppDelegate.swift in Sources */,
+				A397A0E8221EDFE300E61051 /* SpriteComponent.swift in Sources */,
+				A397A0F622208ACD00E61051 /* AtlasTextureBuilder.swift in Sources */,
+				A397A10F2220A02700E61051 /* FighterJumpState.swift in Sources */,
+				A397A0DC221EDDF700E61051 /* GesturePad.swift in Sources */,
+				A397A0FB22208C6000E61051 /* FighterIdleState.swift in Sources */,
+				A397A1132220C29900E61051 /* CategoryMask.swift in Sources */,
+				A397A11D2222DAB200E61051 /* FightingState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
