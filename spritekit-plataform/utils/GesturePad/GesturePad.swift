@@ -8,35 +8,42 @@
 
 import SpriteKit
 
-fileprivate enum ViewSide {
-    case left
-    case right
-}
-
 class GesturePad: NSObject {
     var view: SKView!
     var delegate: GesturePadDelegate!
     
     private var tapRecognizer: UITapGestureRecognizer!
     private var panRecognizer: UIPanGestureRecognizer!
+    private var swipeRecognizer: UISwipeGestureRecognizer!
     private let degressToRadians = Float(CGFloat.pi / 180)
     
     init(forView view: SKView) {
         super.init()
         self.view = view
         setupRecognizers()
-//        self.enable()
     }
     
     private func setupRecognizers() {
+        let areaSize = CGSize(width: self.view.frame.width / 2, height: self.view.frame.height)
+        let xCenterPoint = self.view.frame.width / 2
+        let leftArea = UIView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: areaSize))        
+        let rightArea = UIView(frame: CGRect(origin: CGPoint(x: xCenterPoint, y: 0), size: areaSize))
+        
         tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:)))
         panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
+        swipeRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeGesture(_:)))
+        swipeRecognizer.direction = .up
         
         tapRecognizer.delegate = self
         panRecognizer.delegate = self
+        swipeRecognizer.delegate = self
         
-        self.view.addGestureRecognizer(tapRecognizer)
-        self.view.addGestureRecognizer(panRecognizer)
+        
+        leftArea.addGestureRecognizer(panRecognizer)
+        rightArea.addGestureRecognizer(tapRecognizer)
+        rightArea.addGestureRecognizer(swipeRecognizer)
+        self.view.addSubview(leftArea)
+        self.view.addSubview(rightArea)
     }
     
     func disable() {
@@ -48,52 +55,39 @@ class GesturePad: NSObject {
     }
     
     @objc private func handleTapGesture(_ gesture: UITapGestureRecognizer) {
-        let side = viewSide(ofPoint: gesture.location(in: self.view), onView: self.view)
-        if (side == .right) {
             delegate.performActionForTap()
-        }
     }
     
     @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
         guard let view = gesture.view else { return }
-        let side = viewSide(ofPoint: gesture.location(in: self.view), onView: self.view)
-        if (side == .left) {
-            if (gesture.state == .ended || gesture.state == .cancelled) {
-                delegate.performActionForAnalogStopMoving()
-            }
-            
-            if (gesture.state == .changed) {
-                let translation = gesture.translation(in: view)
-                var direction = float2(Float(translation.x), Float(translation.y))
-                direction = normalize(direction)
-                direction.x = direction.x.isNaN ? 0 : direction.x
-                direction.y = direction.y.isNaN ? 0 : direction.y
-                
-                let directionInDegree = atan2(direction.x, direction.y)
-                delegate.performActionForAnalogMoving(inAngle: CGFloat(directionInDegree), withDirectionX: CGFloat(direction.x), AndDirectionY: CGFloat(direction.y))
-            }
+
+        if (gesture.state == .ended || gesture.state == .cancelled) {
+            delegate.performActionForAnalogStopMoving()
         }
         
-        else if (side == .right) {
-            if (gesture.state == .ended || gesture.state == .cancelled) {
-                delegate.performActionForSwipe()                
-            }
+        if (gesture.state == .changed) {
+            let translation = gesture.translation(in: view)
+            var direction = float2(Float(translation.x), Float(translation.y))
+            direction = normalize(direction)
+            direction.x = direction.x.isNaN ? 0 : direction.x
+            direction.y = direction.y.isNaN ? 0 : direction.y
+            
+            let directionInDegree = atan2(direction.x, direction.y)
+            delegate.performActionForAnalogMoving(inAngle: CGFloat(directionInDegree), withDirectionX: CGFloat(direction.x), AndDirectionY: CGFloat(direction.y))
         }
     }
     
-    private func viewSide(ofPoint point: CGPoint, onView view: SKView) -> ViewSide {
-        let middle = view.frame.width / 2
-        if (point.x < middle) {
-            return .left
-        }        
-        return .right
+    @objc private func handleSwipeGesture(_ gesture: UISwipeGestureRecognizer) {
+        if (gesture.state == .ended) {
+            delegate.performActionForSwipe()
+        }
     }
 }
 
 extension GesturePad: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         
-        if ((gestureRecognizer is UITapGestureRecognizer && otherGestureRecognizer is UIPanGestureRecognizer) || (gestureRecognizer is UIPanGestureRecognizer && otherGestureRecognizer is UITapGestureRecognizer)) {
+        if ((gestureRecognizer is UITapGestureRecognizer && otherGestureRecognizer is UISwipeGestureRecognizer) || (gestureRecognizer is UISwipeGestureRecognizer && otherGestureRecognizer is UITapGestureRecognizer)) {
             return true
         }
         

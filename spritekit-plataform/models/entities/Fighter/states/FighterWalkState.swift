@@ -23,15 +23,20 @@ class FighterWalkState: GKState {
         switch stateClass {
         case is FighterIdleState.Type:
             return true
+        case is FighterJumpState.Type:
+            return true
         default:
             return false
         }
     }
     
     override func didEnter(from previousState: GKState?) {
-        let walkAction = SKAction.animate(with: self.stateAtlasTextures, timePerFrame: 0.15, resize: true, restore: true)
         let nodeDirection: CGFloat = node.xScale < 0 ? -1.0 : 1.0
         node.physicsBody?.applyImpulse(CGVector(dx: (dx * nodeDirection), dy: 0.0))
-        node.run(SKAction.repeatForever(walkAction), withKey: "FighterWalkAction")
+        
+        if (!(previousState is FighterJumpState)) {
+            let walkAction = SKAction.animate(with: self.stateAtlasTextures, timePerFrame: 0.15, resize: true, restore: true)
+            node.run(SKAction.repeatForever(walkAction), withKey: "FighterWalkAction")
+        }
     }
 }
