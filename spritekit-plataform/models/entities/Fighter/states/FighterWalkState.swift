@@ -13,7 +13,7 @@ import GameplayKit
 class FighterWalkState: GKState {
     var node: SKSpriteNode!
     var stateAtlasTextures: [SKTexture] = []
-    var dx: CGFloat = 1.0
+    var dx: CGFloat = 4.0
     
     init(withNode node: SKSpriteNode) {
         self.node = node
@@ -25,6 +25,8 @@ class FighterWalkState: GKState {
             return true
         case is FighterJumpState.Type:
             return true
+        case is FighterFallState.Type:
+            return true
         default:
             return false
         }
@@ -32,6 +34,7 @@ class FighterWalkState: GKState {
     
     override func didEnter(from previousState: GKState?) {
         let nodeDirection: CGFloat = node.xScale < 0 ? -1.0 : 1.0
+        node.physicsBody?.velocity.dx = 0.0
         node.physicsBody?.applyImpulse(CGVector(dx: (dx * nodeDirection), dy: 0.0))
         
         if (!(previousState is FighterJumpState)) {

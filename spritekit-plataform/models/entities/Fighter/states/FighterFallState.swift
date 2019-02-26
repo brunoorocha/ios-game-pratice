@@ -1,29 +1,29 @@
 //
-//  FighterJumpState.swift
+//  FighterFallState.swift
 //  spritekit-plataform
 //
-//  Created by Bruno Rocha on 22/02/19.
+//  Created by Thiago Valente on 26/02/19.
 //  Copyright © 2019 Bruno Rocha. All rights reserved.
 //
 
 import SpriteKit
 import GameplayKit
 
-class FighterJumpState: GKState {
+class FighterFallState: GKState {
     var node: SKSpriteNode!
     var stateAtlasTextures: [SKTexture] = []
     
-    init(withNode node: SKSpriteNode) {
+    init(withNode node: SKSpriteNode){
         self.node = node
     }
     
     override func isValidNextState(_ stateClass: AnyClass) -> Bool {
         switch stateClass {
-        case is FighterIdleState.Type:
-            return true
         case is FighterWalkState.Type:
             return true
-        case is FighterFallState.Type:
+        case is FighterAttackState.Type:
+            return true
+        case is FighterIdleState.Type:
             return true
         default:
             return false
@@ -31,10 +31,8 @@ class FighterJumpState: GKState {
     }
     
     override func didEnter(from previousState: GKState?) {
-        let jumpAction = SKAction.animate(with: self.stateAtlasTextures, timePerFrame: 0.15, resize: true, restore: true)
-        node.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 15.0))
-        node.run(jumpAction, completion: {
-            self.stateMachine?.enter(FighterIdleState.self)
-        })
+        let fallAction = SKAction.animate(with: self.stateAtlasTextures, timePerFrame: 0.15, resize: true, restore: true)
+        node.run(SKAction.repeatForever(fallAction), withKey: "FighterFallAction")
     }
+    
 }

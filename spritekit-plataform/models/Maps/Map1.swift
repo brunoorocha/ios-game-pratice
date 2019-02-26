@@ -14,21 +14,8 @@ class Map1 {
     init(withScene scene: SKScene) {
         self.scene = scene
         self.drawFloor()
-        self.drawPlataform(x: 200, y: 0, width: 200, heigth: 5)
-        self.drawPlataform(x: 300, y: 50, width: 200, heigth: 7)
-    }
-    
-    convenience init(withScene scene: SKScene, andFighters fighters: [Fighter]) {
-        self.init(withScene: scene)
-        self.addCollisionToFighters(fighters: fighters)
-    }
-    
-    private func addCollisionToFighters(fighters: [Fighter]){
-        fighters.forEach({
-            $0.component(ofType: SpriteComponent.self)?.node.physicsBody?.contactTestBitMask |= CategoryMask.plataform
-//            $0.component(ofType: SpriteComponent.self)?.node.physicsBody?.collisionBitMask |= CategoryMask.plataform
-            $0.component(ofType: SpriteComponent.self)?.node.physicsBody?.collisionBitMask &= ~CategoryMask.plataform
-        })
+        self.drawPlataform(x: 200, y: 20, width: 200, heigth: 5)
+        self.drawPlataform(x: 300, y: 70, width: 200, heigth: 7)
     }
     
     private func drawFloor(){
@@ -40,6 +27,7 @@ class Map1 {
         area.physicsBody?.collisionBitMask = CategoryMask.player
         area.physicsBody?.affectedByGravity = false
         area.physicsBody?.restitution = 0
+        area.physicsBody?.friction = 0
         self.scene.addChild(area)
     }
     
@@ -49,6 +37,8 @@ class Map1 {
         area.physicsBody = SKPhysicsBody(edgeLoopFrom: area.frame)
         area.physicsBody?.affectedByGravity = false
         area.physicsBody?.categoryBitMask = CategoryMask.plataform
+        area.physicsBody?.friction = 0
+        area.physicsBody?.restitution = 0
         self.scene.addChild(area)
     }
     

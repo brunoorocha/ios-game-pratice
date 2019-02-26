@@ -26,10 +26,8 @@ class MyScene: SKScene {
         }
         
         // Temporarily
-//        Map1(withScene: self)
-        var fighters: [Fighter] = []
-        fighters.append(self.fighter)
-        Map1(withScene: self, andFighters: fighters)
+        Map1(withScene: self)
+
         
         self.configureStates()
         self.entityManager.add(entity: fighter)
@@ -42,6 +40,7 @@ class MyScene: SKScene {
         let prepareState = PrepareFightState(withScene: self)
         let fightingState = FightingState(withScene: self)
         self.stateMachine = GKStateMachine(states: [prepareState, fightingState])
+
 //        self.stateMachine.enter(PrepareFightState.self)
         self.stateMachine.enter(FightingState.self)
     }
@@ -61,6 +60,10 @@ class MyScene: SKScene {
     func configureGesturePad(for view: SKView) {
         self.gesturePad = GesturePad(forView: view)
         self.gesturePad.delegate = self
+    }
+    
+    override func update(_ currentTime: TimeInterval) {
+        self.fighter.update(deltaTime: currentTime)
     }
 }
 
@@ -85,31 +88,6 @@ extension MyScene: GesturePadDelegate {
 
 extension MyScene: SKPhysicsContactDelegate {
     func didBegin(_ contact: SKPhysicsContact) {
-        let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
-        if collision == CategoryMask.player | CategoryMask.plataform{
-            // Plataform Idle
-            if contact.bodyA.node?.physicsBody?.categoryBitMask == CategoryMask.player{
-                self.playerDidCollideWithPlataform(player: contact.bodyA.node!, plataform: contact.bodyB.node!)
-            }else{
-                self.playerDidCollideWithPlataform(player: contact.bodyB.node!, plataform: contact.bodyA.node!)
-            }
-        }
-        if collision == CategoryMask.player | CategoryMask.ground{
-            if contact.bodyA.node?.physicsBody?.categoryBitMask == CategoryMask.player{
-                contact.bodyA.node!.physicsBody?.collisionBitMask &= ~CategoryMask.plataform
-            }else{
-                contact.bodyB.node!.physicsBody?.collisionBitMask &= ~CategoryMask.plataform
-            }
-        }
-
+        let _ = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
     }
-    
-    private func playerDidCollideWithPlataform(player: SKNode, plataform: SKNode){
-        if plataform.position.y > player.position.y{
-            player.physicsBody?.collisionBitMask &= ~CategoryMask.plataform
-        }else{
-            player.physicsBody?.collisionBitMask |= CategoryMask.plataform
-        }
-    }
-
 }
