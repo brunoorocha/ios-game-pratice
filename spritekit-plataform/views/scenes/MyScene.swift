@@ -38,6 +38,7 @@ class MyScene: SKScene {
         let fightingState = FightingState(withScene: self)
         self.stateMachine = GKStateMachine(states: [prepareState, fightingState])
         self.stateMachine.enter(PrepareFightState.self)
+//        self.stateMachine.enter(FightingState.self)
     }
     
     func configurePhysics() {

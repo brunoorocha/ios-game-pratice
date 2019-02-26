@@ -30,9 +30,8 @@ class FighterJumpState: GKState {
     
     override func didEnter(from previousState: GKState?) {
         let jumpAction = SKAction.animate(with: self.stateAtlasTextures, timePerFrame: 0.15, resize: true, restore: true)
-        node.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 5.0))
-        node.run(jumpAction, completion: {
-            self.stateMachine?.enter(FighterIdleState.self)
-        })
+        node.physicsBody?.velocity.dy = 0.0
+        node.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 10.0))
+        node.run(jumpAction)
     }
 }

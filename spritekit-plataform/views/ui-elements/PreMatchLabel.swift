@@ -20,6 +20,8 @@ class PreMatchLabel {
         let labelYPosition = -((node.size.height / 2) - (textLabel.fontSize - 8.0))
         self.textLabel.position = CGPoint(x: 0, y: labelYPosition)
         self.textLabel.fontName = "Helvetica Neue Bold"
+        self.textLabel.zPosition = 9
+        self.node.zPosition = 8
         self.node.addChild(textLabel)
     }
     

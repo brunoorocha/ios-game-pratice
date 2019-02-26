@@ -13,10 +13,15 @@ class Fighter: GKEntity {
     
     var stateMachine: GKStateMachine!
     
+    var jumpCount = 0
+    var maxNumberOfJump = 2
+    var isJumping = false
+    var isGrounded = false
+    
     override init() {
         super.init()
         
-        let spriteComponent = SpriteComponent(withTexture: SKTexture(imageNamed: ""))
+        let spriteComponent = SpriteComponent(withTexture: SKTexture(imageNamed: "adventurer-idle-2-0"))
         self.addComponent(spriteComponent)
         
         self.setupStateMachine()
@@ -25,7 +30,7 @@ class Fighter: GKEntity {
     
     func configurePhysicsBody() {
         if let node = self.component(ofType: SpriteComponent.self)?.node {
-            node.physicsBody = SKPhysicsBody(circleOfRadius: 10)
+            node.physicsBody = SKPhysicsBody(rectangleOf: node.size)
             node.physicsBody?.affectedByGravity = true
             node.physicsBody?.friction = 0
             node.physicsBody?.restitution = 0
@@ -55,7 +60,7 @@ class Fighter: GKEntity {
         }        
     }
     
-    @objc func idle() {
+    func idle() {
         self.stateMachine.enter(FighterIdleState.self)
     }
     
