@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B3FA0A6222574B700280565 /* Map1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3FA0A5222574B700280565 /* Map1.swift */; };
 		A397A0BD221EDCA400E61051 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A0BC221EDCA400E61051 /* AppDelegate.swift */; };
 		A397A0C5221EDCA400E61051 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A0C4221EDCA400E61051 /* GameViewController.swift */; };
 		A397A0C8221EDCA400E61051 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A397A0C6221EDCA400E61051 /* Main.storyboard */; };
@@ -35,6 +36,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1B3FA0A5222574B700280565 /* Map1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Map1.swift; sourceTree = "<group>"; };
 		A397A0B9221EDCA400E61051 /* spritekit-plataform.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "spritekit-plataform.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A397A0BC221EDCA400E61051 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A397A0C4221EDCA400E61051 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -75,6 +77,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1B3FA0A42225741C00280565 /* Maps */ = {
+			isa = PBXGroup;
+			children = (
+				1B3FA0A5222574B700280565 /* Map1.swift */,
+			);
+			path = Maps;
+			sourceTree = "<group>";
+		};
 		A397A0B0221EDCA400E61051 = {
 			isa = PBXGroup;
 			children = (
@@ -206,6 +216,7 @@
 				A397A1122220C29900E61051 /* CategoryMask.swift */,
 				A397A0D4221EDD2100E61051 /* entities */,
 				A397A0E6221EDFC800E61051 /* components */,
+				1B3FA0A42225741C00280565 /* Maps */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -359,6 +370,7 @@
 				A397A10F2220A02700E61051 /* FighterJumpState.swift in Sources */,
 				A397A0DC221EDDF700E61051 /* GesturePad.swift in Sources */,
 				A397A0FB22208C6000E61051 /* FighterIdleState.swift in Sources */,
+				1B3FA0A6222574B700280565 /* Map1.swift in Sources */,
 				A397A1132220C29900E61051 /* CategoryMask.swift in Sources */,
 				A397A11D2222DAB200E61051 /* FightingState.swift in Sources */,
 			);

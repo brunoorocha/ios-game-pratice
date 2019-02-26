@@ -25,19 +25,25 @@ class MyScene: SKScene {
             fighterSpriteComponent.node.position = CGPoint(x: -200, y: 50)
         }
         
+        // Temporarily
+//        Map1(withScene: self)
+        var fighters: [Fighter] = []
+        fighters.append(self.fighter)
+        Map1(withScene: self, andFighters: fighters)
+        
         self.configureStates()
         self.entityManager.add(entity: fighter)
         self.configureGesturePad(for: view)
         self.configureCamera()
         self.configurePhysics()
-        self.drawFloor()
     }
     
     func configureStates() {
         let prepareState = PrepareFightState(withScene: self)
         let fightingState = FightingState(withScene: self)
         self.stateMachine = GKStateMachine(states: [prepareState, fightingState])
-        self.stateMachine.enter(PrepareFightState.self)
+//        self.stateMachine.enter(PrepareFightState.self)
+        self.stateMachine.enter(FightingState.self)
     }
     
     func configurePhysics() {
@@ -55,18 +61,6 @@ class MyScene: SKScene {
     func configureGesturePad(for view: SKView) {
         self.gesturePad = GesturePad(forView: view)
         self.gesturePad.delegate = self
-    }
-    
-    private func drawFloor(){
-        let y = CGFloat(-80.0)
-        let area = SKShapeNode(rect: CGRect(x: -self.size.width/2, y: y, width: self.size.width, height: 50))
-        area.fillColor = .lightGray
-        area.physicsBody = SKPhysicsBody(edgeLoopFrom: area.frame)
-        area.physicsBody?.categoryBitMask = CategoryMask.ground
-        area.physicsBody?.collisionBitMask = CategoryMask.player
-        area.physicsBody?.affectedByGravity = false
-        area.physicsBody?.restitution = 0
-        self.addChild(area)
     }
 }
 
@@ -91,6 +85,31 @@ extension MyScene: GesturePadDelegate {
 
 extension MyScene: SKPhysicsContactDelegate {
     func didBegin(_ contact: SKPhysicsContact) {
-        let _ = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
+        let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
+        if collision == CategoryMask.player | CategoryMask.plataform{
+            // Plataform Idle
+            if contact.bodyA.node?.physicsBody?.categoryBitMask == CategoryMask.player{
+                self.playerDidCollideWithPlataform(player: contact.bodyA.node!, plataform: contact.bodyB.node!)
+            }else{
+                self.playerDidCollideWithPlataform(player: contact.bodyB.node!, plataform: contact.bodyA.node!)
+            }
+        }
+        if collision == CategoryMask.player | CategoryMask.ground{
+            if contact.bodyA.node?.physicsBody?.categoryBitMask == CategoryMask.player{
+                contact.bodyA.node!.physicsBody?.collisionBitMask &= ~CategoryMask.plataform
+            }else{
+                contact.bodyB.node!.physicsBody?.collisionBitMask &= ~CategoryMask.plataform
+            }
+        }
+
     }
+    
+    private func playerDidCollideWithPlataform(player: SKNode, plataform: SKNode){
+        if plataform.position.y > player.position.y{
+            player.physicsBody?.collisionBitMask &= ~CategoryMask.plataform
+        }else{
+            player.physicsBody?.collisionBitMask |= CategoryMask.plataform
+        }
+    }
+
 }

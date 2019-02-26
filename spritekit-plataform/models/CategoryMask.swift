@@ -10,5 +10,6 @@ import Foundation
 
 struct CategoryMask {
     static let player : UInt32 = 0x1 << 0
+    static let plataform : UInt32 = 0x1 << 1
     static let ground : UInt32 = UInt32.max
 }
