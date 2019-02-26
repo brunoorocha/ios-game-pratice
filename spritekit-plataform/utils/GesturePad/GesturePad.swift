@@ -14,7 +14,8 @@ class GesturePad: NSObject {
     
     private var tapRecognizer: UITapGestureRecognizer!
     private var panRecognizer: UIPanGestureRecognizer!
-    private var swipeRecognizer: UISwipeGestureRecognizer!
+    private var swipeUpRecognizer: UISwipeGestureRecognizer!
+    private var swipeDownRecognizer: UISwipeGestureRecognizer!
     private let degressToRadians = Float(CGFloat.pi / 180)
     
     init(forView view: SKView) {
@@ -31,17 +32,21 @@ class GesturePad: NSObject {
         
         tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:)))
         panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
-        swipeRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeGesture(_:)))
-        swipeRecognizer.direction = .up
+        swipeUpRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeGesture(_:)))
+        swipeDownRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeGesture(_:)))
+        swipeUpRecognizer.direction = .up
+        swipeDownRecognizer.direction = .down
         
         tapRecognizer.delegate = self
         panRecognizer.delegate = self
-        swipeRecognizer.delegate = self
+        swipeUpRecognizer.delegate = self
+        swipeDownRecognizer.delegate = self
         
         
         leftArea.addGestureRecognizer(panRecognizer)
         rightArea.addGestureRecognizer(tapRecognizer)
-        rightArea.addGestureRecognizer(swipeRecognizer)
+        rightArea.addGestureRecognizer(swipeUpRecognizer)
+        rightArea.addGestureRecognizer(swipeDownRecognizer)
         self.view.addSubview(leftArea)
         self.view.addSubview(rightArea)
     }
@@ -55,7 +60,7 @@ class GesturePad: NSObject {
     }
     
     @objc private func handleTapGesture(_ gesture: UITapGestureRecognizer) {
-            delegate.performActionForTap()
+        delegate.performActionForTap()
     }
     
     @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
@@ -79,7 +84,12 @@ class GesturePad: NSObject {
     
     @objc private func handleSwipeGesture(_ gesture: UISwipeGestureRecognizer) {
         if (gesture.state == .ended) {
-            delegate.performActionForSwipe()
+            if (gesture.direction == .up) {
+                delegate.performActionForSwipeUp()
+            }
+            else if(gesture.direction == .down) {
+                delegate.performActionForSwipeDown()
+            }
         }
     }
 }
@@ -99,5 +109,6 @@ protocol GesturePadDelegate {
     func performActionForAnalogMoving(inAngle angle: CGFloat, withDirectionX dx: CGFloat, AndDirectionY dy: CGFloat)
     func performActionForAnalogStopMoving()
     func performActionForTap()
-    func performActionForSwipe()
+    func performActionForSwipeUp()
+    func performActionForSwipeDown()
 }

@@ -80,10 +80,13 @@ extension MyScene: GesturePadDelegate {
         self.fighter.attack()
     }
     
-    func performActionForSwipe() {
+    func performActionForSwipeUp() {
         self.fighter.jump()
     }
     
+    func performActionForSwipeDown() {
+        self.fighter.down()
+    }
 }
 
 extension MyScene: SKPhysicsContactDelegate {

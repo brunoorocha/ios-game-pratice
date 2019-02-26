@@ -18,11 +18,9 @@ class Fighter: GKEntity {
     
     var stateMachine: GKStateMachine!
     
-    var jumpCount = 0
-    var maxNumberOfJump = 2
-    var isJumping = false
-    var isGrounded = false
     var fighterDirection: PlayerSide = .right
+    var isDown: Bool = false
+    var positionDyDownTapped: CGFloat = 0
     
     override init() {
         super.init()
@@ -40,10 +38,21 @@ class Fighter: GKEntity {
         if ((node.physicsBody?.velocity.dy)! > CGFloat(0)){
             node.physicsBody?.collisionBitMask &= ~CategoryMask.plataform
         }
-        // Fall
-        if ((node.physicsBody?.velocity.dy)! < CGFloat(0)){
+        // Natural Fall
+        if ((node.physicsBody?.velocity.dy)! < CGFloat(0) && !self.isDown){
             node.physicsBody?.collisionBitMask |= CategoryMask.plataform
             self.stateMachine.enter(FighterFallState.self)
+        }
+        // Down Fall
+        if ((node.physicsBody?.velocity.dy)! < CGFloat(0) && self.isDown){
+            // This function are called so much
+            if (node.position.y > self.positionDyDownTapped - node.size.height){
+                node.physicsBody?.collisionBitMask &= ~CategoryMask.plataform
+                self.stateMachine.enter(FighterFallState.self)
+            }else{
+                self.isDown = false
+                self.positionDyDownTapped = 0
+            }
         }
         // If current is Fall
         if (self.stateMachine.currentState is FighterFallState) {
@@ -123,6 +132,14 @@ class Fighter: GKEntity {
     
     func jump() {
         self.stateMachine.enter(FighterJumpState.self)
+    }
+    
+    func down(){
+        if let node = self.component(ofType: SpriteComponent.self)?.node {
+            self.isDown = true
+            self.positionDyDownTapped = node.position.y
+            node.physicsBody?.collisionBitMask &= ~CategoryMask.plataform
+        }
     }
     
     func attack() {
