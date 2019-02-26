@@ -37,6 +37,7 @@ class Fighter: GKEntity {
         // Jump
         if ((node.physicsBody?.velocity.dy)! > CGFloat(0)){
             node.physicsBody?.collisionBitMask &= ~CategoryMask.plataform
+            self.isDown = false
         }
         // Natural Fall
         if ((node.physicsBody?.velocity.dy)! < CGFloat(0) && !self.isDown){
