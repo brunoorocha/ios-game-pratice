@@ -79,6 +79,7 @@ class Fighter: GKEntity {
             node.physicsBody?.allowsRotation = false
             node.physicsBody?.categoryBitMask = CategoryMask.player
             node.physicsBody?.collisionBitMask = CategoryMask.ground
+            node.physicsBody?.collisionBitMask &= ~CategoryMask.player
         }
     }
     
@@ -99,7 +100,10 @@ class Fighter: GKEntity {
             let fallState = FighterFallState(withNode: node)
             fallState.stateAtlasTextures = AtlasTextureBuilder.build(atlas: "Fall")
             
-            self.stateMachine = GKStateMachine(states: [idleState, walkState, jumpState, attackState, fallState])
+            let hurtState = FighterHurtState(withNode: node)
+            hurtState.stateAtlasTextures = AtlasTextureBuilder.build(atlas: "Hurt")
+            
+            self.stateMachine = GKStateMachine(states: [idleState, walkState, jumpState, attackState, fallState,hurtState])
             
             self.idle()
         }        
@@ -144,7 +148,36 @@ class Fighter: GKEntity {
     }
     
     func attack() {
+        // Necessary because resizing are bugged
+        if (self.stateMachine.currentState is FighterAttackState) { return }
+        if let node = self.component(ofType: SpriteComponent.self)?.node {
+            // Get scene reference
+            guard let scene = node.scene as? MyScene else { return }
+            // Create a damage area
+            let damageArea = self.insertDamageArea(node: node, scene: scene)
+            // Filter for fights to hit
+            scene.fighters.forEach({
+                if let fighterNode = $0.component(ofType: SpriteComponent.self)?.node {
+                    if fighterNode.intersects(damageArea){
+                        $0.stateMachine?.enter(FighterHurtState.self)
+                    }
+                }
+            })
+        }
         self.stateMachine.enter(FighterAttackState.self)        
+    }
+    
+    private func insertDamageArea(node: SKSpriteNode, scene: SKScene, isDebugger: Bool = false) -> SKShapeNode{
+
+        let position : CGFloat = self.fighterDirection == .left ? -1 : 1
+        
+        let damageArea = SKShapeNode(rect: CGRect(x: node.frame.origin.x+(node.size.width * position), y: node.frame.origin.y, width: node.size.width, height: node.size.height))
+        damageArea.physicsBody?.collisionBitMask = CategoryMask.none
+        if (isDebugger){
+            damageArea.fillColor = .red
+            scene.addChild(damageArea)
+        }
+        return damageArea
     }
     
     required init?(coder aDecoder: NSCoder) {

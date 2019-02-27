@@ -14,6 +14,7 @@ class MyScene: SKScene {
     var fighter: Fighter!
     var entityManager: EntityManager!
     var stateMachine: GKStateMachine!
+    var fighters : [Fighter] = []
     
     override func didMove(to view: SKView) {
         super.didMove(to: view)
@@ -24,6 +25,22 @@ class MyScene: SKScene {
         if let fighterSpriteComponent = self.fighter.component(ofType: SpriteComponent.self) {
             fighterSpriteComponent.node.position = CGPoint(x: -200, y: 50)
         }
+        
+        // Temporarily
+        let guineaPig = Fighter()
+        if let fighterSpriteComponent = guineaPig.component(ofType: SpriteComponent.self) {
+            fighterSpriteComponent.node.position = CGPoint(x: 0, y: 50)
+        }
+        self.fighters.append(guineaPig)
+        self.entityManager.add(entity: guineaPig)
+        
+        // Temporarily
+        let guineaPig2 = Fighter()
+        if let fighterSpriteComponent = guineaPig2.component(ofType: SpriteComponent.self) {
+            fighterSpriteComponent.node.position = CGPoint(x: 50, y: 50)
+        }
+        self.fighters.append(guineaPig2)
+        self.entityManager.add(entity: guineaPig2)
         
         // Temporarily
         Map1(withScene: self)
