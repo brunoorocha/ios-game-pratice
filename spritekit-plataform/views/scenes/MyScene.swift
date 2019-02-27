@@ -46,8 +46,7 @@ class MyScene: SKScene {
     }
     
     func configurePhysics() {
-        let levelEdge = CGRect(x: 0, y: 0, width: self.frame.width + 100, height: self.frame.height + 100)
-        self.physicsBody = SKPhysicsBody(edgeLoopFrom: levelEdge)
+        self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
         self.physicsWorld.contactDelegate = self
     }
     
