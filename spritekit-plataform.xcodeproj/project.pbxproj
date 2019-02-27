@@ -11,6 +11,8 @@
 		1B3FA0A82225B5D900280565 /* FighterFallState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3FA0A72225B5D900280565 /* FighterFallState.swift */; };
 		1BDFA7EE2227148400622BC6 /* FighterHurtState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDFA7ED2227148400622BC6 /* FighterHurtState.swift */; };
 		1BDFA7F0222719F100622BC6 /* Hurt.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 1BDFA7EF222719F100622BC6 /* Hurt.atlas */; };
+		1BDFA7F222272F9200622BC6 /* Die.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 1BDFA7F122272F9200622BC6 /* Die.atlas */; };
+		1BDFA7F422272FED00622BC6 /* FighterDieState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDFA7F322272FED00622BC6 /* FighterDieState.swift */; };
 		A397A0BD221EDCA400E61051 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A0BC221EDCA400E61051 /* AppDelegate.swift */; };
 		A397A0C5221EDCA400E61051 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A0C4221EDCA400E61051 /* GameViewController.swift */; };
 		A397A0C8221EDCA400E61051 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A397A0C6221EDCA400E61051 /* Main.storyboard */; };
@@ -43,6 +45,8 @@
 		1B3FA0A72225B5D900280565 /* FighterFallState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FighterFallState.swift; sourceTree = "<group>"; };
 		1BDFA7ED2227148400622BC6 /* FighterHurtState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FighterHurtState.swift; sourceTree = "<group>"; };
 		1BDFA7EF222719F100622BC6 /* Hurt.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Hurt.atlas; sourceTree = "<group>"; };
+		1BDFA7F122272F9200622BC6 /* Die.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Die.atlas; sourceTree = "<group>"; };
+		1BDFA7F322272FED00622BC6 /* FighterDieState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FighterDieState.swift; sourceTree = "<group>"; };
 		A397A0B9221EDCA400E61051 /* spritekit-plataform.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "spritekit-plataform.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A397A0BC221EDCA400E61051 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A397A0C4221EDCA400E61051 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -246,6 +250,7 @@
 				A397A1142220C5A300E61051 /* FighterAttackState.swift */,
 				1B3FA0A72225B5D900280565 /* FighterFallState.swift */,
 				1BDFA7ED2227148400622BC6 /* FighterHurtState.swift */,
+				1BDFA7F322272FED00622BC6 /* FighterDieState.swift */,
 			);
 			path = states;
 			sourceTree = "<group>";
@@ -261,6 +266,7 @@
 		A397A0FF222091EF00E61051 /* Fighter */ = {
 			isa = PBXGroup;
 			children = (
+				1BDFA7F122272F9200622BC6 /* Die.atlas */,
 				1BDFA7EF222719F100622BC6 /* Hurt.atlas */,
 				A397A102222091FE00E61051 /* Attack.atlas */,
 				A397A103222091FE00E61051 /* Fall.atlas */,
@@ -355,6 +361,7 @@
 				A397A0CD221EDCA700E61051 /* LaunchScreen.storyboard in Resources */,
 				A397A107222091FF00E61051 /* Attack.atlas in Resources */,
 				1BDFA7F0222719F100622BC6 /* Hurt.atlas in Resources */,
+				1BDFA7F222272F9200622BC6 /* Die.atlas in Resources */,
 				A397A108222091FF00E61051 /* Fall.atlas in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -366,6 +373,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BDFA7F422272FED00622BC6 /* FighterDieState.swift in Sources */,
 				A397A10D22209C3700E61051 /* FighterWalkState.swift in Sources */,
 				A397A0E1221EDE5100E61051 /* MyScene.swift in Sources */,
 				A397A0EA221EE1E400E61051 /* EntityManager.swift in Sources */,

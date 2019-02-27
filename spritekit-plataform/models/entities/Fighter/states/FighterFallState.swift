@@ -25,6 +25,8 @@ class FighterFallState: GKState {
             return true
         case is FighterIdleState.Type:
             return true
+        case is FighterDieState.Type:
+            return true
         default:
             return false
         }

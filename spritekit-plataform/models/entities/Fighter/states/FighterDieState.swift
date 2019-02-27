@@ -1,5 +1,5 @@
 //
-//  FighterHurtState.swift
+//  FighterDieState.swift
 //  spritekit-plataform
 //
 //  Created by Thiago Valente on 27/02/19.
@@ -9,7 +9,7 @@
 import SpriteKit
 import GameplayKit
 
-class FighterHurtState: GKState {
+class FighterDieState: GKState {
     var node: SKSpriteNode!
     var stateAtlasTextures: [SKTexture] = []
     
@@ -18,14 +18,19 @@ class FighterHurtState: GKState {
     }
     
     override func isValidNextState(_ stateClass: AnyClass) -> Bool {
-        return stateClass is FighterIdleState.Type || stateClass is FighterDieState.Type
+        return false
     }
     
     override func didEnter(from previousState: GKState?) {
-        let hurtAction = SKAction.animate(with: self.stateAtlasTextures, timePerFrame: 0.15, resize: true, restore: true)
-        node.run(hurtAction, completion: {
-            self.stateMachine?.enter(FighterIdleState.self)
+        self.node.physicsBody?.velocity.dx = 0
+        let dieAction = SKAction.animate(with: self.stateAtlasTextures, timePerFrame: 0.15, resize: true, restore: true)
+        node.run(dieAction, completion: {
+            // Stop forever loops
+            self.node.removeAllActions()
+            // Temporarily - Used because dead texture are bugged
+            self.node.removeFromParent()
         })
     }
 }
+
 
