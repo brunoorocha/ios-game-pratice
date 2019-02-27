@@ -25,20 +25,24 @@ class MyScene: SKScene {
             fighterSpriteComponent.node.position = CGPoint(x: -200, y: 50)
         }
         
+        // Temporarily
+        Map1(withScene: self)
+
+        
         self.configureStates()
         self.entityManager.add(entity: fighter)
         self.configureGesturePad(for: view)
         self.configureCamera()
         self.configurePhysics()
-        self.drawFloor()
     }
     
     func configureStates() {
         let prepareState = PrepareFightState(withScene: self)
         let fightingState = FightingState(withScene: self)
         self.stateMachine = GKStateMachine(states: [prepareState, fightingState])
-        self.stateMachine.enter(PrepareFightState.self)
-//        self.stateMachine.enter(FightingState.self)
+
+//        self.stateMachine.enter(PrepareFightState.self)
+        self.stateMachine.enter(FightingState.self)
     }
     
     func configurePhysics() {
@@ -58,16 +62,8 @@ class MyScene: SKScene {
         self.gesturePad.delegate = self
     }
     
-    private func drawFloor(){
-        let y = CGFloat(-80.0)
-        let area = SKShapeNode(rect: CGRect(x: -self.size.width/2, y: y, width: self.size.width, height: 50))
-        area.fillColor = .lightGray
-        area.physicsBody = SKPhysicsBody(edgeLoopFrom: area.frame)
-        area.physicsBody?.categoryBitMask = CategoryMask.ground
-        area.physicsBody?.collisionBitMask = CategoryMask.player
-        area.physicsBody?.affectedByGravity = false
-        area.physicsBody?.restitution = 0
-        self.addChild(area)
+    override func update(_ currentTime: TimeInterval) {
+        self.fighter.update(deltaTime: currentTime)
     }
 }
 
@@ -84,10 +80,13 @@ extension MyScene: GesturePadDelegate {
         self.fighter.attack()
     }
     
-    func performActionForSwipe() {
+    func performActionForSwipeUp() {
         self.fighter.jump()
     }
     
+    func performActionForSwipeDown() {
+        self.fighter.down()
+    }
 }
 
 extension MyScene: SKPhysicsContactDelegate {

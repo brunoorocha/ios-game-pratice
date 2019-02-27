@@ -25,6 +25,8 @@ class FighterWalkState: GKState {
             return true
         case is FighterJumpState.Type:
             return true
+        case is FighterFallState.Type:
+            return true
         default:
             return false
         }
