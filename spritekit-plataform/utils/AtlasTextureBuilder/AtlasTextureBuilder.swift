@@ -15,7 +15,9 @@ class AtlasTextureBuilder {
         let numImages = animated.textureNames.count
         for i in 0..<numImages{
             let idleTextureName = animated.textureNames.sorted()[i]
-            frames.append(animated.textureNamed(idleTextureName))
+            let texture = animated.textureNamed(idleTextureName)
+            texture.filteringMode = .nearest
+            frames.append(texture)
         }
         return frames
     }

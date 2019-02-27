@@ -46,13 +46,14 @@ class MyScene: SKScene {
     }
     
     func configurePhysics() {
-        self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
+        let levelEdge = CGRect(x: 0, y: 0, width: self.frame.width + 100, height: self.frame.height + 100)
+        self.physicsBody = SKPhysicsBody(edgeLoopFrom: levelEdge)
         self.physicsWorld.contactDelegate = self
     }
     
     func configureCamera() {
         let camera = SKCameraNode()
-//        camera.setScale(0.5)
+        camera.setScale(0.7)
         self.camera = camera
         self.addChild(camera)
     }
@@ -64,6 +65,9 @@ class MyScene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         self.fighter.update(deltaTime: currentTime)
+        if let node = self.fighter.component(ofType: SpriteComponent.self)?.node {
+            self.camera?.position = node.position
+        }
     }
 }
 
