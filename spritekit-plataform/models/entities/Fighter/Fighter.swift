@@ -22,6 +22,12 @@ class Fighter: GKEntity {
     var isDown: Bool = false
     var positionDyDownTapped: CGFloat = 0
     
+    var health : CGFloat = 100
+    var damage : CGFloat = 25
+    
+    let rangerAttack : CGFloat = 10
+    let heightAttack : CGFloat = 10
+
     override init() {
         super.init()
         
@@ -68,6 +74,8 @@ class Fighter: GKEntity {
                 self.stateMachine.enter(FighterWalkState.self)
             }
         }
+        
+        // Check position to suicide kill
     }
     
     func configurePhysicsBody() {
@@ -80,6 +88,7 @@ class Fighter: GKEntity {
             node.physicsBody?.categoryBitMask = CategoryMask.player
             node.physicsBody?.collisionBitMask = CategoryMask.ground
             node.physicsBody?.collisionBitMask &= ~CategoryMask.player
+            node.physicsBody?.collisionBitMask &= ~CategoryMask.suicideArea
         }
     }
     
@@ -103,7 +112,10 @@ class Fighter: GKEntity {
             let hurtState = FighterHurtState(withNode: node)
             hurtState.stateAtlasTextures = AtlasTextureBuilder.build(atlas: "Hurt")
             
-            self.stateMachine = GKStateMachine(states: [idleState, walkState, jumpState, attackState, fallState,hurtState])
+            let dieState = FighterDieState(withNode: node)
+            dieState.stateAtlasTextures = AtlasTextureBuilder.build(atlas: "Die")
+            
+            self.stateMachine = GKStateMachine(states: [idleState, walkState, jumpState, attackState, fallState,hurtState, dieState])
             
             self.idle()
         }        
@@ -153,13 +165,14 @@ class Fighter: GKEntity {
         if let node = self.component(ofType: SpriteComponent.self)?.node {
             // Get scene reference
             guard let scene = node.scene as? MyScene else { return }
-            // Create a damage area
-            let damageArea = self.insertDamageArea(node: node, scene: scene)
+            // Create a damage area - See more to info
+            let damageArea = self.insertDamageArea(node: node)
             // Filter for fights to hit
             scene.fighters.forEach({
                 if let fighterNode = $0.component(ofType: SpriteComponent.self)?.node {
                     if fighterNode.intersects(damageArea){
-                        $0.stateMachine?.enter(FighterHurtState.self)
+                        if ($0 == self) { return }
+                        $0.receiveDamage(damage: self.damage)
                     }
                 }
             })
@@ -167,13 +180,45 @@ class Fighter: GKEntity {
         self.stateMachine.enter(FighterAttackState.self)        
     }
     
-    private func insertDamageArea(node: SKSpriteNode, scene: SKScene, isDebugger: Bool = false) -> SKShapeNode{
+    func receiveDamage(damage: CGFloat){
+        self.health -= damage
+        // Check if is alive
+        if (health > 0) {
+            self.stateMachine?.enter(FighterHurtState.self)
+        }else{
+            self.stateMachine?.enter(FighterDieState.self)
+        }
+    }
+    
+    func suicide(){
+        self.stateMachine?.enter(FighterDieState.self)
+    }
+    
+    /// Create the SKShapeNode which will be resposable of give damage to anothers players
+    /// The shape will setter the sizes based on self properties of range attack and height attack
+    /// - Parameters:
+    ///   - node: The node from fighter responsible for give attack
+    ///   - scene: The scene is needed when have debugger
+    /// - Returns: SKShapeNode
+    private func insertDamageArea(node: SKSpriteNode, scene debugger: SKScene? = nil) -> SKShapeNode{
 
-        let position : CGFloat = self.fighterDirection == .left ? -1 : 1
-        
-        let damageArea = SKShapeNode(rect: CGRect(x: node.frame.origin.x+(node.size.width * position), y: node.frame.origin.y, width: node.size.width, height: node.size.height))
+        var pointX : CGFloat = 0
+        if (self.fighterDirection == .left) {
+            pointX = -self.rangerAttack
+        }else{
+            pointX = +node.size.width
+        }
+        /*
+         * X < Get current position x + subtract for range attack to make outside from same body
+         * : = node.frame.origin.x    + (- self.rangerAttack)
+         * X > Get current position x + sum with own width to make outside from same body
+         * : = node.frame.origin.x    + node.size.width
+         * Y = Get the fighet floor position + get the center (Y) position + set the height area to center
+         * : = node.frame.origin.y           + node.size.height/2          + ( - self.heightAttack/2 )
+        **/
+        let damageArea = SKShapeNode(rect: CGRect(x: node.frame.origin.x + pointX, y: node.frame.origin.y+(node.size.height/2) - self.heightAttack/2, width: self.rangerAttack, height: self.heightAttack))
         damageArea.physicsBody?.collisionBitMask = CategoryMask.none
-        if (isDebugger){
+        if let scene = debugger{
             damageArea.fillColor = .red
             scene.addChild(damageArea)
         }
