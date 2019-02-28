@@ -14,6 +14,7 @@ class MyScene: SKScene {
     var fighter: Fighter!
     var entityManager: EntityManager!
     var stateMachine: GKStateMachine!
+    var fighters : [Fighter] = []
     
     override func didMove(to view: SKView) {
         super.didMove(to: view)
@@ -24,6 +25,23 @@ class MyScene: SKScene {
         if let fighterSpriteComponent = self.fighter.component(ofType: SpriteComponent.self) {
             fighterSpriteComponent.node.position = CGPoint(x: -200, y: 50)
         }
+        self.fighters.append(fighter)
+        
+        // Temporarily
+        let guineaPig = Fighter()
+        if let fighterSpriteComponent = guineaPig.component(ofType: SpriteComponent.self) {
+            fighterSpriteComponent.node.position = CGPoint(x: -150, y: 50)
+        }
+        self.fighters.append(guineaPig)
+        self.entityManager.add(entity: guineaPig)
+        
+        // Temporarily
+        let guineaPig2 = Fighter()
+        if let fighterSpriteComponent = guineaPig2.component(ofType: SpriteComponent.self) {
+            fighterSpriteComponent.node.position = CGPoint(x: 50, y: 50)
+        }
+        self.fighters.append(guineaPig2)
+        self.entityManager.add(entity: guineaPig2)
         
         // Temporarily
         Map1(withScene: self)
@@ -34,6 +52,7 @@ class MyScene: SKScene {
         self.configureGesturePad(for: view)
         self.configureCamera()
         self.configurePhysics()
+        self.suicideArea()
     }
     
     func configureStates() {
@@ -46,8 +65,22 @@ class MyScene: SKScene {
     }
     
     func configurePhysics() {
-        self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
+//        self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
         self.physicsWorld.contactDelegate = self
+    }
+    
+    private func suicideArea(){
+        let width = self.size.width*5
+        let area = SKShapeNode(rect: CGRect(x: (-self.size.width/2 - width/2), y: -self.size.height/2 - 20, width: width, height: 0))
+        area.fillColor = .lightGray
+        area.physicsBody = SKPhysicsBody(edgeLoopFrom: area.frame)
+        area.physicsBody?.categoryBitMask = CategoryMask.suicideArea
+        area.physicsBody?.contactTestBitMask = CategoryMask.player
+        area.physicsBody?.affectedByGravity = false
+        area.physicsBody?.restitution = 0
+        area.physicsBody?.friction = 0
+        area.isHidden = true
+        self.addChild(area)
     }
     
     func configureCamera() {
@@ -94,6 +127,17 @@ extension MyScene: GesturePadDelegate {
 
 extension MyScene: SKPhysicsContactDelegate {
     func didBegin(_ contact: SKPhysicsContact) {
-        let _ = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
+        let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
+        if ( collision == CategoryMask.player | CategoryMask.suicideArea ) {
+            print("Commited suicide")
+            let playerNode = contact.bodyA.categoryBitMask == CategoryMask.player ? contact.bodyA.node : contact.bodyB.node
+            self.fighters.forEach({
+                if let node = $0.component(ofType: SpriteComponent.self)?.node {
+                    if (node == playerNode){
+                        $0.suicide()
+                    }
+                }
+            })
+        }
     }
 }
