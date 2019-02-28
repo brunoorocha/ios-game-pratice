@@ -13,6 +13,11 @@
 		1BDFA7F0222719F100622BC6 /* Hurt.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 1BDFA7EF222719F100622BC6 /* Hurt.atlas */; };
 		1BDFA7F222272F9200622BC6 /* Die.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 1BDFA7F122272F9200622BC6 /* Die.atlas */; };
 		1BDFA7F422272FED00622BC6 /* FighterDieState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDFA7F322272FED00622BC6 /* FighterDieState.swift */; };
+		6CCF8E0322282A5400296148 /* GameCenterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCF8E0222282A5400296148 /* GameCenterService.swift */; };
+		6CCF8E0522282ABF00296148 /* MultiplayerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCF8E0422282ABF00296148 /* MultiplayerService.swift */; };
+		6CCF8E0722282AF300296148 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCF8E0622282AF300296148 /* Message.swift */; };
+		6CCF8E0922282B1400296148 /* NotificationName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCF8E0822282B1400296148 /* NotificationName.swift */; };
+		6CCF8E0B22282B7600296148 /* ReceiveDataDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCF8E0A22282B7600296148 /* ReceiveDataDelegate.swift */; };
 		A397A0BD221EDCA400E61051 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A0BC221EDCA400E61051 /* AppDelegate.swift */; };
 		A397A0C5221EDCA400E61051 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A0C4221EDCA400E61051 /* GameViewController.swift */; };
 		A397A0C8221EDCA400E61051 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A397A0C6221EDCA400E61051 /* Main.storyboard */; };
@@ -47,6 +52,11 @@
 		1BDFA7EF222719F100622BC6 /* Hurt.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Hurt.atlas; sourceTree = "<group>"; };
 		1BDFA7F122272F9200622BC6 /* Die.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Die.atlas; sourceTree = "<group>"; };
 		1BDFA7F322272FED00622BC6 /* FighterDieState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FighterDieState.swift; sourceTree = "<group>"; };
+		6CCF8E0222282A5400296148 /* GameCenterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCenterService.swift; sourceTree = "<group>"; };
+		6CCF8E0422282ABF00296148 /* MultiplayerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplayerService.swift; sourceTree = "<group>"; };
+		6CCF8E0622282AF300296148 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		6CCF8E0822282B1400296148 /* NotificationName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationName.swift; sourceTree = "<group>"; };
+		6CCF8E0A22282B7600296148 /* ReceiveDataDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveDataDelegate.swift; sourceTree = "<group>"; };
 		A397A0B9221EDCA400E61051 /* spritekit-plataform.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "spritekit-plataform.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A397A0BC221EDCA400E61051 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A397A0C4221EDCA400E61051 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -95,6 +105,18 @@
 			path = Maps;
 			sourceTree = "<group>";
 		};
+		6CCF8E0022282A1800296148 /* services */ = {
+			isa = PBXGroup;
+			children = (
+				6CCF8E0222282A5400296148 /* GameCenterService.swift */,
+				6CCF8E0422282ABF00296148 /* MultiplayerService.swift */,
+				6CCF8E0622282AF300296148 /* Message.swift */,
+				6CCF8E0822282B1400296148 /* NotificationName.swift */,
+				6CCF8E0A22282B7600296148 /* ReceiveDataDelegate.swift */,
+			);
+			path = services;
+			sourceTree = "<group>";
+		};
 		A397A0B0221EDCA400E61051 = {
 			isa = PBXGroup;
 			children = (
@@ -120,6 +142,7 @@
 				A397A0F822208B7200E61051 /* views */,
 				A397A0D8221EDD6600E61051 /* assets */,
 				A397A0F722208B4300E61051 /* models */,
+				6CCF8E0022282A1800296148 /* services */,
 				A397A0CE221EDCA700E61051 /* Info.plist */,
 			);
 			path = "spritekit-plataform";
@@ -382,16 +405,21 @@
 				A397A11822218EBB00E61051 /* PrepareFightState.swift in Sources */,
 				A397A1152220C5A300E61051 /* FighterAttackState.swift in Sources */,
 				A397A0C5221EDCA400E61051 /* GameViewController.swift in Sources */,
+				6CCF8E0522282ABF00296148 /* MultiplayerService.swift in Sources */,
 				A397A0BD221EDCA400E61051 /* AppDelegate.swift in Sources */,
 				A397A0E8221EDFE300E61051 /* SpriteComponent.swift in Sources */,
+				6CCF8E0B22282B7600296148 /* ReceiveDataDelegate.swift in Sources */,
 				A397A0F622208ACD00E61051 /* AtlasTextureBuilder.swift in Sources */,
 				1BDFA7EE2227148400622BC6 /* FighterHurtState.swift in Sources */,
 				A397A10F2220A02700E61051 /* FighterJumpState.swift in Sources */,
 				1B3FA0A82225B5D900280565 /* FighterFallState.swift in Sources */,
 				A397A0DC221EDDF700E61051 /* GesturePad.swift in Sources */,
 				A397A0FB22208C6000E61051 /* FighterIdleState.swift in Sources */,
+				6CCF8E0322282A5400296148 /* GameCenterService.swift in Sources */,
 				1B3FA0A6222574B700280565 /* Map1.swift in Sources */,
+				6CCF8E0722282AF300296148 /* Message.swift in Sources */,
 				A397A1132220C29900E61051 /* CategoryMask.swift in Sources */,
+				6CCF8E0922282B1400296148 /* NotificationName.swift in Sources */,
 				A397A11D2222DAB200E61051 /* FightingState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -539,7 +567,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = MK2CL4Y92D;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "spritekit-plataform/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -557,7 +585,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = MK2CL4Y92D;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "spritekit-plataform/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

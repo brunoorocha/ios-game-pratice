@@ -46,7 +46,6 @@ class MyScene: SKScene {
         // Temporarily
         Map1(withScene: self)
 
-        
         self.configureStates()
         self.entityManager.add(entity: fighter)
         self.configureGesturePad(for: view)

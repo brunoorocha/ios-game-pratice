@@ -184,7 +184,7 @@ class Fighter: GKEntity {
             // Filter for fights to hit
             scene.fighters.forEach({
                 if let fighterNode = $0.component(ofType: SpriteComponent.self)?.node {
-                    if fighterNode.intersects(damageArea){
+                    if fighterNode.intersects(damageArea) {
                         if ($0 == self) { return }
                         $0.receiveDamage(damage: self.damage)
                     }
@@ -242,4 +242,5 @@ class Fighter: GKEntity {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
 }
