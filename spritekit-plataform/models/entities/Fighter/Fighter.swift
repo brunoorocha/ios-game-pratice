@@ -21,6 +21,8 @@ class Fighter: GKEntity {
     var fighterDirection: PlayerSide = .right
     var isDown: Bool = false
     var positionDyDownTapped: CGFloat = 0
+    var jumpCount = 0
+    var maxNJumps = 2
     
     var health : CGFloat = 100
     var damage : CGFloat = 25
@@ -76,6 +78,14 @@ class Fighter: GKEntity {
         }
         
         // Check position to suicide kill
+
+        // Check if fighter is on ground to allows him to jump
+        if ((node.physicsBody?.velocity.dy)! == CGFloat(0)) {
+            if (self.jumpCount != 0) {                
+                self.jumpCount = 0
+            }
+        }
+
     }
     
     func configurePhysicsBody() {
@@ -148,7 +158,11 @@ class Fighter: GKEntity {
     }
     
     func jump() {
-        self.stateMachine.enter(FighterJumpState.self)
+        if (self.jumpCount < self.maxNJumps) {
+            self.stateMachine.enter(FighterIdleState.self)
+            self.stateMachine.enter(FighterJumpState.self)
+            self.jumpCount += 1
+        }
     }
     
     func down(){
