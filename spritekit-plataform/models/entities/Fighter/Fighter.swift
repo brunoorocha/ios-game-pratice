@@ -21,6 +21,8 @@ class Fighter: GKEntity {
     var fighterDirection: PlayerSide = .right
     var isDown: Bool = false
     var positionDyDownTapped: CGFloat = 0
+    var jumpCount = 0
+    var maxNJumps = 2
     
     override init() {
         super.init()
@@ -66,6 +68,12 @@ class Fighter: GKEntity {
             else if ((node.physicsBody?.velocity.dy)! == CGFloat(0))
             && ((node.physicsBody?.velocity.dx)! != CGFloat(0)){
                 self.stateMachine.enter(FighterWalkState.self)
+            }
+        }
+        
+        if ((node.physicsBody?.velocity.dy)! == CGFloat(0)) {
+            if (self.jumpCount != 0) {                
+                self.jumpCount = 0
             }
         }
     }
@@ -132,7 +140,11 @@ class Fighter: GKEntity {
     }
     
     func jump() {
-        self.stateMachine.enter(FighterJumpState.self)
+        if (self.jumpCount < self.maxNJumps) {
+            self.stateMachine.enter(FighterIdleState.self)
+            self.stateMachine.enter(FighterJumpState.self)
+            self.jumpCount += 1
+        }
     }
     
     func down(){
