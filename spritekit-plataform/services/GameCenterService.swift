@@ -22,7 +22,6 @@ class GameCenterService: NSObject {
     override init(){
         super.init()
         
-        print("init game center service")
         GKLocalPlayer.local.authenticateHandler = { authenticationVC, error in
             
             NotificationCenter.default.post(name: .authenticationChanged , object: GKLocalPlayer.local.isAuthenticated)
@@ -95,7 +94,6 @@ extension GameCenterService: GKMatchDelegate {
             receiveDataDelegate?.didReceive(message: d, from: player)
             
             if case .startGame(let randomNumber) = d.messageType {
-                
                 
                 MultiplayerService.shared.addPlayer(with: player.playerID, randomNumber: randomNumber)
             

@@ -26,7 +26,7 @@ class Fighter: GKEntity {
     
     var health : CGFloat = 100
     var damage : CGFloat = 25
-    
+    var playerID: String = ""
     let rangerAttack : CGFloat = 10
     let heightAttack : CGFloat = 10
 
@@ -38,6 +38,11 @@ class Fighter: GKEntity {
         
         self.setupStateMachine()
         self.configurePhysicsBody()
+    }
+    
+    convenience init(playerID: String) {
+        self.init()
+        self.playerID = playerID
     }
     
     override func update(deltaTime seconds: TimeInterval) {
@@ -129,6 +134,13 @@ class Fighter: GKEntity {
             
             self.idle()
         }        
+    }
+    
+    func changePlayerPosition(position: CGPoint){
+        let move = SKAction.move(to: position, duration: 0.05)
+        if let node = self.component(ofType: SpriteComponent.self)?.node {
+            node.run(move)
+        }
     }
     
     func idle() {

@@ -14,7 +14,8 @@ protocol ReceiveDataDelegate {
 }
 
 protocol UpdateSceneDelegate {
-    func updateScene(playerPosition: CGPoint, from playerID: Int)
+    func updatePlayerMove(dx: CGFloat, from playerID: Int)
+    func updatePlayerStopMove(playerPosition: CGPoint, from playerID: Int)
     func jumpPlayer(playerID: Int)
     func showPing(ping: Int, host: GKPlayer)
 }

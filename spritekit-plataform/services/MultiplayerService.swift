@@ -17,7 +17,7 @@ class MultiplayerService: NSObject {
     private(set) var hostPlayer: GKPlayer?
     private(set) var pingHost: Int = 40 // in miliseconds
     private(set) var allPlayers: [String : Float] = [String : Float]()
-    
+    private(set) var selfPlayer = GKLocalPlayer.local
     var updateSceneDelegate: UpdateSceneDelegate?
     override init() {
         super.init()
@@ -45,28 +45,33 @@ class MultiplayerService: NSObject {
     }
     
     func startingGame(){
-        let player = GKLocalPlayer.local.playerID
-        let randomNumber = allPlayers[player]!
+
+        let randomNumber = allPlayers[selfPlayer.playerID]!
         let messageStart = Message(messageType: .startGame(randomNumber: randomNumber))
         sendData(data: messageStart, sendDataMode: .reliable)
     }
     
     //For each player in match, alloc in the scene
-//    func allocPlayers(in scene: SKScene) -> [Int: CharacterNode]{
-//        var otherPlayers : [Int: CharacterNode] = [:]
-//        if let match = GameCenterService.shared.currentMatch {
-//            match.players.forEach {
-//                let otherPlayer = CharacterNode(playerID: $0.playerID)
-//                otherPlayer.position = CGPoint(x: 300, y: 120)
-//                if let playerIDInt = $0.playerID.toInt() {
-//                    otherPlayers[playerIDInt] = otherPlayer
-//                    scene.addChild(otherPlayer)
-//                }
-//            }
-//        }
-//        return otherPlayers
-//        
-//    }
+    func allocPlayers(in scene: MyScene) -> [Int: Fighter]{
+        var otherPlayers : [Int: Fighter] = [:]
+        if let match = GameCenterService.shared.currentMatch {
+            //for each other player(except self), put in the scene
+            match.players.forEach {
+                let otherPlayer = Fighter(playerID: $0.playerID)
+                
+                if let node = otherPlayer.component(ofType: SpriteComponent.self)?.node {
+                    node.position = CGPoint(x: 0, y: 0)
+                }
+                
+                if let playerIDInt = $0.playerID.toInt() {
+                    otherPlayers[playerIDInt] = otherPlayer
+                    scene.entityManager.add(entity: otherPlayer)
+                }
+            }
+        }
+        return otherPlayers
+        
+    }
     
     func ping(message: MessageType, sendToHost: Bool){
         do {
@@ -93,9 +98,7 @@ class MultiplayerService: NSObject {
         guard let hostPlayerID = (allPlayers.sorted { $0.1 < $1.1 }).first?.key else {return}
         
         GKPlayer.loadPlayers(forIdentifiers: [hostPlayerID]) { (players, error) in
-            //if let player = players?.first {
             self.hostPlayer = (players?.first)!
-            //}
         }
         
     }
@@ -120,29 +123,53 @@ class MultiplayerService: NSObject {
         return 0
     }
     
+    func hostAction(completion: @escaping ()-> Void, msg: (_ hostID: Int)-> Void){
+        if  let host = hostPlayer,
+            let hostID = host.playerID.toInt(),
+            (host == selfPlayer) {
+                let ping = Double(pingHost) / 1000
+                Timer.scheduledTimer(withTimeInterval: ping, repeats: false) { (_) in
+                    completion()
+                }
+            
+                msg(hostID)
+        }
+    }
+    
 }
 
 extension MultiplayerService: ReceiveDataDelegate {
     func didReceive(message: Message, from player: GKPlayer) {
         
         switch message.messageType {
-        case .sendMoveRequest(let position):
+        case .sendMoveRequest(let dx):
             
             if let host = hostPlayer, let playerIDInt = player.playerID.toInt(), host == GKLocalPlayer.local {
-                updateSceneDelegate?.updateScene(playerPosition: position, from: playerIDInt)
+                updateSceneDelegate?.updatePlayerMove(dx: dx, from: playerIDInt)
             }
             
             if let playerID = player.playerID.toInt() {
-                let data = Message(messageType: .sendMoveResponse(playerID: playerID, position: position))
+                let data = Message(messageType: .sendMoveResponse(playerID: playerID, dx: dx))
                 MultiplayerService.shared.sendData(data: data, sendDataMode: .unreliable)
-                
             }
-            
             
         case .sendMoveResponse(let playerID, let position):
             
-            updateSceneDelegate?.updateScene(playerPosition: position, from: playerID)
-            print("moveResponse: \(position) from player: \(player)")
+            updateSceneDelegate?.updatePlayerMove(dx: position, from: playerID)
+            
+        case .sendStopRequest(let position):
+            if let host = hostPlayer, let playerIDInt = player.playerID.toInt(), host == GKLocalPlayer.local {
+                updateSceneDelegate?.updatePlayerStopMove(playerPosition: position, from: playerIDInt)
+            }
+            if let playerID = player.playerID.toInt() {
+                let data = Message(messageType: .sendStopResponse(playerID: playerID, position: position))
+                MultiplayerService.shared.sendData(data: data, sendDataMode: .unreliable)
+                
+            }
+        case .sendStopResponse(let playerID, let position):
+            
+            updateSceneDelegate?.updatePlayerStopMove(playerPosition: position, from: playerID)
+        
         case .sendJumpRequest:
             
             if let host = hostPlayer, let playerIDInt = player.playerID.toInt(), host == GKLocalPlayer.local {

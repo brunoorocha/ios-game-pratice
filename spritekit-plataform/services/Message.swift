@@ -9,17 +9,17 @@
 import GameKit
 
 enum MessageType {
-    case sendMoveRequest(position: CGPoint)
-    case sendMoveResponse(playerID: Int, position: CGPoint)
+    case sendMoveRequest(dx: CGFloat)
+    case sendMoveResponse(playerID: Int, dx: CGFloat)
     
     case sendStopRequest(position: CGPoint)
-    case sendStopRespond(playerID: Int, position: CGPoint)
+    case sendStopResponse(playerID: Int, position: CGPoint)
     
     case sendJumpRequest
     case sendJumpResponse(playerID: Int)
     
     case startGame(randomNumber: Float)
-    case sendPlayerColor(red: CGFloat, green: CGFloat, blue: CGFloat)
+    
     case sendPingRequest(senderTime: Int)
     case sendPingResponse(senderTime: Int, halfPing: Int)
 }
