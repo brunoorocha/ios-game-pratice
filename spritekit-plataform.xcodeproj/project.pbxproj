@@ -38,6 +38,7 @@
 		A397A11822218EBB00E61051 /* PrepareFightState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A11722218EBB00E61051 /* PrepareFightState.swift */; };
 		A397A11B2222C3E600E61051 /* PreMatchLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A11A2222C3E600E61051 /* PreMatchLabel.swift */; };
 		A397A11D2222DAB200E61051 /* FightingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A11C2222DAB200E61051 /* FightingState.swift */; };
+		A397A1222229595A00E61051 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A397A1212229595A00E61051 /* GameKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,6 +75,7 @@
 		A397A11722218EBB00E61051 /* PrepareFightState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrepareFightState.swift; sourceTree = "<group>"; };
 		A397A11A2222C3E600E61051 /* PreMatchLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreMatchLabel.swift; sourceTree = "<group>"; };
 		A397A11C2222DAB200E61051 /* FightingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FightingState.swift; sourceTree = "<group>"; };
+		A397A1212229595A00E61051 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A397A1222229595A00E61051 /* GameKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,6 +103,7 @@
 			children = (
 				A397A0BB221EDCA400E61051 /* spritekit-plataform */,
 				A397A0BA221EDCA400E61051 /* Products */,
+				A397A1202229595A00E61051 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -294,6 +298,14 @@
 			path = "ui-elements";
 			sourceTree = "<group>";
 		};
+		A397A1202229595A00E61051 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A397A1212229595A00E61051 /* GameKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -326,6 +338,11 @@
 				TargetAttributes = {
 					A397A0B8221EDCA400E61051 = {
 						CreatedOnToolsVersion = 10.1;
+						SystemCapabilities = {
+							com.apple.GameCenter.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -539,13 +556,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = MK2CL4Y92D;
+				DEVELOPMENT_TEAM = V9TV25TFN7;
 				INFOPLIST_FILE = "spritekit-plataform/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pratices.spritekit-plataform";
+				PRODUCT_BUNDLE_IDENTIFIER = com.Link.SmashRoyale;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -557,13 +574,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = MK2CL4Y92D;
+				DEVELOPMENT_TEAM = V9TV25TFN7;
 				INFOPLIST_FILE = "spritekit-plataform/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pratices.spritekit-plataform";
+				PRODUCT_BUNDLE_IDENTIFIER = com.Link.SmashRoyale;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
