@@ -22,6 +22,7 @@ class GameCenterService: NSObject {
     override init(){
         super.init()
         
+        print("init game center service")
         GKLocalPlayer.local.authenticateHandler = { authenticationVC, error in
             
             NotificationCenter.default.post(name: .authenticationChanged , object: GKLocalPlayer.local.isAuthenticated)
