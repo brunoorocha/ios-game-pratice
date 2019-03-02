@@ -86,6 +86,14 @@ class MultiplayerService: NSObject {
             let player = Fighter(playerID: GKLocalPlayer.local.playerID)
             allPlayers[GKLocalPlayer.local.playerID.toInt()] = player
             scene.entityManager.add(entity: player)
+        }else{
+            
+            //for single player only(debugg mode), will be deleted soon
+            //ADD MOCK PLAYERS HERE
+            
+            let player = Fighter(playerID: GKLocalPlayer.local.playerID)
+            allPlayers[GKLocalPlayer.local.playerID.toInt()] = player
+            scene.entityManager.add(entity: player)
         }
         return allPlayers
         

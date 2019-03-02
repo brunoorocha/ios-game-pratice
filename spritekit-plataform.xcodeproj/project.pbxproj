@@ -47,6 +47,7 @@
 		A397A11822218EBB00E61051 /* PrepareFightState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A11722218EBB00E61051 /* PrepareFightState.swift */; };
 		A397A11B2222C3E600E61051 /* PreMatchLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A11A2222C3E600E61051 /* PreMatchLabel.swift */; };
 		A397A11D2222DAB200E61051 /* FightingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A11C2222DAB200E61051 /* FightingState.swift */; };
+		A397A1222229595A00E61051 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A397A1212229595A00E61051 /* GameKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -92,6 +93,7 @@
 		A397A11722218EBB00E61051 /* PrepareFightState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrepareFightState.swift; sourceTree = "<group>"; };
 		A397A11A2222C3E600E61051 /* PreMatchLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreMatchLabel.swift; sourceTree = "<group>"; };
 		A397A11C2222DAB200E61051 /* FightingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FightingState.swift; sourceTree = "<group>"; };
+		A397A1212229595A00E61051 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,7 +101,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6C9234902229540C00F74567 /* GameKit.framework in Frameworks */,
+				A397A1222229595A00E61051 /* GameKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,7 +149,7 @@
 			children = (
 				A397A0BB221EDCA400E61051 /* spritekit-plataform */,
 				A397A0BA221EDCA400E61051 /* Products */,
-				6C92348E2229540C00F74567 /* Frameworks */,
+				A397A1202229595A00E61051 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -344,6 +346,14 @@
 				A397A11A2222C3E600E61051 /* PreMatchLabel.swift */,
 			);
 			path = "ui-elements";
+			sourceTree = "<group>";
+		};
+		A397A1202229595A00E61051 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A397A1212229595A00E61051 /* GameKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

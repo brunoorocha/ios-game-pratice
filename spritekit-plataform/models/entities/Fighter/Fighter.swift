@@ -22,13 +22,19 @@ class Fighter: GKEntity {
     var isDown: Bool = false
     var positionDyDownTapped: CGFloat = 0
     var jumpCount = 0
-    var maxNJumps = 2
+    var jumpCountMax = 2
     
     var health : CGFloat = 100
     var damage : CGFloat = 25
     var playerID: String = ""
     let rangerAttack : CGFloat = 10
     let heightAttack : CGFloat = 10
+    
+    var comboCount = 0
+    let comboCountMax = 3
+    var comboTimeCount: TimeInterval = 0
+    var lastAttackTimeCount: TimeInterval = 0
+    let comboTimeWindow: TimeInterval = 0.8
 
     override init() {
         super.init()
@@ -89,6 +95,11 @@ class Fighter: GKEntity {
             if (self.jumpCount != 0) {                
                 self.jumpCount = 0
             }
+        }
+        
+        self.comboTimeCount = seconds
+        if ((self.comboTimeCount - self.lastAttackTimeCount) > self.comboTimeWindow) {
+            self.comboCount = 0
         }
 
     }
@@ -171,7 +182,7 @@ class Fighter: GKEntity {
     }
     
     func jump() {
-        if (self.jumpCount < self.maxNJumps) {
+        if (self.jumpCount < self.jumpCountMax) {
             self.stateMachine.enter(FighterIdleState.self)
             self.stateMachine.enter(FighterJumpState.self)
             self.jumpCount += 1
@@ -212,7 +223,16 @@ class Fighter: GKEntity {
 //                }
 //            })
         }
-        self.stateMachine.enter(FighterAttackState.self)        
+        self.stateMachine.enter(FighterAttackState.self)
+        
+        if (self.comboCount < self.comboCountMax) {
+            self.comboCount = self.comboCount + 1
+            self.lastAttackTimeCount = self.comboTimeCount
+        }
+        else {
+            self.comboCount = 0
+        }
+        
     }
     
     func receiveDamage(damage: CGFloat){

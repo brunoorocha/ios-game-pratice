@@ -34,7 +34,7 @@ class Map1 {
     private func drawPlataform(x: CGFloat, y: CGFloat, width: CGFloat, heigth: CGFloat){
         let area = SKShapeNode(rect: CGRect(x: -1*(x/2), y: y, width: width, height: heigth))
         area.fillColor = .red
-        area.physicsBody = SKPhysicsBody(edgeLoopFrom: area.frame)
+        area.physicsBody = SKPhysicsBody(edgeLoopFrom: CGRect(x: area.frame.minX, y: area.frame.maxY - 3, width: width, height: 1))
         area.physicsBody?.affectedByGravity = false
         area.physicsBody?.categoryBitMask = CategoryMask.plataform
         area.physicsBody?.friction = 0
