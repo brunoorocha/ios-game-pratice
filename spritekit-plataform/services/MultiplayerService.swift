@@ -44,6 +44,22 @@ class MultiplayerService: NSObject {
         }
     }
     
+    func sendActionMessage(clientMessage: MessageType, hostMessage: MessageType, hostAction: @escaping () -> Void){
+        var messageType: MessageType = clientMessage
+        
+        if hostPlayer == selfPlayer {
+            let ping = Double(pingHost) / 1000
+            Timer.scheduledTimer(withTimeInterval: ping, repeats: false) { (_) in
+                hostAction()
+            }
+            
+            messageType = hostMessage
+        }
+        
+        let data = Message(messageType: messageType)
+        MultiplayerService.shared.sendData(data: data, sendDataMode: .reliable)
+    }
+    
     func startingGame(){
 
         let randomNumber = allPlayers[selfPlayer.playerID]!
@@ -63,10 +79,8 @@ class MultiplayerService: NSObject {
                     node.position = CGPoint(x: 0, y: 0)
                 }
                 
-                if let playerIDInt = $0.playerID.toInt() {
-                    otherPlayers[playerIDInt] = otherPlayer
-                    scene.entityManager.add(entity: otherPlayer)
-                }
+                otherPlayers[$0.playerID.toInt()] = otherPlayer
+                scene.entityManager.add(entity: otherPlayer)
             }
         }
         return otherPlayers
@@ -123,79 +137,63 @@ class MultiplayerService: NSObject {
         return 0
     }
     
-    func hostAction(completion: @escaping ()-> Void, msg: (_ hostID: Int)-> Void){
-        if  let host = hostPlayer,
-            let hostID = host.playerID.toInt(),
-            (host == selfPlayer) {
-                let ping = Double(pingHost) / 1000
-                Timer.scheduledTimer(withTimeInterval: ping, repeats: false) { (_) in
-                    completion()
-                }
-            
-                msg(hostID)
-        }
-    }
     
 }
 
 extension MultiplayerService: ReceiveDataDelegate {
     func didReceive(message: Message, from player: GKPlayer) {
+        guard let host = hostPlayer else { return }
+        let playerIDInt = player.playerID.toInt()
         
         switch message.messageType {
         case .sendMoveRequest(let dx):
-            
-            if let host = hostPlayer, let playerIDInt = player.playerID.toInt(), host == GKLocalPlayer.local {
+    
+            if host == GKLocalPlayer.local {
                 updateSceneDelegate?.updatePlayerMove(dx: dx, from: playerIDInt)
             }
             
-            if let playerID = player.playerID.toInt() {
-                let data = Message(messageType: .sendMoveResponse(playerID: playerID, dx: dx))
-                MultiplayerService.shared.sendData(data: data, sendDataMode: .unreliable)
-            }
+            let data = Message(messageType: .sendMoveResponse(playerID: playerIDInt, dx: dx))
+            MultiplayerService.shared.sendData(data: data, sendDataMode: .unreliable)
             
         case .sendMoveResponse(let playerID, let position):
             
             updateSceneDelegate?.updatePlayerMove(dx: position, from: playerID)
             
         case .sendStopRequest(let position):
-            if let host = hostPlayer, let playerIDInt = player.playerID.toInt(), host == GKLocalPlayer.local {
+            
+            if host == GKLocalPlayer.local {
                 updateSceneDelegate?.updatePlayerStopMove(playerPosition: position, from: playerIDInt)
             }
-            if let playerID = player.playerID.toInt() {
-                let data = Message(messageType: .sendStopResponse(playerID: playerID, position: position))
-                MultiplayerService.shared.sendData(data: data, sendDataMode: .unreliable)
-                
-            }
+            let data = Message(messageType: .sendStopResponse(playerID: playerIDInt, position: position))
+            MultiplayerService.shared.sendData(data: data, sendDataMode: .unreliable)
+            
         case .sendStopResponse(let playerID, let position):
             
             updateSceneDelegate?.updatePlayerStopMove(playerPosition: position, from: playerID)
         
         case .sendJumpRequest:
             
-            if let host = hostPlayer, let playerIDInt = player.playerID.toInt(), host == GKLocalPlayer.local {
+            if host == GKLocalPlayer.local {
                 updateSceneDelegate?.jumpPlayer(playerID: playerIDInt)
             }
             
-            if let playerID = player.playerID.toInt() {
-                let data = Message(messageType: .sendJumpResponse(playerID: playerID))
-                MultiplayerService.shared.sendData(data: data, sendDataMode: .unreliable)
+            let data = Message(messageType: .sendJumpResponse(playerID: playerIDInt))
+            MultiplayerService.shared.sendData(data: data, sendDataMode: .unreliable)
                 
-            }
-            
         case .sendJumpResponse(let playerID):
+            
             updateSceneDelegate?.jumpPlayer(playerID: playerID)
             
-            
         case .sendPingRequest(let senderTime):
-            MultiplayerService.shared.responsePingRequest(senderTime: senderTime)
+            responsePingRequest(senderTime: senderTime)
             
             //if player is the host, update the ping
-            if let host = hostPlayer, (host == GKLocalPlayer.local) {
+            if host == GKLocalPlayer.local {
                 updateSceneDelegate?.showPing(ping: self.pingHost, host: host)
             }
+            
         case .sendPingResponse(let senderTime, let halfPing):
-            let ping = MultiplayerService.shared.receivePing(senderTime: senderTime, halfPing: halfPing)
-            guard let host = MultiplayerService.shared.hostPlayer else {return}
+            let ping = receivePing(senderTime: senderTime, halfPing: halfPing)
             updateSceneDelegate?.showPing(ping: ping, host: host)
             
         default:

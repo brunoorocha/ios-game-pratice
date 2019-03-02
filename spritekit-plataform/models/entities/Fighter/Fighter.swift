@@ -137,6 +137,7 @@ class Fighter: GKEntity {
     }
     
     func changePlayerPosition(position: CGPoint){
+        
         let move = SKAction.move(to: position, duration: 0.05)
         if let node = self.component(ofType: SpriteComponent.self)?.node {
             node.run(move)

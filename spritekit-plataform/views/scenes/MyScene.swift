@@ -11,6 +11,7 @@ import GameplayKit
 import GameKit
 
 class MyScene: SKScene {
+    
     var gesturePad: GesturePad!
     var fighter: Fighter!
     var entityManager: EntityManager!
@@ -20,6 +21,9 @@ class MyScene: SKScene {
     private var otherPlayers : [Int: Fighter] = [:]
     var pingLabel: SKLabelNode!
     var canSendPing = true
+    
+    let multiplayerService = MultiplayerService.shared
+    let selfPlayerID = GKLocalPlayer.local.playerID.toInt()
     
     override func didMove(to view: SKView) {
         super.didMove(to: view)
@@ -130,34 +134,28 @@ class MyScene: SKScene {
 extension MyScene: GesturePadDelegate {
     func performActionForAnalogMoving(inAngle angle: CGFloat, withDirectionX dx: CGFloat, AndDirectionY dy: CGFloat) {
         
-        var messageType: MessageType = .sendMoveRequest(dx: dx)
-        //if player is host
-        MultiplayerService.shared.hostAction(completion: {
+        let clientMessage: MessageType = .sendMoveRequest(dx: dx)
+        let hostMessage: MessageType = .sendMoveResponse(playerID: selfPlayerID, dx: dx)
+        
+        multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage) {
             self.fighter.walk(inDirectionX: dx)
-        }) { (hostID) in
-            messageType = .sendMoveResponse(playerID: hostID, dx: dx)
         }
         
-        let data = Message(messageType: messageType)
-        MultiplayerService.shared.sendData(data: data, sendDataMode: .reliable)
     }
     
     func performActionForAnalogStopMoving() {
-        //self.fighter.idle()
+        print("stop moving")
+        guard let playerNode = self.fighter.component(ofType: SpriteComponent.self)?.node else {return}
         
-        guard let node = self.fighter.component(ofType: SpriteComponent.self)?.node else {return}
-        var messageType: MessageType = .sendStopRequest(position: node.position)
+        let clientMessage: MessageType = .sendStopRequest(position: playerNode.position)
+        let hostMessage: MessageType = .sendStopResponse(playerID: selfPlayerID, position: playerNode.position)
         
-        //if player is host
-        MultiplayerService.shared.hostAction(completion: {
+        let playerPosition = playerNode.position
+        
+        multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage) {
             self.fighter.idle()
-            self.fighter.changePlayerPosition(position: node.position)
-        }) { (hostID) in
-            messageType = .sendStopResponse(playerID: hostID, position: node.position)
+            self.fighter.changePlayerPosition(position: playerPosition)
         }
-        
-        let data = Message(messageType: messageType)
-        MultiplayerService.shared.sendData(data: data, sendDataMode: .reliable)
         
     }
     
@@ -194,28 +192,25 @@ extension MyScene: SKPhysicsContactDelegate {
 extension MyScene: UpdateSceneDelegate {
     func updatePlayerMove(dx: CGFloat, from playerID: Int) {
         
-        let isSelf = GKLocalPlayer.local.playerID.toInt() == playerID
+        let isSelf = selfPlayerID == playerID
         
         if let otherPlayer = otherPlayers[playerID] {
             otherPlayer.walk(inDirectionX: dx)
         }else if isSelf{
             self.fighter.walk(inDirectionX: dx)
-            print("error while getting player")
         }
     }
     
     func updatePlayerStopMove(playerPosition: CGPoint, from playerID: Int) {
         
+        let isSelf = selfPlayerID == playerID
     
-        let isSelf = GKLocalPlayer.local.playerID.toInt() == playerID
-        
         if let otherPlayer = otherPlayers[playerID] {
             otherPlayer.idle()
             otherPlayer.changePlayerPosition(position: playerPosition)
         }else if isSelf{
-            self.fighter.idle()
             self.fighter.changePlayerPosition(position: playerPosition)
-            print("error while getting player")
+            self.fighter.idle()
         }
         
     }

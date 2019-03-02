@@ -22,10 +22,10 @@ protocol UpdateSceneDelegate {
 
 
 extension String {
-    func toInt() -> Int?{
+    func toInt() -> Int{
         if let intValue = Int(self.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()) {
             return intValue
         }
-        return nil
+        return 0
     }
 }
