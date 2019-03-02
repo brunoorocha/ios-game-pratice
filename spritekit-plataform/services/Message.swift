@@ -18,6 +18,9 @@ enum MessageType {
     case sendJumpRequest
     case sendJumpResponse(playerID: Int)
     
+    case sendDownRequest
+    case sendDownResponse(playerID: Int)
+    
     case startGame(randomNumber: Float)
     
     case sendPingRequest(senderTime: Int)

@@ -18,7 +18,7 @@ class MyScene: SKScene {
     var stateMachine: GKStateMachine!
     var fighters : [Fighter] = []
     
-    private var otherPlayers : [Int: Fighter] = [:]
+    var allPlayers : [Int: Fighter] = [:]
     var pingLabel: SKLabelNode!
     var canSendPing = true
     
@@ -30,11 +30,11 @@ class MyScene: SKScene {
         self.backgroundColor = UIColor.white
         self.entityManager = EntityManager(withScene: self)
         
-        self.fighter = Fighter()
-        if let fighterSpriteComponent = self.fighter.component(ofType: SpriteComponent.self) {
-            fighterSpriteComponent.node.position = CGPoint(x: 0, y: 0)
-        }
-        self.fighters.append(fighter)
+//        self.fighter = Fighter()
+//        if let fighterSpriteComponent = self.fighter.component(ofType: SpriteComponent.self) {
+//            fighterSpriteComponent.node.position = CGPoint(x: 0, y: 0)
+//        }
+//        self.fighters.append(fighter)
         
         //ping label
         pingLabel = SKLabelNode(text: "ping: 0 ms, host: \(MultiplayerService.shared.selfPlayer.alias)")
@@ -63,14 +63,17 @@ class MyScene: SKScene {
         Map1(withScene: self)
 
         self.configureStates()
-        self.entityManager.add(entity: fighter)
         self.configureGesturePad(for: view)
         self.configureCamera()
         self.configurePhysics()
         self.suicideArea()
         
+        allPlayers = MultiplayerService.shared.allocPlayers(in: self)
+        if let player = allPlayers[GKLocalPlayer.local.playerID.toInt()] {
+            self.fighter = player
+        }
+        
         MultiplayerService.shared.updateSceneDelegate = self
-        otherPlayers = MultiplayerService.shared.allocPlayers(in: self)
     }
     
     func configureStates() {
@@ -115,11 +118,15 @@ class MyScene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         self.fighter.update(deltaTime: currentTime)
+    
+        self.allPlayers.forEach { (_,value) in
+            value.update(deltaTime: currentTime)
+        }
+        
         if let node = self.fighter.component(ofType: SpriteComponent.self)?.node {
             self.camera?.position = node.position
         }
         
-    
         //Send Ping request
         if Int(currentTime) % 2 == 1 && canSendPing{
             let date = Int((Date().timeIntervalSince1970 * 1000))
@@ -144,7 +151,7 @@ extension MyScene: GesturePadDelegate {
     }
     
     func performActionForAnalogStopMoving() {
-        print("stop moving")
+
         guard let playerNode = self.fighter.component(ofType: SpriteComponent.self)?.node else {return}
         
         let clientMessage: MessageType = .sendStopRequest(position: playerNode.position)
@@ -164,11 +171,27 @@ extension MyScene: GesturePadDelegate {
     }
     
     func performActionForSwipeUp() {
-        self.fighter.jump()
+        //self.fighter.jump()
+        
+        let clientMessage: MessageType = .sendJumpRequest
+        let hostMessage: MessageType = .sendJumpResponse(playerID: selfPlayerID)
+        
+        multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage) {
+            self.fighter.jump()
+        }
+        
     }
     
     func performActionForSwipeDown() {
-        self.fighter.down()
+        //self.fighter.down()
+        
+        let clientMessage: MessageType = .sendDownRequest
+        let hostMessage: MessageType = .sendDownResponse(playerID: selfPlayerID)
+        
+        multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage) {
+            self.fighter.down()
+        }
+        
     }
 }
 
@@ -191,32 +214,28 @@ extension MyScene: SKPhysicsContactDelegate {
 
 extension MyScene: UpdateSceneDelegate {
     func updatePlayerMove(dx: CGFloat, from playerID: Int) {
-        
-        let isSelf = selfPlayerID == playerID
-        
-        if let otherPlayer = otherPlayers[playerID] {
-            otherPlayer.walk(inDirectionX: dx)
-        }else if isSelf{
-            self.fighter.walk(inDirectionX: dx)
+        if let player = allPlayers[playerID] {
+            player.walk(inDirectionX: dx)
         }
     }
     
     func updatePlayerStopMove(playerPosition: CGPoint, from playerID: Int) {
-        
-        let isSelf = selfPlayerID == playerID
-    
-        if let otherPlayer = otherPlayers[playerID] {
-            otherPlayer.idle()
-            otherPlayer.changePlayerPosition(position: playerPosition)
-        }else if isSelf{
-            self.fighter.changePlayerPosition(position: playerPosition)
-            self.fighter.idle()
+        if let player = allPlayers[playerID] {
+            player.idle()
+            player.changePlayerPosition(position: playerPosition)
         }
-        
     }
     
-    func jumpPlayer(playerID: Int) {
-        
+    func updateJumpPlayer(playerID: Int) {
+        if let player = allPlayers[playerID] {
+            player.jump()
+        }
+    }
+    
+    func updateDownPlayer(playerID: Int) {
+        if let player = allPlayers[playerID] {
+            player.down()
+        }
     }
     
     func showPing(ping: Int, host: GKPlayer) {

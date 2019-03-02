@@ -195,14 +195,22 @@ class Fighter: GKEntity {
             // Create a damage area - See more to info
             let damageArea = self.insertDamageArea(node: node)
             // Filter for fights to hit
-            scene.fighters.forEach({
-                if let fighterNode = $0.component(ofType: SpriteComponent.self)?.node {
+            scene.allPlayers.forEach { (_, fighter) in
+                if let fighterNode = fighter.component(ofType: SpriteComponent.self)?.node {
                     if fighterNode.intersects(damageArea) {
-                        if ($0 == self) { return }
-                        $0.receiveDamage(damage: self.damage)
+                        if (fighter == self) { return }
+                        fighter.receiveDamage(damage: self.damage)
                     }
                 }
-            })
+            }
+//            scene.fighters.forEach({
+//                if let fighterNode = $0.component(ofType: SpriteComponent.self)?.node {
+//                    if fighterNode.intersects(damageArea) {
+//                        if ($0 == self) { return }
+//                        $0.receiveDamage(damage: self.damage)
+//                    }
+//                }
+//            })
         }
         self.stateMachine.enter(FighterAttackState.self)        
     }
