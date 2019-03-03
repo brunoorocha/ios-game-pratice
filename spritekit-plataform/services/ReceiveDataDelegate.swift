@@ -18,6 +18,8 @@ protocol UpdateSceneDelegate {
     func updatePlayerStopMove(playerPosition: CGPoint, from playerID: Int)
     func updateJumpPlayer(playerID: Int)
     func updateDownPlayer(playerID: Int)
+    func updateAttackPlayerRequest(attackerID: Int) -> [Int]
+    func updateAttackPlayerResponse(attackerID: Int, receivedAttackIDs: [Int])
     func showPing(ping: Int, host: GKPlayer)
 }
 

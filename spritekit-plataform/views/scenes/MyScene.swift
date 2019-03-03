@@ -167,11 +167,32 @@ extension MyScene: GesturePadDelegate {
     }
     
     func performActionForTap() {
-        self.fighter.attack()
+        let hittedPlayers = self.fighter.attack()
+        var hitted = HittedPlayers()
+        
+        hitted.player1 = hittedPlayers[0]
+        hitted.player2 = hittedPlayers[1]
+        hitted.player3 = hittedPlayers[2]
+        hitted.player4 = hittedPlayers[3]
+        
+        let clientMessage: MessageType = .sendAttackRequest
+        let hostMessage: MessageType = .sendAttackResponse(attackerID: selfPlayerID, receivedAtackIDs: hitted)
+        
+        multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage) {
+            
+            hittedPlayers.forEach { (playerID) in
+                if let hittedPlayer = self.allPlayers[playerID] {
+                    hittedPlayer.receiveDamage(damage: self.fighter.damage)
+                }
+            }
+        }
+
+        
+        
+        
     }
     
     func performActionForSwipeUp() {
-        //self.fighter.jump()
         
         let clientMessage: MessageType = .sendJumpRequest
         let hostMessage: MessageType = .sendJumpResponse(playerID: selfPlayerID)
@@ -183,8 +204,7 @@ extension MyScene: GesturePadDelegate {
     }
     
     func performActionForSwipeDown() {
-        //self.fighter.down()
-        
+    
         let clientMessage: MessageType = .sendDownRequest
         let hostMessage: MessageType = .sendDownResponse(playerID: selfPlayerID)
         
@@ -236,6 +256,28 @@ extension MyScene: UpdateSceneDelegate {
         if let player = allPlayers[playerID] {
             player.down()
         }
+    }
+    
+    func updateAttackPlayerRequest(attackerID: Int) -> [Int] {
+        if let player = allPlayers[attackerID] {
+            return player.attack()
+        }
+        
+        return []
+    }
+    
+    func updateAttackPlayerResponse(attackerID: Int, receivedAttackIDs: [Int]) {
+        guard let attackerPlayer = allPlayers[attackerID] else {return}
+        
+        attackerPlayer.attack()
+        
+        receivedAttackIDs.forEach { (playerID) in
+            if let hittedPlayer = allPlayers[playerID] {
+                hittedPlayer.receiveDamage(damage: attackerPlayer.damage)
+            }
+        }
+        
+        
     }
     
     func showPing(ping: Int, host: GKPlayer) {

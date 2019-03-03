@@ -197,32 +197,28 @@ class Fighter: GKEntity {
         }
     }
     
-    func attack() {
+    func attack() -> [Int]{
+        var playersHitted: [Int] = [0,0,0,0]
         // Necessary because resizing are bugged
-        if (self.stateMachine.currentState is FighterAttackState) { return }
+        if (self.stateMachine.currentState is FighterAttackState) { return [0]}
         if let node = self.component(ofType: SpriteComponent.self)?.node {
             // Get scene reference
-            guard let scene = node.scene as? MyScene else { return }
+            guard let scene = node.scene as? MyScene else { return [0]}
             // Create a damage area - See more to info
             let damageArea = self.insertDamageArea(node: node)
             // Filter for fights to hit
-            scene.allPlayers.forEach { (_, fighter) in
-                if let fighterNode = fighter.component(ofType: SpriteComponent.self)?.node {
-                    if fighterNode.intersects(damageArea) {
-                        if (fighter == self) { return }
-                        fighter.receiveDamage(damage: self.damage)
+            
+            
+            for (i, fighter) in scene.allPlayers.enumerated() {
+                if let fighterNode = fighter.value.component(ofType: SpriteComponent.self)?.node {
+                    if fighterNode.intersects(damageArea) && fighter.value != self {
+                        playersHitted[i] = fighter.value.playerID.toInt()
+                        //fighter.receiveDamage(damage: self.damage)
                     }
                 }
             }
-//            scene.fighters.forEach({
-//                if let fighterNode = $0.component(ofType: SpriteComponent.self)?.node {
-//                    if fighterNode.intersects(damageArea) {
-//                        if ($0 == self) { return }
-//                        $0.receiveDamage(damage: self.damage)
-//                    }
-//                }
-//            })
         }
+        
         self.stateMachine.enter(FighterAttackState.self)
         
         if (self.comboCount < self.comboCountMax) {
@@ -233,6 +229,7 @@ class Fighter: GKEntity {
             self.comboCount = 0
         }
         
+        return playersHitted
     }
     
     func receiveDamage(damage: CGFloat){

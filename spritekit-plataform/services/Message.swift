@@ -21,6 +21,9 @@ enum MessageType {
     case sendDownRequest
     case sendDownResponse(playerID: Int)
     
+    case sendAttackRequest
+    case sendAttackResponse(attackerID: Int, receivedAtackIDs: HittedPlayers)
+    
     case startGame(randomNumber: Float)
     
     case sendPingRequest(senderTime: Int)
@@ -29,7 +32,6 @@ enum MessageType {
 
 struct Message {
     var messageType: MessageType
-    
     init(messageType: MessageType){
         self.messageType = messageType
     }
@@ -53,4 +55,12 @@ struct Message {
         })
         return message
     }
+    
+}
+
+struct HittedPlayers{
+    var player1: Int = 0
+    var player2: Int = 0
+    var player3: Int = 0
+    var player4: Int = 0
 }
