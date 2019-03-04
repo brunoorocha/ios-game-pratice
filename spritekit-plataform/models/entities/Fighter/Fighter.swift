@@ -197,18 +197,20 @@ class Fighter: GKEntity {
         }
     }
     
+    //attack returns all players(playerID) that was hitted by attacker player
     func attack() -> [Int]{
-        var playersHitted: [Int] = [0,0,0,0]
+        var playersHitted: [Int] = [-1,-1,-1,-1] // none player is -1
         // Necessary because resizing are bugged
-        if (self.stateMachine.currentState is FighterAttackState) { return [0]}
+        if (self.stateMachine.currentState is FighterAttackState ||
+            self.stateMachine.currentState is FighterHurtState ||
+            self.stateMachine.currentState is FighterDieState) { return playersHitted}
+        
         if let node = self.component(ofType: SpriteComponent.self)?.node {
             // Get scene reference
-            guard let scene = node.scene as? MyScene else { return [0]}
+            guard let scene = node.scene as? MyScene else { return playersHitted}
             // Create a damage area - See more to info
             let damageArea = self.insertDamageArea(node: node)
             // Filter for fights to hit
-            
-            
             for (i, fighter) in scene.allPlayers.enumerated() {
                 if let fighterNode = fighter.value.component(ofType: SpriteComponent.self)?.node {
                     if fighterNode.intersects(damageArea) && fighter.value != self {
@@ -220,7 +222,7 @@ class Fighter: GKEntity {
         }
         
         self.stateMachine.enter(FighterAttackState.self)
-        
+    
         if (self.comboCount < self.comboCountMax) {
             self.comboCount = self.comboCount + 1
             self.lastAttackTimeCount = self.comboTimeCount
@@ -228,9 +230,10 @@ class Fighter: GKEntity {
         else {
             self.comboCount = 0
         }
-        
+        print("retornou: \(playersHitted)")
         return playersHitted
     }
+    
     
     func receiveDamage(damage: CGFloat){
         self.health -= damage

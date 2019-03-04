@@ -31,6 +31,7 @@ class MenuScene: SKScene {
             startSingleButton.isUserInteractionEnabled = true
             startSingleButton.actionBlock = {
                 if let gameScene = SKScene(fileNamed: "MyScene") as? MyScene {
+                    gameScene.scaleMode = .resizeFill
                     view.presentScene(gameScene)
                 }
             }
@@ -51,7 +52,7 @@ class MenuScene: SKScene {
         
         if let gameScene = SKScene(fileNamed: "MyScene") as? MyScene {
             // Set the scale mode to scale to fit the window
-            gameScene.scaleMode = .aspectFill
+            gameScene.scaleMode = .resizeFill
             //gameScene.currentMatch = match
             
             // Present the scene

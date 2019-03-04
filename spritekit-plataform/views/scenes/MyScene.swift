@@ -20,6 +20,7 @@ class MyScene: SKScene {
     
     var allPlayers : [Int: Fighter] = [:]
     var pingLabel: SKLabelNode!
+    var debugLabel: SKLabelNode!
     var canSendPing = true
     
     let multiplayerService = MultiplayerService.shared
@@ -36,12 +37,7 @@ class MyScene: SKScene {
 //        }
 //        self.fighters.append(fighter)
         
-        //ping label
-        pingLabel = SKLabelNode(text: "ping: 0 ms, host: \(MultiplayerService.shared.selfPlayer.alias)")
-        pingLabel.position = CGPoint(x: 0, y: 0)
-        pingLabel.fontColor = SKColor.black
-        pingLabel.fontSize = 14
-        addChild(pingLabel)
+        
         
         // Temporarily
         let guineaPig = Fighter()
@@ -65,6 +61,7 @@ class MyScene: SKScene {
         self.configureStates()
         self.configureGesturePad(for: view)
         self.configureCamera()
+        self.configureUI()
         self.configurePhysics()
         self.suicideArea()
         
@@ -111,18 +108,50 @@ class MyScene: SKScene {
         self.addChild(camera)
     }
     
+    func configureUI(){
+        
+        if let cam = self.camera {
+            
+            //ping label
+            pingLabel = SKLabelNode(text: "ping: 0 ms, host: \(MultiplayerService.shared.selfPlayer.alias)")
+            print(self.size.height)
+            pingLabel.position = CGPoint(x: self.size.width/2 - 20  , y: self.size.height/2 - 40)
+            pingLabel.horizontalAlignmentMode = .right
+            pingLabel.fontName = "Helvetica"
+            pingLabel.fontColor = SKColor.black
+            pingLabel.fontSize = 18
+            cam.addChild(pingLabel)
+            
+            //debug label
+            debugLabel = SKLabelNode(text: "debug label")
+            debugLabel.position = CGPoint(x: -self.size.width/2 + 20  , y: self.size.height/2 - 40)
+            debugLabel.horizontalAlignmentMode = .left
+            debugLabel.fontName = "Helvetica"
+            debugLabel.fontColor = SKColor.black
+            debugLabel.fontSize = 18
+            cam.addChild(debugLabel)
+            
+            
+        }
+    }
+    
     func configureGesturePad(for view: SKView) {
         self.gesturePad = GesturePad(forView: view)
         self.gesturePad.delegate = self
     }
     
     override func update(_ currentTime: TimeInterval) {
-        self.fighter.update(deltaTime: currentTime)
-    
-        self.allPlayers.forEach { (_,value) in
+        //self.fighter.update(deltaTime: currentTime)
+
+        var p: [Fighter] = []
+        
+        self.allPlayers.forEach { (key,value) in
             value.update(deltaTime: currentTime)
+            p.append(value)
         }
         
+        debugLabel.text =  "p1 life: \(p[0].health) - p2 life: \(p[1].health) "
+    
         if let node = self.fighter.component(ofType: SpriteComponent.self)?.node {
             self.camera?.position = node.position
         }
@@ -167,29 +196,25 @@ extension MyScene: GesturePadDelegate {
     }
     
     func performActionForTap() {
-        let hittedPlayers = self.fighter.attack()
+        let hittedPlayersArray = self.fighter.attack()
         var hitted = HittedPlayers()
-        
-        hitted.player1 = hittedPlayers[0]
-        hitted.player2 = hittedPlayers[1]
-        hitted.player3 = hittedPlayers[2]
-        hitted.player4 = hittedPlayers[3]
+        hitted.player1 = hittedPlayersArray[0]
+        hitted.player2 = hittedPlayersArray[1]
+        hitted.player3 = hittedPlayersArray[2]
+        hitted.player4 = hittedPlayersArray[3]
         
         let clientMessage: MessageType = .sendAttackRequest
         let hostMessage: MessageType = .sendAttackResponse(attackerID: selfPlayerID, receivedAtackIDs: hitted)
         
         multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage) {
             
-            hittedPlayers.forEach { (playerID) in
+            hittedPlayersArray.forEach { (playerID) in
                 if let hittedPlayer = self.allPlayers[playerID] {
                     hittedPlayer.receiveDamage(damage: self.fighter.damage)
                 }
             }
         }
 
-        
-        
-        
     }
     
     func performActionForSwipeUp() {
@@ -263,13 +288,15 @@ extension MyScene: UpdateSceneDelegate {
             return player.attack()
         }
         
-        return []
+        return [-1,-1,-1,-1]
     }
     
     func updateAttackPlayerResponse(attackerID: Int, receivedAttackIDs: [Int]) {
         guard let attackerPlayer = allPlayers[attackerID] else {return}
         
-        attackerPlayer.attack()
+        
+        let hittedPlayers = attackerPlayer.attack()
+        print("received: \(receivedAttackIDs) - hitted: \(hittedPlayers)")
         
         receivedAttackIDs.forEach { (playerID) in
             if let hittedPlayer = allPlayers[playerID] {

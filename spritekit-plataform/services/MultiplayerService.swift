@@ -212,16 +212,17 @@ extension MultiplayerService: ReceiveDataDelegate {
             updateSceneDelegate?.updateDownPlayer(playerID: playerID)
         
         case .sendAttackRequest:
-            var playersAttacked : [Int] = [0,0,0,0]
+            var hittedPlayersArray : [Int] = [-1, -1, -1, -1]
             if host == GKLocalPlayer.local {
-                 playersAttacked = (updateSceneDelegate?.updateAttackPlayerRequest(attackerID: playerIDInt))!
+                hittedPlayersArray = (updateSceneDelegate?.updateAttackPlayerRequest(attackerID: playerIDInt))!
+                updateSceneDelegate?.updateAttackPlayerResponse(attackerID: playerIDInt, receivedAttackIDs: hittedPlayersArray)
             }
             var hittedPlayers = HittedPlayers()
             
-            hittedPlayers.player1 = playersAttacked[0]
-            hittedPlayers.player2 = playersAttacked[1]
-            hittedPlayers.player3 = playersAttacked[2]
-            hittedPlayers.player4 = playersAttacked[3]
+            hittedPlayers.player1 = hittedPlayersArray[0]
+            hittedPlayers.player2 = hittedPlayersArray[1]
+            hittedPlayers.player3 = hittedPlayersArray[2]
+            hittedPlayers.player4 = hittedPlayersArray[3]
             
             let data = Message(messageType: .sendAttackResponse(attackerID: playerIDInt, receivedAtackIDs: hittedPlayers))
             MultiplayerService.shared.sendData(data: data, sendDataMode: .reliable)
