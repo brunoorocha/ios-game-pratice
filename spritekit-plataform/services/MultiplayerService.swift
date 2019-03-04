@@ -74,6 +74,7 @@ class MultiplayerService: NSObject {
             //for each other player(except self), put in the scene
             match.players.forEach {
                 let otherPlayer = Fighter(playerID: $0.playerID)
+                otherPlayer.playerAlias = $0.alias
                 if let node = otherPlayer.component(ofType: SpriteComponent.self)?.node {
                     //TODO: set randomly the start position of each player
                     node.position = CGPoint(x: 0, y: 0)
@@ -84,11 +85,12 @@ class MultiplayerService: NSObject {
             
             //put self in the dictionary
             let player = Fighter(playerID: GKLocalPlayer.local.playerID)
+            player.playerAlias = GKLocalPlayer.local.alias
             allPlayers[GKLocalPlayer.local.playerID.toInt()] = player
             scene.entityManager.add(entity: player)
         }else{
             
-            //for single player only(debugg mode), will be deleted soon
+            //for single player only(testing mode), will be deleted soon
             //ADD MOCK PLAYERS HERE
             
             let player = Fighter(playerID: GKLocalPlayer.local.playerID)

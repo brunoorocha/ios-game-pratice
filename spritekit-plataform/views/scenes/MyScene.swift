@@ -30,15 +30,7 @@ class MyScene: SKScene {
         super.didMove(to: view)
         self.backgroundColor = UIColor.white
         self.entityManager = EntityManager(withScene: self)
-        
-//        self.fighter = Fighter()
-//        if let fighterSpriteComponent = self.fighter.component(ofType: SpriteComponent.self) {
-//            fighterSpriteComponent.node.position = CGPoint(x: 0, y: 0)
-//        }
-//        self.fighters.append(fighter)
-        
-        
-        
+
         // Temporarily
         let guineaPig = Fighter()
         if let fighterSpriteComponent = guineaPig.component(ofType: SpriteComponent.self) {
@@ -143,15 +135,10 @@ class MyScene: SKScene {
     override func update(_ currentTime: TimeInterval) {
         //self.fighter.update(deltaTime: currentTime)
 
-        var p: [Fighter] = []
-        
         self.allPlayers.forEach { (key,value) in
             value.update(deltaTime: currentTime)
-            p.append(value)
         }
         
-        debugLabel.text =  "p1 life: \(p[0].health) - p2 life: \(p[1].health) "
-    
         if let node = self.fighter.component(ofType: SpriteComponent.self)?.node {
             self.camera?.position = node.position
         }

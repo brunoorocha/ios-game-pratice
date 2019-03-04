@@ -27,6 +27,7 @@ class Fighter: GKEntity {
     var health : CGFloat = 100
     var damage : CGFloat = 25
     var playerID: String = ""
+    var playerAlias: String = ""
     let rangerAttack : CGFloat = 10
     let heightAttack : CGFloat = 10
     
