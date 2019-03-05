@@ -37,19 +37,22 @@ class Fighter: GKEntity {
     var lastAttackTimeCount: TimeInterval = 0
     let comboTimeWindow: TimeInterval = 0.8
 
-    override init() {
+    init(playerID: String, playerAlias: String) {
         super.init()
+        
+        self.playerID = playerID
+        self.playerAlias = playerAlias
         
         let spriteComponent = SpriteComponent(withTexture: SKTexture(imageNamed: "adventurer-idle-2-0"))
         self.addComponent(spriteComponent)
         
+        if let nameLabel = self.component(ofType: SpriteComponent.self)?.nameLabel {
+            nameLabel.text = playerAlias
+        }
+        
         self.setupStateMachine()
         self.configurePhysicsBody()
-    }
-    
-    convenience init(playerID: String) {
-        self.init()
-        self.playerID = playerID
+
     }
     
     override func update(deltaTime seconds: TimeInterval) {
@@ -164,7 +167,8 @@ class Fighter: GKEntity {
     }
     
     func walk(inDirectionX dx: CGFloat) {
-        if let node = self.component(ofType: SpriteComponent.self)?.node {
+        if let node = self.component(ofType: SpriteComponent.self)?.node,
+           let nameLabel = self.component(ofType: SpriteComponent.self)?.nameLabel {
             let nodeDirection: CGFloat = dx < 0 ? -1.0 : 1.0
             // If direction new is right and old isn't right
             if (nodeDirection == 1.0 && self.fighterDirection != .right) {
@@ -177,6 +181,7 @@ class Fighter: GKEntity {
                 self.stateMachine.enter(FighterIdleState.self)
             }
             node.xScale = abs(node.xScale) * nodeDirection
+            nameLabel.xScale = nodeDirection
             self.stateMachine.enter(FighterWalkState.self)
         }
         

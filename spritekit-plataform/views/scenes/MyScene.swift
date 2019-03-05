@@ -32,19 +32,19 @@ class MyScene: SKScene {
         self.entityManager = EntityManager(withScene: self)
 
         // Temporarily
-        let guineaPig = Fighter()
-        if let fighterSpriteComponent = guineaPig.component(ofType: SpriteComponent.self) {
-            fighterSpriteComponent.node.position = CGPoint(x: -150, y: 50)
-        }
-        self.fighters.append(guineaPig)
+//        let guineaPig = Fighter()
+//        if let fighterSpriteComponent = guineaPig.component(ofType: SpriteComponent.self) {
+//            fighterSpriteComponent.node.position = CGPoint(x: -150, y: 50)
+//        }
+//        self.fighters.append(guineaPig)
         //self.entityManager.add(entity: guineaPig)
         
         // Temporarily
-        let guineaPig2 = Fighter()
-        if let fighterSpriteComponent = guineaPig2.component(ofType: SpriteComponent.self) {
-            fighterSpriteComponent.node.position = CGPoint(x: 50, y: 50)
-        }
-        self.fighters.append(guineaPig2)
+//        let guineaPig2 = Fighter()
+//        if let fighterSpriteComponent = guineaPig2.component(ofType: SpriteComponent.self) {
+//            fighterSpriteComponent.node.position = CGPoint(x: 50, y: 50)
+//        }
+//        self.fighters.append(guineaPig2)
         //self.entityManager.add(entity: guineaPig2)
         
         // Temporarily

@@ -16,7 +16,6 @@
 		6C92348822294BA800F74567 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C92348722294BA800F74567 /* MenuScene.swift */; };
 		6C92348A22294BDA00F74567 /* MenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6C92348922294BDA00F74567 /* MenuScene.sks */; };
 		6C92348D22294CC800F74567 /* ButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C92348C22294CC800F74567 /* ButtonNode.swift */; };
-		6C9234902229540C00F74567 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C92348F2229540C00F74567 /* GameKit.framework */; };
 		6CCF8E0322282A5400296148 /* GameCenterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCF8E0222282A5400296148 /* GameCenterService.swift */; };
 		6CCF8E0522282ABF00296148 /* MultiplayerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCF8E0422282ABF00296148 /* MultiplayerService.swift */; };
 		6CCF8E0722282AF300296148 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCF8E0622282AF300296148 /* Message.swift */; };
@@ -60,7 +59,6 @@
 		6C92348722294BA800F74567 /* MenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 		6C92348922294BDA00F74567 /* MenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MenuScene.sks; sourceTree = "<group>"; };
 		6C92348C22294CC800F74567 /* ButtonNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonNode.swift; sourceTree = "<group>"; };
-		6C92348F2229540C00F74567 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		6CCF8E0222282A5400296148 /* GameCenterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCenterService.swift; sourceTree = "<group>"; };
 		6CCF8E0422282ABF00296148 /* MultiplayerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplayerService.swift; sourceTree = "<group>"; };
 		6CCF8E0622282AF300296148 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
@@ -122,14 +120,6 @@
 				6C92348C22294CC800F74567 /* ButtonNode.swift */,
 			);
 			path = nodes;
-			sourceTree = "<group>";
-		};
-		6C92348E2229540C00F74567 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				6C92348F2229540C00F74567 /* GameKit.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		6CCF8E0022282A1800296148 /* services */ = {
