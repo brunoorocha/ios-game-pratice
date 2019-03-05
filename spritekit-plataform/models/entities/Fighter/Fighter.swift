@@ -63,12 +63,13 @@ class Fighter: GKEntity {
             self.isDown = false
         }
         // Natural Fall
-        if ((node.physicsBody?.velocity.dy)! < CGFloat(0) && !self.isDown){
+        if ((node.physicsBody?.velocity.dy)! < CGFloat(0) && !self.isDown) {
             node.physicsBody?.collisionBitMask |= CategoryMask.plataform
             self.stateMachine.enter(FighterFallState.self)
         }
         // Down Fall
-        if ((node.physicsBody?.velocity.dy)! < CGFloat(0) && self.isDown){
+        if ((node.physicsBody?.velocity.dy)! < CGFloat(0) && self.isDown) {
+            
             // This function are called so much
             if (node.position.y > self.positionDyDownTapped - node.size.height){
                 node.physicsBody?.collisionBitMask &= ~CategoryMask.plataform
@@ -154,6 +155,7 @@ class Fighter: GKEntity {
     func changePlayerPosition(position: CGPoint){
         
         let move = SKAction.move(to: position, duration: 0.05)
+        move.timingMode = .easeIn
         if let node = self.component(ofType: SpriteComponent.self)?.node {
             node.run(move)
         }

@@ -12,6 +12,9 @@ enum MessageType {
     case sendMoveRequest(dx: CGFloat)
     case sendMoveResponse(playerID: Int, dx: CGFloat)
     
+    case sendPositionRequest(position: CGPoint)
+    case sendPositionResponse(playerID: Int, position: CGPoint)
+    
     case sendStopRequest(position: CGPoint)
     case sendStopResponse(playerID: Int, position: CGPoint)
     

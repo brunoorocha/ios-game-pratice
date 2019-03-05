@@ -168,12 +168,23 @@ extension MultiplayerService: ReceiveDataDelegate {
                 updateSceneDelegate?.updatePlayerMove(dx: dx, from: playerIDInt)
             }
             let data = Message(messageType: .sendMoveResponse(playerID: playerIDInt, dx: dx))
-            MultiplayerService.shared.sendData(data: data, sendDataMode: .unreliable)
+            MultiplayerService.shared.sendData(data: data, sendDataMode: .reliable)
         
         case .sendMoveResponse(let playerID, let position):
             
             updateSceneDelegate?.updatePlayerMove(dx: position, from: playerID)
            
+        //PLAYER POSITION
+        case .sendPositionRequest(let position):
+            if host == GKLocalPlayer.local {
+                updateSceneDelegate?.updatePlayerPosition(playerPosition: position, from: playerIDInt)
+            }
+            let data = Message(messageType: .sendPositionResponse(playerID: playerIDInt, position: position))
+            MultiplayerService.shared.sendData(data: data, sendDataMode: .reliable)
+            
+        case .sendPositionResponse(let playerID, let position):
+            updateSceneDelegate?.updatePlayerPosition(playerPosition: position, from: playerID)
+        
         //STOP PLAYER
         case .sendStopRequest(let position):
             
@@ -181,7 +192,7 @@ extension MultiplayerService: ReceiveDataDelegate {
                 updateSceneDelegate?.updatePlayerStopMove(playerPosition: position, from: playerIDInt)
             }
             let data = Message(messageType: .sendStopResponse(playerID: playerIDInt, position: position))
-            MultiplayerService.shared.sendData(data: data, sendDataMode: .unreliable)
+            MultiplayerService.shared.sendData(data: data, sendDataMode: .reliable)
         
         case .sendStopResponse(let playerID, let position):
             

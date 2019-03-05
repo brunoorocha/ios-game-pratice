@@ -22,9 +22,11 @@ class MyScene: SKScene {
     var pingLabel: SKLabelNode!
     var debugLabel: SKLabelNode!
     var canSendPing = true
-    
+    var previousPosition: CGPoint = CGPoint.zero;
     let multiplayerService = MultiplayerService.shared
     let selfPlayerID = GKLocalPlayer.local.playerID.toInt()
+    
+    var lookingLeft = true
     
     override func didMove(to view: SKView) {
         super.didMove(to: view)
@@ -61,7 +63,9 @@ class MyScene: SKScene {
         if let player = allPlayers[GKLocalPlayer.local.playerID.toInt()] {
             self.fighter = player
         }
-        
+        if let node = self.fighter.component(ofType: SpriteComponent.self)?.node {
+            previousPosition = node.position
+        }
         MultiplayerService.shared.updateSceneDelegate = self
     }
     
@@ -133,29 +137,44 @@ class MyScene: SKScene {
     }
     
     override func update(_ currentTime: TimeInterval) {
-        //self.fighter.update(deltaTime: currentTime)
-
+        
         self.allPlayers.forEach { (key,value) in
             value.update(deltaTime: currentTime)
         }
         
         if let node = self.fighter.component(ofType: SpriteComponent.self)?.node {
-            self.camera?.position = node.position
+            let move = SKAction.move(to: node.position, duration: 0.3)
+            self.camera?.run(move)
         }
         
         //Send Ping request
-        if Int(currentTime) % 2 == 1 && canSendPing{
+        if Int(currentTime * 5) % 2 == 1 && canSendPing{
             let date = Int((Date().timeIntervalSince1970 * 1000))
             MultiplayerService.shared.ping(message: .sendPingRequest(senderTime: date), sendToHost: true)
             canSendPing = false
-        }else if Int(currentTime) % 2 != 1{
+        }else if Int(currentTime * 5) % 2 != 1{
             canSendPing = true
         }
+        
     }
 }
 
 extension MyScene: GesturePadDelegate {
     func performActionForAnalogMoving(inAngle angle: CGFloat, withDirectionX dx: CGFloat, AndDirectionY dy: CGFloat) {
+        
+        if (dx >= 0 && lookingLeft) || (dx < 0 && !lookingLeft) {
+            print("orientation changed")
+            lookingLeft = !lookingLeft
+            
+            guard let playerNode = self.fighter.component(ofType: SpriteComponent.self)?.node else {return}
+            let clientMessage: MessageType = .sendPositionRequest(position: playerNode.position)
+            let hostMessage: MessageType = .sendPositionResponse(playerID: selfPlayerID, position: playerNode.position)
+            
+            multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage) {
+                self.fighter.changePlayerPosition(position: playerNode.position)
+            }
+            
+        }
         
         let clientMessage: MessageType = .sendMoveRequest(dx: dx)
         let hostMessage: MessageType = .sendMoveResponse(playerID: selfPlayerID, dx: dx)
@@ -169,15 +188,20 @@ extension MyScene: GesturePadDelegate {
     func performActionForAnalogStopMoving() {
 
         guard let playerNode = self.fighter.component(ofType: SpriteComponent.self)?.node else {return}
+
+        var positionXPredicted: CGFloat = playerNode.xScale < 0 ? -7.0 : 7.0
         
-        let clientMessage: MessageType = .sendStopRequest(position: playerNode.position)
-        let hostMessage: MessageType = .sendStopResponse(playerID: selfPlayerID, position: playerNode.position)
-        
-        let playerPosition = playerNode.position
+        if playerNode.physicsBody?.velocity.dx == 0 {
+            positionXPredicted = 0
+        }
+        let positionToSend = CGPoint(x: playerNode.position.x + positionXPredicted, y: playerNode.position.y)
+
+        let clientMessage: MessageType = .sendStopRequest(position: positionToSend)
+        let hostMessage: MessageType = .sendStopResponse(playerID: selfPlayerID, position: positionToSend)
         
         multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage) {
             self.fighter.idle()
-            self.fighter.changePlayerPosition(position: playerPosition)
+            self.fighter.changePlayerPosition(position: positionToSend)
         }
         
     }
@@ -248,6 +272,11 @@ extension MyScene: UpdateSceneDelegate {
     func updatePlayerMove(dx: CGFloat, from playerID: Int) {
         if let player = allPlayers[playerID] {
             player.walk(inDirectionX: dx)
+        }
+    }
+    func updatePlayerPosition(playerPosition: CGPoint, from playerID: Int) {
+        if let player = allPlayers[playerID] {
+            player.changePlayerPosition(position: playerPosition)
         }
     }
     
