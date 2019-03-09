@@ -110,7 +110,6 @@ class MyScene: SKScene {
             
             //ping label
             pingLabel = SKLabelNode(text: "ping: 0 ms, host: \(MultiplayerService.shared.selfPlayer.alias)")
-            print(self.size.height)
             pingLabel.position = CGPoint(x: self.size.width/2 - 20  , y: self.size.height/2 - 40)
             pingLabel.horizontalAlignmentMode = .right
             pingLabel.fontName = "Helvetica"
@@ -163,7 +162,7 @@ extension MyScene: GesturePadDelegate {
     func performActionForAnalogMoving(inAngle angle: CGFloat, withDirectionX dx: CGFloat, AndDirectionY dy: CGFloat) {
         
         if (dx >= 0 && lookingLeft) || (dx < 0 && !lookingLeft) {
-            print("orientation changed")
+
             lookingLeft = !lookingLeft
             
             guard let playerNode = self.fighter.component(ofType: SpriteComponent.self)?.node else {return}
@@ -312,7 +311,6 @@ extension MyScene: UpdateSceneDelegate {
         
         
         let hittedPlayers = attackerPlayer.attack()
-        print("received: \(receivedAttackIDs) - hitted: \(hittedPlayers)")
         
         receivedAttackIDs.forEach { (playerID) in
             if let hittedPlayer = allPlayers[playerID] {

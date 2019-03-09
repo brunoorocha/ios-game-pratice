@@ -238,7 +238,6 @@ class Fighter: GKEntity {
         else {
             self.comboCount = 0
         }
-        print("retornou: \(playersHitted)")
         return playersHitted
     }
     
