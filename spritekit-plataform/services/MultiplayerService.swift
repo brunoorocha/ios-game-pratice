@@ -12,12 +12,13 @@ class MultiplayerService: NSObject {
     
     static let shared = MultiplayerService()
     
-    private(set) var matchMinPlayers : Int = 3
-    private(set) var matchMaxPlayers : Int = 3
+    private(set) var matchMinPlayers : Int = 2
+    private(set) var matchMaxPlayers : Int = 2
     private(set) var hostPlayer: GKPlayer?
     private(set) var pingHost: Int = 40 // in miliseconds
     private(set) var allPlayers: [String : Float] = [String : Float]()
     private(set) var selfPlayer = GKLocalPlayer.local
+    private var timer: Timer = Timer()
     var updateSceneDelegate: UpdateSceneDelegate?
     override init() {
         super.init()
@@ -49,7 +50,8 @@ class MultiplayerService: NSObject {
         
         if hostPlayer == selfPlayer {
             let ping = Double(pingHost) / 1000
-            Timer.scheduledTimer(withTimeInterval: ping, repeats: false) { (_) in
+
+            timer = Timer.scheduledTimer(withTimeInterval: ping, repeats: false) { (_) in
                 hostAction()
             }
             

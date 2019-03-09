@@ -147,11 +147,11 @@ class MyScene: SKScene {
         }
         
         //Send Ping request
-        if Int(currentTime * 5) % 2 == 1 && canSendPing{
+        if Int(currentTime) % 2 == 1 && canSendPing{
             let date = Int((Date().timeIntervalSince1970 * 1000))
             MultiplayerService.shared.ping(message: .sendPingRequest(senderTime: date), sendToHost: true)
             canSendPing = false
-        }else if Int(currentTime * 5) % 2 != 1{
+        }else if Int(currentTime) % 2 != 1{
             canSendPing = true
         }
         
@@ -161,7 +161,7 @@ class MyScene: SKScene {
 extension MyScene: GesturePadDelegate {
     func performActionForAnalogMoving(inAngle angle: CGFloat, withDirectionX dx: CGFloat, AndDirectionY dy: CGFloat) {
         
-        if (dx >= 0 && lookingLeft) || (dx < 0 && !lookingLeft) {
+        if (dx >= 0 && lookingLeft) || (dx < 0 && !lookingLeft) && self.fighter.jumpCount == 0 {
 
             lookingLeft = !lookingLeft
             
@@ -310,7 +310,7 @@ extension MyScene: UpdateSceneDelegate {
         guard let attackerPlayer = allPlayers[attackerID] else {return}
         
         
-        let hittedPlayers = attackerPlayer.attack()
+        let _ = attackerPlayer.attack()
         
         receivedAttackIDs.forEach { (playerID) in
             if let hittedPlayer = allPlayers[playerID] {
