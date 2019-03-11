@@ -26,7 +26,8 @@ class Fighter: GKEntity {
     
     var health : CGFloat = 100
     var damage : CGFloat = 25
-    
+    var playerID: String = ""
+    var playerAlias: String = ""
     let rangerAttack : CGFloat = 10
     let heightAttack : CGFloat = 10
     
@@ -36,14 +37,22 @@ class Fighter: GKEntity {
     var lastAttackTimeCount: TimeInterval = 0
     let comboTimeWindow: TimeInterval = 0.8
 
-    override init() {
+    init(playerID: String, playerAlias: String) {
         super.init()
+        
+        self.playerID = playerID
+        self.playerAlias = playerAlias
         
         let spriteComponent = SpriteComponent(withTexture: SKTexture(imageNamed: "adventurer-idle-2-0"))
         self.addComponent(spriteComponent)
         
+        if let nameLabel = self.component(ofType: SpriteComponent.self)?.nameLabel {
+            nameLabel.text = playerAlias
+        }
+        
         self.setupStateMachine()
         self.configurePhysicsBody()
+
     }
     
     override func update(deltaTime seconds: TimeInterval) {
@@ -54,12 +63,13 @@ class Fighter: GKEntity {
             self.isDown = false
         }
         // Natural Fall
-        if ((node.physicsBody?.velocity.dy)! < CGFloat(0) && !self.isDown){
+        if ((node.physicsBody?.velocity.dy)! < CGFloat(0) && !self.isDown) {
             node.physicsBody?.collisionBitMask |= CategoryMask.plataform
             self.stateMachine.enter(FighterFallState.self)
         }
         // Down Fall
-        if ((node.physicsBody?.velocity.dy)! < CGFloat(0) && self.isDown){
+        if ((node.physicsBody?.velocity.dy)! < CGFloat(0) && self.isDown) {
+            
             // This function are called so much
             if (node.position.y > self.positionDyDownTapped - node.size.height){
                 node.physicsBody?.collisionBitMask &= ~CategoryMask.plataform
@@ -148,6 +158,15 @@ class Fighter: GKEntity {
         }        
     }
     
+    func changePlayerPosition(position: CGPoint){
+        
+        let move = SKAction.move(to: position, duration: 0.05)
+        move.timingMode = .easeIn
+        if let node = self.component(ofType: SpriteComponent.self)?.node {
+            node.run(move)
+        }
+    }
+    
     func idle() {
         if let node = self.component(ofType: SpriteComponent.self)?.node {
             node.physicsBody?.velocity.dx = 0.0
@@ -156,7 +175,8 @@ class Fighter: GKEntity {
     }
     
     func walk(inDirectionX dx: CGFloat) {
-        if let node = self.component(ofType: SpriteComponent.self)?.node {
+        if let node = self.component(ofType: SpriteComponent.self)?.node,
+           let nameLabel = self.component(ofType: SpriteComponent.self)?.nameLabel {
             let nodeDirection: CGFloat = dx < 0 ? -1.0 : 1.0
             // If direction new is right and old isn't right
             if (nodeDirection == 1.0 && self.fighterDirection != .right) {
@@ -169,6 +189,7 @@ class Fighter: GKEntity {
                 self.stateMachine.enter(FighterIdleState.self)
             }
             node.xScale = abs(node.xScale) * nodeDirection
+            nameLabel.xScale = nodeDirection
             self.stateMachine.enter(FighterWalkState.self)
         }
         
@@ -190,28 +211,33 @@ class Fighter: GKEntity {
         }
     }
     
-    func attack() {
+    //attack returns all players(playerID) that was hitted by attacker player
+    func attack() -> [Int]{
+        var playersHitted: [Int] = [-1,-1,-1,-1] // none player is -1
         // Necessary because resizing are bugged
-        if (self.stateMachine.currentState is FighterAttackState) { return }
+        if (self.stateMachine.currentState is FighterAttackState ||
+            self.stateMachine.currentState is FighterHurtState ||
+            self.stateMachine.currentState is FighterDieState) { return playersHitted}
+        
         if let node = self.component(ofType: SpriteComponent.self)?.node {
             // Get scene reference
-            guard let scene = node.scene as? MyScene else { return }
+            guard let scene = node.scene as? MyScene else { return playersHitted}
             // Create a damage area - See more to info
             let damageArea = self.insertDamageArea(node: node)
             // Filter for fights to hit
-            scene.fighters.forEach({
-                if let fighterNode = $0.component(ofType: SpriteComponent.self)?.node {
-                    if fighterNode.intersects(damageArea){
-                        if ($0 == self) { return }
-                        $0.receiveDamage(damage: self.damage)
+            for (i, fighter) in scene.allPlayers.enumerated() {
+                if let fighterNode = fighter.value.component(ofType: SpriteComponent.self)?.node {
+                    if fighterNode.intersects(damageArea) && fighter.value != self {
+                        playersHitted[i] = fighter.value.playerID.toInt()
+                        //fighter.receiveDamage(damage: self.damage)
                     }
                 }
-            })
+            }
         }
-        
-        
-        let comboStateList = [FighterAttackState.self, FighterAttack2State.self, FighterAttack3State.self]
-        
+               
+        let comboStateList = [FighterAttackState.self, FighterAttack2State.self, FighterAttack3State.self]        
+        self.stateMachine.enter(FighterAttackState.self)
+    
         if (self.comboCount < self.comboCountMax) {
             self.stateMachine.enter(comboStateList[self.comboCount])
             self.comboCount = self.comboCount + 1
@@ -221,8 +247,9 @@ class Fighter: GKEntity {
             self.comboCount = 0
             self.stateMachine.enter(comboStateList[self.comboCount])
         }
-        
+        return playersHitted
     }
+    
     
     func receiveDamage(damage: CGFloat){
         self.health -= damage
@@ -272,4 +299,5 @@ class Fighter: GKEntity {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
 }

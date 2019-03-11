@@ -16,7 +16,7 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         let skView = view as! SKView
         
-        if let scene = SKScene(fileNamed: "MyScene") {
+        if let scene = SKScene(fileNamed: "MenuScene") {
             scene.scaleMode = .resizeFill
             skView.presentScene(scene)
         }
@@ -24,7 +24,9 @@ class GameViewController: UIViewController {
         skView.showsFPS = true
         skView.showsNodeCount = true
         skView.ignoresSiblingOrder = true
-//        skView.showsPhysics = true
+        skView.showsPhysics = true
+        
+        GameCenterService.shared.authenticationViewController = self
     }
     
     override var shouldAutorotate: Bool {

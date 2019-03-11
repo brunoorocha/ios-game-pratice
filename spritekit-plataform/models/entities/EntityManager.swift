@@ -24,12 +24,14 @@ class EntityManager {
             spriteNode.zPosition = 3
             scene.addChild(spriteNode)
         }
+        
     }
     
     func remove(entity: GKEntity) {
         if let spriteNode = entity.component(ofType: SpriteComponent.self)?.node {
             spriteNode.removeFromParent()
-        }        
+        }
+        
         entities.remove(entity)
     }
 
