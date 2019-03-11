@@ -103,7 +103,9 @@ class Fighter: GKEntity {
         }
         
         self.comboTimeCount = seconds
+        //print("timeCount: \(comboTimeCount), lastattackTimecount: \(lastAttackTimeCount), timeWindow: \(comboTimeWindow) , comboCount: \(comboCount)")
         if ((self.comboTimeCount - self.lastAttackTimeCount) > self.comboTimeWindow) {
+            
             self.comboCount = 0
         }
 
@@ -161,7 +163,7 @@ class Fighter: GKEntity {
     func changePlayerPosition(position: CGPoint){
         
         let move = SKAction.move(to: position, duration: 0.05)
-        move.timingMode = .easeIn
+        //move.timingMode = .easeIn
         if let node = self.component(ofType: SpriteComponent.self)?.node {
             node.run(move)
         }
@@ -237,9 +239,10 @@ class Fighter: GKEntity {
         }
                
         let comboStateList = [FighterAttackState.self, FighterAttack2State.self, FighterAttack3State.self]        
-        self.stateMachine.enter(FighterAttackState.self)
+        //self.stateMachine.enter(FighterAttackState.self)
     
         if (self.comboCount < self.comboCountMax) {
+            print("comboCount: ", self.comboCount)
             self.stateMachine.enter(comboStateList[self.comboCount])
             self.comboCount = self.comboCount + 1
             self.lastAttackTimeCount = self.comboTimeCount

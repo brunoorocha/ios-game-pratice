@@ -45,7 +45,7 @@ class MultiplayerService: NSObject {
         }
     }
     
-    func sendActionMessage(clientMessage: MessageType, hostMessage: MessageType, hostAction: @escaping () -> Void){
+    func sendActionMessage(clientMessage: MessageType, hostMessage: MessageType, sendDataMode: GKMatch.SendDataMode, hostAction: @escaping () -> Void){
         var messageType: MessageType = clientMessage
         
         if hostPlayer == selfPlayer {
@@ -59,7 +59,7 @@ class MultiplayerService: NSObject {
         }
         
         let data = Message(messageType: messageType)
-        MultiplayerService.shared.sendData(data: data, sendDataMode: .reliable)
+        MultiplayerService.shared.sendData(data: data, sendDataMode: sendDataMode)
     }
     
     func startingGame(){
@@ -81,6 +81,9 @@ class MultiplayerService: NSObject {
                     //TODO: set randomly the start position of each player
                     node.position = CGPoint(x: 0, y: 0)
                     name.text = $0.alias
+                    node.physicsBody?.isDynamic = false;
+                    node.physicsBody?.categoryBitMask = CategoryMask.player;
+                    node.physicsBody?.collisionBitMask = CategoryMask.playerCopy;
                 }
                 allPlayers[$0.playerID.toInt()] = otherPlayer
                 scene.entityManager.add(entity: otherPlayer)
@@ -90,6 +93,23 @@ class MultiplayerService: NSObject {
             let player = Fighter(playerID: GKLocalPlayer.local.playerID, playerAlias: GKLocalPlayer.local.alias)
             allPlayers[GKLocalPlayer.local.playerID.toInt()] = player
             scene.entityManager.add(entity: player)
+            
+            if let node = player.component(ofType: SpriteComponent.self)?.node {
+                node.physicsBody?.isDynamic = false;
+                node.physicsBody?.categoryBitMask = CategoryMask.none;
+                node.physicsBody?.collisionBitMask = CategoryMask.none;
+            }
+            
+            let playerCopy = Fighter(playerID: GKLocalPlayer.local.playerID, playerAlias: GKLocalPlayer.local.alias)
+            scene.entityManager.add(entity: playerCopy)
+            scene.fighterCopy = playerCopy
+            
+    
+            if let node = playerCopy.component(ofType: SpriteComponent.self)?.node {
+                //uncomment this lines to activate collision between players
+                //node.physicsBody?.categoryBitMask = CategoryMask.playerCopy
+                //node.physicsBody?.collisionBitMask = CategoryMask.player
+            }
         }else{
             
             //for single player only(testing mode), will be deleted soon
@@ -98,6 +118,17 @@ class MultiplayerService: NSObject {
             let player = Fighter(playerID: GKLocalPlayer.local.playerID, playerAlias: GKLocalPlayer.local.alias)
             allPlayers[GKLocalPlayer.local.playerID.toInt()] = player
             scene.entityManager.add(entity: player)
+            
+            if let node = player.component(ofType: SpriteComponent.self)?.node {
+                node.physicsBody?.isDynamic = false;
+                node.physicsBody?.categoryBitMask = CategoryMask.none;
+                node.physicsBody?.collisionBitMask = CategoryMask.none;
+            }
+            
+            let playerCopy = Fighter(playerID: GKLocalPlayer.local.playerID, playerAlias: GKLocalPlayer.local.alias)
+            scene.entityManager.add(entity: playerCopy)
+            scene.fighterCopy = playerCopy
+
         }
         return allPlayers
         

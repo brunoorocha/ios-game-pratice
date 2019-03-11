@@ -22,6 +22,8 @@ class Map1 {
     private func drawBackground() {
         let background = SKSpriteNode(texture: SKTexture(imageNamed: "background"))
         background.size.height = self.scene.size.height
+        background.setScale(1.2)
+        background.position = CGPoint(x: 0, y: 50)
         background.texture?.filteringMode = .nearest
         background.zPosition = 1
         self.scene.addChild(background)
