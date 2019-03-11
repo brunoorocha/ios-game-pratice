@@ -43,6 +43,10 @@
 		A397A12622295B5800E61051 /* Attack2.atlas in Resources */ = {isa = PBXBuildFile; fileRef = A397A12522295B5800E61051 /* Attack2.atlas */; };
 		A397A12822295C5600E61051 /* FighterAttack3State.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A12722295C5600E61051 /* FighterAttack3State.swift */; };
 		A397A12A22295D6200E61051 /* Attack3.atlas in Resources */ = {isa = PBXBuildFile; fileRef = A397A12922295D6200E61051 /* Attack3.atlas */; };
+		A3ACB3312233EA4500AF5088 /* FighterHurt.wav in Resources */ = {isa = PBXBuildFile; fileRef = A3ACB3302233EA4500AF5088 /* FighterHurt.wav */; };
+		A3ACB3332233EC0600AF5088 /* FighterJump.wav in Resources */ = {isa = PBXBuildFile; fileRef = A3ACB3322233EC0600AF5088 /* FighterJump.wav */; };
+		A3ACB3352233EC1600AF5088 /* FighterAttack.wav in Resources */ = {isa = PBXBuildFile; fileRef = A3ACB3342233EC1600AF5088 /* FighterAttack.wav */; };
+		A3ACB3372233ECB900AF5088 /* FighterDeath.wav in Resources */ = {isa = PBXBuildFile; fileRef = A3ACB3362233ECB900AF5088 /* FighterDeath.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +88,10 @@
 		A397A12522295B5800E61051 /* Attack2.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Attack2.atlas; sourceTree = "<group>"; };
 		A397A12722295C5600E61051 /* FighterAttack3State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FighterAttack3State.swift; sourceTree = "<group>"; };
 		A397A12922295D6200E61051 /* Attack3.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Attack3.atlas; sourceTree = "<group>"; };
+		A3ACB3302233EA4500AF5088 /* FighterHurt.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = FighterHurt.wav; sourceTree = "<group>"; };
+		A3ACB3322233EC0600AF5088 /* FighterJump.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = FighterJump.wav; sourceTree = "<group>"; };
+		A3ACB3342233EC1600AF5088 /* FighterAttack.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = FighterAttack.wav; sourceTree = "<group>"; };
+		A3ACB3362233ECB900AF5088 /* FighterDeath.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = FighterDeath.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +184,7 @@
 		A397A0D8221EDD6600E61051 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				A3ACB32F2233EA3400AF5088 /* SFX */,
 				A397A0FE222091E700E61051 /* Atlas */,
 				A397A0C9221EDCA700E61051 /* Assets.xcassets */,
 			);
@@ -259,10 +268,10 @@
 				A397A0FA22208C6000E61051 /* FighterIdleState.swift */,
 				A397A10C22209C3700E61051 /* FighterWalkState.swift */,
 				A397A10E2220A02700E61051 /* FighterJumpState.swift */,
-				A397A1142220C5A300E61051 /* FighterAttackState.swift */,
 				1B3FA0A72225B5D900280565 /* FighterFallState.swift */,
 				1BDFA7ED2227148400622BC6 /* FighterHurtState.swift */,
 				1BDFA7F322272FED00622BC6 /* FighterDieState.swift */,
+				A397A1142220C5A300E61051 /* FighterAttackState.swift */,
 				A397A12322295A6100E61051 /* FighterAttack2State.swift */,
 				A397A12722295C5600E61051 /* FighterAttack3State.swift */,
 			);
@@ -316,6 +325,17 @@
 				A397A1212229595A00E61051 /* GameKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A3ACB32F2233EA3400AF5088 /* SFX */ = {
+			isa = PBXGroup;
+			children = (
+				A3ACB3302233EA4500AF5088 /* FighterHurt.wav */,
+				A3ACB3322233EC0600AF5088 /* FighterJump.wav */,
+				A3ACB3342233EC1600AF5088 /* FighterAttack.wav */,
+				A3ACB3362233ECB900AF5088 /* FighterDeath.wav */,
+			);
+			path = SFX;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -384,15 +404,19 @@
 				A397A0C8221EDCA400E61051 /* Main.storyboard in Resources */,
 				A397A106222091FF00E61051 /* Run.atlas in Resources */,
 				A397A109222091FF00E61051 /* Jump.atlas in Resources */,
+				A3ACB3352233EC1600AF5088 /* FighterAttack.wav in Resources */,
 				A397A0CA221EDCA700E61051 /* Assets.xcassets in Resources */,
+				A3ACB3332233EC0600AF5088 /* FighterJump.wav in Resources */,
 				A397A105222091FF00E61051 /* Idle.atlas in Resources */,
 				A397A12A22295D6200E61051 /* Attack3.atlas in Resources */,
 				A397A0DF221EDE2E00E61051 /* MyScene.sks in Resources */,
+				A3ACB3312233EA4500AF5088 /* FighterHurt.wav in Resources */,
 				A397A0CD221EDCA700E61051 /* LaunchScreen.storyboard in Resources */,
 				A397A107222091FF00E61051 /* Attack.atlas in Resources */,
 				1BDFA7F0222719F100622BC6 /* Hurt.atlas in Resources */,
 				1BDFA7F222272F9200622BC6 /* Die.atlas in Resources */,
 				A397A12622295B5800E61051 /* Attack2.atlas in Resources */,
+				A3ACB3372233ECB900AF5088 /* FighterDeath.wav in Resources */,
 				A397A108222091FF00E61051 /* Fall.atlas in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -31,7 +31,7 @@ class FighterAttack2State: GKState {
     }
     
     override func didEnter(from previousState: GKState?) {
-        let attackAction = SKAction.animate(with: self.stateAtlasTextures, timePerFrame: 0.15, resize: true, restore: true)
+        let attackAction = SKAction.animate(with: self.stateAtlasTextures, timePerFrame: 0.1, resize: true, restore: true)
         node.run(attackAction, completion: {
             self.stateMachine?.enter(FighterIdleState.self)
         })

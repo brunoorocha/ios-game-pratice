@@ -24,7 +24,8 @@ class FighterDieState: GKState {
     override func didEnter(from previousState: GKState?) {
         self.node.physicsBody?.velocity.dx = 0
         let dieAction = SKAction.animate(with: self.stateAtlasTextures, timePerFrame: 0.15, resize: true, restore: true)
-        node.run(dieAction, completion: {
+        let dieSound = SKAction.playSoundFileNamed("FighterDeath.wav", waitForCompletion: false)
+        node.run(SKAction.group([dieAction, dieSound]), completion: {
             // Stop forever loops
             self.node.removeAllActions()
             // Temporarily - Used because dead texture are bugged

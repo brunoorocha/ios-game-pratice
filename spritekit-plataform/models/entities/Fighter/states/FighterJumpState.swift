@@ -36,7 +36,8 @@ class FighterJumpState: GKState {
         let jumpAction = SKAction.animate(with: self.stateAtlasTextures, timePerFrame: 0.15, resize: true, restore: true)
         node.physicsBody?.velocity.dy = 0.0
         node.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 12.0))
-        node.run(jumpAction, completion: {
+        let jumpSound = SKAction.playSoundFileNamed("FighterJump.wav", waitForCompletion: true)
+        node.run(SKAction.group([jumpAction, jumpSound]), completion: {
             self.stateMachine?.enter(FighterIdleState.self)
         })
     }
