@@ -23,7 +23,6 @@ class FighterIdleState: GKState {
     
     override func didEnter(from previousState: GKState?) {
         let idleAction = SKAction.animate(with: self.stateAtlasTextures, timePerFrame: 0.15, resize: true, restore: true)
-//        node.physicsBody?.velocity.dx = 0.0
         node.run(SKAction.repeatForever(idleAction), withKey: "FighterIdleAction")
     }
 }

@@ -13,7 +13,6 @@ import GameplayKit
 class FighterWalkState: GKState {
     var node: SKSpriteNode!
     var stateAtlasTextures: [SKTexture] = []
-    var dx: CGFloat = 4.0
     
     init(withNode node: SKSpriteNode) {
         self.node = node
@@ -29,16 +28,18 @@ class FighterWalkState: GKState {
             return true
         case is FighterDieState.Type:
             return true
+        case is FighterAttackState.Type:
+            return true
+        case is FighterAttack2State.Type:
+            return true
+        case is FighterAttack3State.Type:
+            return true
         default:
             return false
         }
     }
     
     override func didEnter(from previousState: GKState?) {
-        let nodeDirection: CGFloat = node.xScale < 0 ? -1.0 : 1.0
-        node.physicsBody?.velocity.dx = 0.0
-        node.physicsBody?.applyImpulse(CGVector(dx: (dx * nodeDirection), dy: 0.0))
-        
         if (!(previousState is FighterJumpState)) {
             let walkAction = SKAction.animate(with: self.stateAtlasTextures, timePerFrame: 0.15, resize: true, restore: true)
             node.run(SKAction.repeatForever(walkAction), withKey: "FighterWalkAction")

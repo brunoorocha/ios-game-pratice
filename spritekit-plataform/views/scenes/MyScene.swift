@@ -245,6 +245,11 @@ extension MyScene: GesturePadDelegate {
             hittedPlayersArray.forEach { (playerID) in
                 if let hittedPlayer = self.allPlayers[playerID] {
                     hittedPlayer.receiveDamage(damage: self.fighter.damage)
+                    if let attacker = self.allPlayers[self.selfPlayerID]{
+                        if attacker.stateMachine.currentState is FighterAttack3State{
+                            hittedPlayer.reiceivePushDamage(force: attacker.forcePush, direction: attacker.fighterDirection)
+                        }
+                    }
                 }
             }
         }
@@ -339,6 +344,11 @@ extension MyScene: UpdateSceneDelegate {
         receivedAttackIDs.forEach { (playerID) in
             if let hittedPlayer = allPlayers[playerID] {
                 hittedPlayer.receiveDamage(damage: attackerPlayer.damage)
+                if let attacker = self.allPlayers[self.selfPlayerID]{
+                    if attacker.stateMachine.currentState is FighterAttack3State{
+                        hittedPlayer.reiceivePushDamage(force: attacker.forcePush, direction: attacker.fighterDirection)
+                    }
+                }
             }
         }
         

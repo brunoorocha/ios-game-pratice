@@ -119,6 +119,7 @@ class MultiplayerService: NSObject {
             allPlayers[GKLocalPlayer.local.playerID.toInt()] = player
             scene.entityManager.add(entity: player)
             
+
             if let node = player.component(ofType: SpriteComponent.self)?.node {
                 node.physicsBody?.isDynamic = false;
                 node.physicsBody?.categoryBitMask = CategoryMask.none;
@@ -128,6 +129,10 @@ class MultiplayerService: NSObject {
             let playerCopy = Fighter(playerID: GKLocalPlayer.local.playerID, playerAlias: GKLocalPlayer.local.alias)
             scene.entityManager.add(entity: playerCopy)
             scene.fighterCopy = playerCopy
+
+            let player2 = Fighter(playerID: "1234", playerAlias: "MOCK")
+            allPlayers[1234] = player2
+            scene.entityManager.add(entity: player2)
 
         }
         return allPlayers

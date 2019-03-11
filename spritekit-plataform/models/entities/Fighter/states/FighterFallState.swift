@@ -23,6 +23,10 @@ class FighterFallState: GKState {
             return true
         case is FighterAttackState.Type:
             return true
+        case is FighterAttack2State.Type:
+            return true
+        case is FighterAttack3State.Type:
+            return true
         case is FighterIdleState.Type:
             return true
         case is FighterDieState.Type:
