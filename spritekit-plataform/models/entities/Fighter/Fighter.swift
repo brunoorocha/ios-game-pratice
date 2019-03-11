@@ -24,10 +24,11 @@ class Fighter: GKEntity {
     var jumpCount = 0
     var jumpCountMax = 2
     
-    var health : CGFloat = 100
-    var damage : CGFloat = 25
     var playerID: String = ""
     var playerAlias: String = ""
+    var health : CGFloat = 100
+    var damage : CGFloat = 5
+    var forcePush : CGFloat = 5
     let rangerAttack : CGFloat = 10
     let heightAttack : CGFloat = 10
     
@@ -152,7 +153,10 @@ class Fighter: GKEntity {
             let dieState = FighterDieState(withNode: node)
             dieState.stateAtlasTextures = AtlasTextureBuilder.build(atlas: "Die")
             
-            self.stateMachine = GKStateMachine(states: [idleState, walkState, jumpState, attackState, attack2State, attack3State, fallState, hurtState, dieState])
+            let knockbackState = FighterKnockbackState(withNode: node)
+            knockbackState.stateAtlasTextures = AtlasTextureBuilder.build(atlas: "Hurt")
+            
+            self.stateMachine = GKStateMachine(states: [idleState, walkState, jumpState, attackState, attack2State, attack3State, fallState, hurtState, dieState, knockbackState])
             
             self.idle()
         }        
@@ -262,6 +266,13 @@ class Fighter: GKEntity {
         }else{
             self.stateMachine?.enter(FighterDieState.self)
         }
+    }
+    
+    func reiceivePushDamage(force: CGFloat, direction: PlayerSide){
+        guard let node = self.component(ofType: SpriteComponent.self)?.node else { return }
+        let forceDX : CGFloat = direction == .left ? -1 : 1
+        node.physicsBody?.applyImpulse(CGVector(dx: force*forceDX, dy: 0))
+        self.stateMachine.enter(FighterKnockbackState.self)
     }
     
     func suicide(){

@@ -21,7 +21,7 @@ class FighterHurtState: GKState {
         if stateClass is FighterAttackState.Type {
             return false
         }
-        return  stateClass is FighterIdleState.Type || stateClass is FighterDieState.Type
+        return stateClass is FighterIdleState.Type || stateClass is FighterDieState.Type || stateClass is FighterKnockbackState.Type
     }
     
     override func didEnter(from previousState: GKState?) {
