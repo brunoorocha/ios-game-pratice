@@ -21,6 +21,7 @@ class EntityManager {
     func add(entity: GKEntity) {
         entities.insert(entity)
         if let spriteNode = entity.component(ofType: SpriteComponent.self)?.node {
+            spriteNode.zPosition = 3
             scene.addChild(spriteNode)
         }
         

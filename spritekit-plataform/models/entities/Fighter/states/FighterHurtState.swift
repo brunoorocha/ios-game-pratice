@@ -26,7 +26,8 @@ class FighterHurtState: GKState {
     
     override func didEnter(from previousState: GKState?) {
         let hurtAction = SKAction.animate(with: self.stateAtlasTextures, timePerFrame: 0.15, resize: true, restore: true)
-        node.run(hurtAction, completion: {
+        let hurtSound = SKAction.playSoundFileNamed("FighterHurt.wav", waitForCompletion: true)
+        node.run(SKAction.group([hurtAction, hurtSound]), completion: {
             self.stateMachine?.enter(FighterIdleState.self)
         })
     }
