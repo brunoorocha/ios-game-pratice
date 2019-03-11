@@ -137,6 +137,12 @@ class Fighter: GKEntity {
             let attackState = FighterAttackState(withNode: node)
             attackState.stateAtlasTextures = AtlasTextureBuilder.build(atlas: "Attack")
             
+            let attack2State = FighterAttack2State(withNode: node)
+            attack2State.stateAtlasTextures = AtlasTextureBuilder.build(atlas: "Attack2")
+            
+            let attack3State = FighterAttack3State(withNode: node)
+            attack3State.stateAtlasTextures = AtlasTextureBuilder.build(atlas: "Attack3")
+            
             let fallState = FighterFallState(withNode: node)
             fallState.stateAtlasTextures = AtlasTextureBuilder.build(atlas: "Fall")
             
@@ -146,7 +152,7 @@ class Fighter: GKEntity {
             let dieState = FighterDieState(withNode: node)
             dieState.stateAtlasTextures = AtlasTextureBuilder.build(atlas: "Die")
             
-            self.stateMachine = GKStateMachine(states: [idleState, walkState, jumpState, attackState, fallState,hurtState, dieState])
+            self.stateMachine = GKStateMachine(states: [idleState, walkState, jumpState, attackState, attack2State, attack3State, fallState, hurtState, dieState])
             
             self.idle()
         }        
@@ -228,15 +234,18 @@ class Fighter: GKEntity {
                 }
             }
         }
-        
+               
+        let comboStateList = [FighterAttackState.self, FighterAttack2State.self, FighterAttack3State.self]        
         self.stateMachine.enter(FighterAttackState.self)
     
         if (self.comboCount < self.comboCountMax) {
+            self.stateMachine.enter(comboStateList[self.comboCount])
             self.comboCount = self.comboCount + 1
             self.lastAttackTimeCount = self.comboTimeCount
         }
         else {
             self.comboCount = 0
+            self.stateMachine.enter(comboStateList[self.comboCount])
         }
         return playersHitted
     }

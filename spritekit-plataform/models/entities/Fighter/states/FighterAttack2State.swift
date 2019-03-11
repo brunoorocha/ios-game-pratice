@@ -1,15 +1,15 @@
 //
-//  FighterJumpState.swift
+//  FighterAttack2State.swift
 //  spritekit-plataform
 //
-//  Created by Bruno Rocha on 22/02/19.
+//  Created by Bruno Rocha on 01/03/19.
 //  Copyright © 2019 Bruno Rocha. All rights reserved.
 //
 
 import SpriteKit
 import GameplayKit
 
-class FighterJumpState: GKState {
+class FighterAttack2State: GKState {
     var node: SKSpriteNode!
     var stateAtlasTextures: [SKTexture] = []
     
@@ -23,8 +23,6 @@ class FighterJumpState: GKState {
             return true
         case is FighterWalkState.Type:
             return true
-        case is FighterFallState.Type:
-            return true
         case is FighterDieState.Type:
             return true
         default:
@@ -33,12 +31,10 @@ class FighterJumpState: GKState {
     }
     
     override func didEnter(from previousState: GKState?) {
-        let jumpAction = SKAction.animate(with: self.stateAtlasTextures, timePerFrame: 0.15, resize: true, restore: true)
-        node.physicsBody?.velocity.dy = 0.0
-        node.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 12.0))
-        let jumpSound = SKAction.playSoundFileNamed("FighterJump.wav", waitForCompletion: true)
-        node.run(SKAction.group([jumpAction, jumpSound]), completion: {
+        let attackAction = SKAction.animate(with: self.stateAtlasTextures, timePerFrame: 0.1, resize: true, restore: true)
+        node.run(attackAction, completion: {
             self.stateMachine?.enter(FighterIdleState.self)
         })
     }
 }
+
