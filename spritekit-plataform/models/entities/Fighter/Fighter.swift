@@ -215,9 +215,14 @@ class Fighter: GKEntity {
     func attack() -> [Int]{
         var playersHitted: [Int] = [-1,-1,-1,-1] // none player is -1
         // Necessary because resizing are bugged
-        if (self.stateMachine.currentState is FighterAttackState ||
-            self.stateMachine.currentState is FighterHurtState ||
+        if (self.stateMachine.currentState is FighterHurtState ||
             self.stateMachine.currentState is FighterDieState) { return playersHitted}
+        
+        // Disable N attacks for tap
+        if (self.stateMachine.currentState is FighterAttackState ||
+            self.stateMachine.currentState is FighterAttack2State ||
+            self.stateMachine.currentState is FighterAttack3State ){ return playersHitted }
+        
         
         if let node = self.component(ofType: SpriteComponent.self)?.node {
             // Get scene reference
@@ -234,19 +239,17 @@ class Fighter: GKEntity {
                 }
             }
         }
-               
-        let comboStateList = [FighterAttackState.self, FighterAttack2State.self, FighterAttack3State.self]        
-        self.stateMachine.enter(FighterAttackState.self)
+        
+        let comboStateList = [FighterAttackState.self, FighterAttack2State.self, FighterAttack3State.self]
     
-        if (self.comboCount < self.comboCountMax) {
-            self.stateMachine.enter(comboStateList[self.comboCount])
-            self.comboCount = self.comboCount + 1
-            self.lastAttackTimeCount = self.comboTimeCount
-        }
-        else {
+        if ( self.comboCount == self.comboCountMax){
             self.comboCount = 0
-            self.stateMachine.enter(comboStateList[self.comboCount])
         }
+        
+        self.stateMachine.enter(comboStateList[self.comboCount])
+        self.comboCount = self.comboCount + 1
+        self.lastAttackTimeCount = self.comboTimeCount
+
         return playersHitted
     }
     
