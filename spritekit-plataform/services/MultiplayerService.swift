@@ -12,8 +12,8 @@ class MultiplayerService: NSObject {
     
     static let shared = MultiplayerService()
     
-    private(set) var matchMinPlayers : Int = 3
-    private(set) var matchMaxPlayers : Int = 3
+    private(set) var matchMinPlayers : Int = 2
+    private(set) var matchMaxPlayers : Int = 2
     private(set) var hostPlayer: GKPlayer?
     private(set) var pingHost: Int = 40 // in miliseconds
     private(set) var allPlayers: [String : Float] = [String : Float]()
@@ -96,6 +96,10 @@ class MultiplayerService: NSObject {
             let player = Fighter(playerID: GKLocalPlayer.local.playerID, playerAlias: GKLocalPlayer.local.alias)
             allPlayers[GKLocalPlayer.local.playerID.toInt()] = player
             scene.entityManager.add(entity: player)
+            
+            let player2 = Fighter(playerID: "1234", playerAlias: "MOCK")
+            allPlayers[1234] = player2
+            scene.entityManager.add(entity: player2)
         }
         return allPlayers
         
