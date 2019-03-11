@@ -21,8 +21,6 @@ class FighterAttack2State: GKState {
         switch stateClass {
         case is FighterIdleState.Type:
             return true
-        case is FighterWalkState.Type:
-            return true
         case is FighterDieState.Type:
             return true
         default:
@@ -32,7 +30,8 @@ class FighterAttack2State: GKState {
     
     override func didEnter(from previousState: GKState?) {
         let attackAction = SKAction.animate(with: self.stateAtlasTextures, timePerFrame: 0.1, resize: true, restore: true)
-        node.run(attackAction, completion: {
+        let attackSound = SKAction.playSoundFileNamed("FighterAttack.wav", waitForCompletion: true)
+        node.run(SKAction.group([attackAction, attackSound]), completion: {
             self.stateMachine?.enter(FighterIdleState.self)
         })
     }

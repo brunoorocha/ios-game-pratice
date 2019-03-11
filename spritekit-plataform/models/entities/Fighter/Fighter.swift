@@ -14,6 +14,17 @@ enum PlayerSide{
     case right
 }
 
+extension PlayerSide{
+    var math: CGFloat{
+        switch self {
+        case .left:
+            return -1
+        case .right:
+            return 1
+        }
+    }
+}
+
 class Fighter: GKEntity {
     
     var stateMachine: GKStateMachine!
@@ -29,14 +40,17 @@ class Fighter: GKEntity {
     var health : CGFloat = 100
     var damage : CGFloat = 5
     var forcePush : CGFloat = 5
+    var jumpForce: CGFloat = 12.0
     let rangerAttack : CGFloat = 10
     let heightAttack : CGFloat = 10
+    var velocity : CGFloat = 4
     
     var comboCount = 0
     let comboCountMax = 3
     var comboTimeCount: TimeInterval = 0
     var lastAttackTimeCount: TimeInterval = 0
     let comboTimeWindow: TimeInterval = 0.8
+    var delayAttack: TimeInterval = 0.4
 
     init(playerID: String, playerAlias: String) {
         super.init()
@@ -66,7 +80,10 @@ class Fighter: GKEntity {
         // Natural Fall
         if ((node.physicsBody?.velocity.dy)! < CGFloat(0) && !self.isDown) {
             node.physicsBody?.collisionBitMask |= CategoryMask.plataform
-            self.stateMachine.enter(FighterFallState.self)
+            // If is in attacking does not change
+            if (!self.comboList()){
+                self.stateMachine.enter(FighterFallState.self)
+            }
         }
         // Down Fall
         if ((node.physicsBody?.velocity.dy)! < CGFloat(0) && self.isDown) {
@@ -74,7 +91,10 @@ class Fighter: GKEntity {
             // This function are called so much
             if (node.position.y > self.positionDyDownTapped - node.size.height){
                 node.physicsBody?.collisionBitMask &= ~CategoryMask.plataform
-                self.stateMachine.enter(FighterFallState.self)
+                // If is in attacking does not change
+                if (!comboList()){
+                    self.stateMachine.enter(FighterFallState.self)
+                }
             }else{
                 self.isDown = false
                 self.positionDyDownTapped = 0
@@ -85,7 +105,10 @@ class Fighter: GKEntity {
             // When is grounded and haven't moviment set Idle
             if ((node.physicsBody?.velocity.dy)! == CGFloat(0))
             && ((node.physicsBody?.velocity.dx)! == CGFloat(0)){
-                self.stateMachine.enter(FighterIdleState.self)
+                // If is in attacking does not change
+                if (!comboList()){
+                    self.stateMachine.enter(FighterIdleState.self)
+                }
             }
             // When is grounded and have moviment set Run
             else if ((node.physicsBody?.velocity.dy)! == CGFloat(0))
@@ -163,7 +186,6 @@ class Fighter: GKEntity {
     }
     
     func changePlayerPosition(position: CGPoint){
-        
         let move = SKAction.move(to: position, duration: 0.05)
         move.timingMode = .easeIn
         if let node = self.component(ofType: SpriteComponent.self)?.node {
@@ -194,15 +216,29 @@ class Fighter: GKEntity {
             }
             node.xScale = abs(node.xScale) * nodeDirection
             nameLabel.xScale = nodeDirection
-            self.stateMachine.enter(FighterWalkState.self)
+            self.walk()
         }
         
     }
     
+    private func walk(){
+        // If is in attacking dont walk
+        if (self.comboList()){ return }
+        guard let node = self.component(ofType: SpriteComponent.self)?.node else { return }
+        node.physicsBody?.velocity.dx = 0.0
+        node.physicsBody?.applyImpulse(CGVector(dx: (velocity*self.fighterDirection.math), dy: 0.0))
+        self.stateMachine.enter(FighterWalkState.self)
+    }
+    
     func jump() {
         if (self.jumpCount < self.jumpCountMax) {
-            self.stateMachine.enter(FighterIdleState.self)
-            self.stateMachine.enter(FighterJumpState.self)
+            guard let node = self.component(ofType: SpriteComponent.self)?.node else { return }
+            if !(comboList()){
+                self.stateMachine.enter(FighterIdleState.self)
+                self.stateMachine.enter(FighterJumpState.self)
+            }
+            node.physicsBody?.velocity.dy = 0.0
+            node.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: jumpForce))
             self.jumpCount += 1
         }
     }
@@ -218,15 +254,19 @@ class Fighter: GKEntity {
     //attack returns all players(playerID) that was hitted by attacker player
     func attack() -> [Int]{
         var playersHitted: [Int] = [-1,-1,-1,-1] // none player is -1
-        // Necessary because resizing are bugged
         if (self.stateMachine.currentState is FighterHurtState ||
             self.stateMachine.currentState is FighterDieState) { return playersHitted}
         
-        // Disable N attacks for tap
-        if (self.stateMachine.currentState is FighterAttackState ||
-            self.stateMachine.currentState is FighterAttack2State ||
-            self.stateMachine.currentState is FighterAttack3State ){ return playersHitted }
+        // Delay attack
+        if ((self.comboTimeCount - self.lastAttackTimeCount) < self.delayAttack) && self.lastAttackTimeCount != 0{
+            return playersHitted
+        }
         
+        // Disable N attacks for tap
+        if (self.comboList()){ return playersHitted }
+        
+        // Disabled attack in moviment
+//        if (self.stateMachine.currentState is FighterWalkState) { return playersHitted}
         
         if let node = self.component(ofType: SpriteComponent.self)?.node {
             // Get scene reference
@@ -262,16 +302,21 @@ class Fighter: GKEntity {
         self.health -= damage
         // Check if is alive
         if (health > 0) {
+            // Necessary set idle to multiples hurt simultaneously
+            self.stateMachine?.enter(FighterIdleState.self)
             self.stateMachine?.enter(FighterHurtState.self)
         }else{
+            guard let node = self.component(ofType: SpriteComponent.self)?.node else { return }
+            node.physicsBody?.velocity.dx = 0
             self.stateMachine?.enter(FighterDieState.self)
         }
     }
     
     func reiceivePushDamage(force: CGFloat, direction: PlayerSide){
         guard let node = self.component(ofType: SpriteComponent.self)?.node else { return }
-        let forceDX : CGFloat = direction == .left ? -1 : 1
-        node.physicsBody?.applyImpulse(CGVector(dx: force*forceDX, dy: 0))
+        if !(stateMachine.currentState is FighterDieState){
+            node.physicsBody?.applyImpulse(CGVector(dx: force*direction.math, dy: 0))
+        }
         self.stateMachine.enter(FighterKnockbackState.self)
     }
     
@@ -308,6 +353,16 @@ class Fighter: GKEntity {
             scene.addChild(damageArea)
         }
         return damageArea
+    }
+    
+    private func comboList() -> Bool{
+        if (self.stateMachine.currentState is FighterAttackState ||
+            self.stateMachine.currentState is FighterAttack2State ||
+            self.stateMachine.currentState is FighterAttack3State){
+            return true
+        }else{
+            return false
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

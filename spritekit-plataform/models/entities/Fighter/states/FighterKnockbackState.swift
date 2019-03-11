@@ -18,7 +18,7 @@ class FighterKnockbackState: GKState {
     }
     
     override func isValidNextState(_ stateClass: AnyClass) -> Bool {
-        return stateClass is FighterIdleState.Type
+        return stateClass is FighterIdleState.Type || stateClass is FighterDieState.Type
     }
     
     override func didEnter(from previousState: GKState?) {

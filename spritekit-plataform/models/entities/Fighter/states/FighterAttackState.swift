@@ -21,8 +21,6 @@ class FighterAttackState: GKState {
         switch stateClass {
         case is FighterIdleState.Type:
             return true
-        case is FighterWalkState.Type:
-            return true
         case is FighterDieState.Type:
             return true
         default:
