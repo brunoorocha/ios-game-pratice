@@ -51,7 +51,7 @@ open class JoystickComponent : SKSpriteNode {
             circle.fillColor = c
             self.addChild(circle)
             self.color = UIColor.clear
-            self.alpha = 0.6
+            self.alpha = 0.4
         }
         
     }

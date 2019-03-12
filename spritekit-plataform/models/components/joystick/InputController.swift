@@ -31,10 +31,10 @@ class InputController: SKSpriteNode {
     
         
         let positionButtonA  = CGPoint(x: (self.size.width/2) - 255, y: -(self.size.height/2) + 130)
-        virtualButtonA = VirtualButtonNode(radius: 40, fillColor: SKColor.gray, inPosition: positionButtonA)
+        virtualButtonA = VirtualButtonNode(name: "A", radius: 40, fillColor: SKColor.gray, inPosition: positionButtonA)
         addChild(virtualButtonA)
         let positionButtonB  = CGPoint(x: (self.size.width/2) - 210, y: -(self.size.height/2) + 160)
-        virtualButtonB = VirtualButtonNode(radius: 40, fillColor: SKColor.gray, inPosition: positionButtonB)
+        virtualButtonB = VirtualButtonNode(name: "B", radius: 40, fillColor: SKColor.gray, inPosition: positionButtonB)
         addChild(virtualButtonB)
         
         virtualButtonA.actionBlock = {
@@ -65,7 +65,7 @@ class InputController: SKSpriteNode {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
-        if let touch = touches.first, (touch.location(in: self).x < 0) {
+        if let touch = touches.first, (touch.location(in: self).x < 0), (touchLeft != touch) {
             touchLeft = touch
             joystick.disabled = false
             joystick.position = touch.location(in: self)
@@ -75,7 +75,7 @@ class InputController: SKSpriteNode {
     
     }
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let touch = touches.first, (touch.location(in: self).x < 0) {
+        if let touch = touches.first, (touch.location(in: self).x < 0), (touchLeft == touch) {
             joystick.touchesMoved([touch], with: event)
             joystickDelegate?.joystickDidMoved(direction: joystick.direction)
         
@@ -85,20 +85,29 @@ class InputController: SKSpriteNode {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let touch = touches.first {
+        if let touch = touches.first, (touchLeft == touch) {
+            touchLeft = UITouch()
             joystick.disabled = true
-            isDown = false
             joystick.touchesEnded([touch], with: event)
             joystickDelegate?.joystickDidEndTracking(direction: joystick.direction)
+            
+            Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { (_) in
+                self.isDown = false
+            }
+            
         }
         
     }
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first, (touchLeft == touch) {
+            touchLeft = UITouch()
             joystick.disabled = true
-            isDown = false
             joystick.touchesCancelled([touch], with: event)
             joystickDelegate?.joystickDidEndTracking(direction: joystick.direction)
+            
+            Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { (_) in
+                self.isDown = false
+            }
         }
         
     }

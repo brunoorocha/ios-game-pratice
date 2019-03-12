@@ -60,7 +60,7 @@ class MyScene: SKScene {
         }
         
         if let nodeCopy = self.fighterCopy.component(ofType: SpriteComponent.self)?.node  {
-            nodeCopy.alpha = 0.5;
+            nodeCopy.alpha = 0.01;
             self.playerNodeCopy = nodeCopy
         }
         
@@ -319,7 +319,7 @@ extension MyScene: UpdateSceneDelegate {
         guard let attackerPlayer = allPlayers[attackerID] else {return}
         
         
-        let h = attackerPlayer.attack()
+        let _ = attackerPlayer.attack()
         
         receivedAttackIDs.forEach { (playerID) in
             if let hittedPlayer = allPlayers[playerID] {

@@ -240,10 +240,7 @@ class Fighter: GKEntity {
     }
     
     func changePlayerPosition(position: CGPoint){
-        var p = position
-        p.x = p.x + 30
-        let move = SKAction.move(to: p, duration: 0.05)
-        //move.timingMode = .easeIn
+        let move = SKAction.move(to: position, duration: 0.05)
         if let node = self.component(ofType: SpriteComponent.self)?.node {
             node.run(move)
         }
@@ -265,19 +262,16 @@ class Fighter: GKEntity {
             // If direction new is right and old isn't right
             if (nodeDirection == 1.0 && self.fighterDirection != .right) {
                 self.fighterDirection = .right
-                self.stateMachine.enter(FighterIdleState.self)
             }
             // If new direction is left and old isn't left
             else if (nodeDirection == -1.0 && self.fighterDirection != .left) {
                 self.fighterDirection = .left
-                
-                self.stateMachine.enter(FighterIdleState.self)
             }
             node.xScale = abs(node.xScale) * nodeDirection
             nameLabel.xScale = nodeDirection
-            if dx != 0{
-                self.walk()
-            }
+
+            self.walk()
+
             
         }
         
@@ -289,7 +283,10 @@ class Fighter: GKEntity {
         guard let node = self.component(ofType: SpriteComponent.self)?.node else { return }
         node.physicsBody?.velocity.dx = 0.0
         node.physicsBody?.applyImpulse(CGVector(dx: (velocity*self.fighterDirection.math), dy: 0.0))
-        self.stateMachine.enter(FighterWalkState.self)
+        
+        if self.jumpCount == 0 { //if is in ground
+            self.stateMachine.enter(FighterWalkState.self)
+        }
     }
     
     func jump() {

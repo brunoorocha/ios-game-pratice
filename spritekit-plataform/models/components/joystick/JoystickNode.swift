@@ -82,7 +82,6 @@ open class JoystickNode: SKNode {
         if let touch = touches.first {
             tracking = true
             joystickIsEnabled = true
-            //joystickDelegate?.joystickDidStartTracking()
         }
     }
     
