@@ -39,15 +39,14 @@ class MyScene: SKScene {
         self.backgroundColor = UIColor.white
         self.entityManager = EntityManager(withScene: self)                
         self.configureStates()
-        
-        //CONTROLS: choose one, comment the other
-        //self.configureGesturePad(for: view)
-        self.setupJoystick()
-        
         self.configureCamera()
         self.configureUI()
         self.configurePhysics()
         self.suicideArea()
+        
+        //CONTROLS: choose one, comment the other
+        //self.configureGesturePad(for: view)
+        self.setupJoystick()
         
         // Temporarily
 		    let arena = PListManager.loadArena(with: "FighterArena")
