@@ -28,16 +28,13 @@ class MyScene: SKScene {
     var previousPosition: CGPoint = CGPoint.zero;
     let multiplayerService = MultiplayerService.shared
     let selfPlayerID = GKLocalPlayer.local.playerID.toInt()
-    
     var lookingLeft = true
+    var map: Map1!
     
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         self.backgroundColor = UIColor.white
         self.entityManager = EntityManager(withScene: self)
-        
-        // Temporarily
-        Map1(withScene: self)
 
         self.configureStates()
         self.configureGesturePad(for: view)
@@ -45,6 +42,9 @@ class MyScene: SKScene {
         self.configureUI()
         self.configurePhysics()
         self.suicideArea()
+        
+        // Temporarily
+        self.map = Map1(withScene: self)
         
         allPlayers = MultiplayerService.shared.allocPlayers(in: self)
         if let player = allPlayers[GKLocalPlayer.local.playerID.toInt()] {
@@ -181,7 +181,7 @@ class MyScene: SKScene {
         }
         
         self.previousPosition = self.playerNodeCopy.position
-    
+        self.map.updateParallaxBackground()
     }
 
 }

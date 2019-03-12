@@ -10,23 +10,39 @@ import SpriteKit
 
 class Map1 {
     let scene: SKScene
+    var parallaxSky: ParallaxBackground!
+    var parallaxSea: ParallaxBackground!
     
     init(withScene scene: SKScene) {
         self.scene = scene
         self.drawBackground()
+//        self.drawRocks()
         self.drawFloor()
         self.drawPlataform(x: 200, y: 20, width: 200, heigth: 5)
         self.drawPlataform(x: 300, y: 70, width: 200, heigth: 7)
     }
     
     private func drawBackground() {
-        let background = SKSpriteNode(texture: SKTexture(imageNamed: "background"))
-        background.size.height = self.scene.size.height
-        background.setScale(1.2)
-        background.position = CGPoint(x: 0, y: 50)
-        background.texture?.filteringMode = .nearest
-        background.zPosition = 1
-        self.scene.addChild(background)
+        let sky = SKSpriteNode(texture: SKTexture(imageNamed: "sky"))
+        sky.size.height = self.scene.size.height
+        sky.setScale(1.2)
+        sky.position = CGPoint(x: 0, y: 50)
+        sky.texture?.filteringMode = .nearest
+        sky.zPosition = 1
+        
+        let sea = SKSpriteNode(texture: SKTexture(imageNamed: "sea"))
+        sea.size.height = self.scene.size.height
+        sea.setScale(1.2)
+        sea.position = CGPoint(x: 0, y: 50)
+        sea.texture?.filteringMode = .nearest
+        sea.zPosition = 2
+        
+        self.parallaxSky = ParallaxBackground(withCamera: self.scene.camera!, andNode: sky)
+        self.parallaxSea = ParallaxBackground(withCamera: self.scene.camera!, andNode: sea)
+        self.parallaxSea.layer = 2
+        
+        self.scene.addChild(sky)
+        self.scene.addChild(sea)
     }
     
     private func drawFloor(){
@@ -40,7 +56,7 @@ class Map1 {
         area.physicsBody?.affectedByGravity = false
         area.physicsBody?.restitution = 0
         area.physicsBody?.friction = 0
-        area.zPosition = 2
+        area.zPosition = 4
         self.scene.addChild(area)
     }
     
@@ -53,9 +69,21 @@ class Map1 {
         area.physicsBody?.categoryBitMask = CategoryMask.plataform
         area.physicsBody?.friction = 0
         area.physicsBody?.restitution = 0
-        area.zPosition = 2
+        area.zPosition = 4
         self.scene.addChild(area)
     }
     
+    func drawRocks() {
+        let rocks = SKSpriteNode(texture: SKTexture(imageNamed: "rocks"))
+        rocks.setScale(1.2)
+        rocks.position = CGPoint(x: 400, y: 0)
+        rocks.texture?.filteringMode = .nearest
+        rocks.zPosition = 3
+        self.scene.addChild(rocks)
+    }
     
+    func updateParallaxBackground() {
+        self.parallaxSky.update()
+        self.parallaxSea.update()
+    }
 }
