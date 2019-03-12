@@ -260,6 +260,7 @@ class Fighter: GKEntity {
         if let node = self.component(ofType: SpriteComponent.self)?.node,
            let nameLabel = self.component(ofType: SpriteComponent.self)?.nameLabel {
             let nodeDirection: CGFloat = dx < 0 ? -1.0 : 1.0
+            
             // If direction new is right and old isn't right
             if (nodeDirection == 1.0 && self.fighterDirection != .right) {
                 self.fighterDirection = .right
@@ -273,7 +274,10 @@ class Fighter: GKEntity {
             }
             node.xScale = abs(node.xScale) * nodeDirection
             nameLabel.xScale = nodeDirection
-            self.walk()
+            if dx != 0{
+                self.walk()
+            }
+            
         }
         
     }
