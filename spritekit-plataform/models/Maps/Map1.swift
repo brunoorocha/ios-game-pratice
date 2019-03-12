@@ -13,13 +13,17 @@ class Map1 {
     var parallaxSky: ParallaxBackground!
     var parallaxSea: ParallaxBackground!
     
-    init(withScene scene: SKScene) {
+	init(withScene scene: SKScene, andArena arena: Arena) {
         self.scene = scene
         self.drawBackground()
         self.drawRocks()
         self.drawFloor()
-        self.drawPlataform(x: 200, y: 20, width: 200, heigth: 5)
-        self.drawPlataform(x: 300, y: 70, width: 200, heigth: 7)
+//        self.drawPlataform(x: 200, y: 20, width: 200, heigth: 5)
+		let platform = arena.platforms[0]
+		drawPlataform(platform)
+		let platform2 = arena.platforms[1]
+		drawPlataform(platform2)
+//        self.drawPlataform(x: 300, y: 70, width: 200, heigth: 7)'
     }
     
     private func drawBackground() {
@@ -88,4 +92,18 @@ class Map1 {
         self.parallaxSky.update()
         self.parallaxSea.update()
     }
+	
+	private func drawPlataform(_ platform: Platform){
+		let area = SKSpriteNode(imageNamed: platform.atlas)
+		area.size = CGSize(width: 200, height: 7)
+		area.position = CGPoint(x: -1*(platform.position.x/2), y: platform.position.y)
+		area.zPosition = 2
+		let rect = CGRect(x: -(area.size.width/2), y: -(area.size.height/2), width: area.size.width, height: area.size.height)
+		area.physicsBody = SKPhysicsBody(edgeLoopFrom: rect)
+		area.physicsBody?.affectedByGravity = false
+		area.physicsBody?.categoryBitMask = CategoryMask.plataform
+		area.physicsBody?.friction = 0
+		area.physicsBody?.restitution = 0
+		self.scene.addChild(area)
+	}
 }

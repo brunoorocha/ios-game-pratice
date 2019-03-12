@@ -22,6 +22,10 @@
 		6CCF8E0722282AF300296148 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCF8E0622282AF300296148 /* Message.swift */; };
 		6CCF8E0922282B1400296148 /* NotificationName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCF8E0822282B1400296148 /* NotificationName.swift */; };
 		6CCF8E0B22282B7600296148 /* ReceiveDataDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCF8E0A22282B7600296148 /* ReceiveDataDelegate.swift */; };
+		48441D6522295C040005EC3A /* FighterArena.plist in Resources */ = {isa = PBXBuildFile; fileRef = 48441D6422295C040005EC3A /* FighterArena.plist */; };
+		48441D692229698F0005EC3A /* Arena.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48441D682229698F0005EC3A /* Arena.swift */; };
+		48441D6C22296A9C0005EC3A /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48441D6B22296A9C0005EC3A /* Platform.swift */; };
+		4857C9E12234300300EFA2E9 /* PListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4857C9E02234300300EFA2E9 /* PListManager.swift */; };
 		A397A0BD221EDCA400E61051 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A0BC221EDCA400E61051 /* AppDelegate.swift */; };
 		A397A0C5221EDCA400E61051 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A0C4221EDCA400E61051 /* GameViewController.swift */; };
 		A397A0C8221EDCA400E61051 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A397A0C6221EDCA400E61051 /* Main.storyboard */; };
@@ -75,6 +79,10 @@
 		6CCF8E0622282AF300296148 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		6CCF8E0822282B1400296148 /* NotificationName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationName.swift; sourceTree = "<group>"; };
 		6CCF8E0A22282B7600296148 /* ReceiveDataDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveDataDelegate.swift; sourceTree = "<group>"; };
+		48441D6422295C040005EC3A /* FighterArena.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = FighterArena.plist; sourceTree = "<group>"; };
+		48441D682229698F0005EC3A /* Arena.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Arena.swift; sourceTree = "<group>"; };
+		48441D6B22296A9C0005EC3A /* Platform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
+		4857C9E02234300300EFA2E9 /* PListManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PListManager.swift; sourceTree = "<group>"; };
 		A397A0B9221EDCA400E61051 /* spritekit-plataform.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "spritekit-plataform.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A397A0BC221EDCA400E61051 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A397A0C4221EDCA400E61051 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -154,6 +162,22 @@
 			path = services;
 			sourceTree = "<group>";
 		};
+		48441D662229675B0005EC3A /* fighter */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = fighter;
+			sourceTree = "<group>";
+		};
+		48441D6A22296A230005EC3A /* arena */ = {
+			isa = PBXGroup;
+			children = (
+				48441D682229698F0005EC3A /* Arena.swift */,
+				48441D6B22296A9C0005EC3A /* Platform.swift */,
+			);
+			path = arena;
+			sourceTree = "<group>";
+		};
 		A397A0B0221EDCA400E61051 = {
 			isa = PBXGroup;
 			children = (
@@ -215,11 +239,13 @@
 		A397A0D7221EDD5E00E61051 /* scenes */ = {
 			isa = PBXGroup;
 			children = (
+				48441D662229675B0005EC3A /* fighter */,
 				A397A11622218E6300E61051 /* states */,
 				A397A0DE221EDE2E00E61051 /* MyScene.sks */,
 				A397A0E0221EDE5100E61051 /* MyScene.swift */,
 				6C92348722294BA800F74567 /* MenuScene.swift */,
 				6C92348922294BDA00F74567 /* MenuScene.sks */,
+				48441D6422295C040005EC3A /* FighterArena.plist */,
 			);
 			path = scenes;
 			sourceTree = "<group>";
@@ -247,6 +273,7 @@
 			children = (
 				A397A0F422208AAB00E61051 /* AtlasTextureBuilder */,
 				A397A0DD221EDDFC00E61051 /* GesturePad */,
+				4857C9E02234300300EFA2E9 /* PListManager.swift */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -287,6 +314,7 @@
 		A397A0F722208B4300E61051 /* models */ = {
 			isa = PBXGroup;
 			children = (
+				48441D6A22296A230005EC3A /* arena */,
 				A397A1122220C29900E61051 /* CategoryMask.swift */,
 				A397A0D4221EDD2100E61051 /* entities */,
 				A397A0E6221EDFC800E61051 /* components */,
@@ -447,6 +475,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48441D6522295C040005EC3A /* FighterArena.plist in Resources */,
 				A397A0C8221EDCA400E61051 /* Main.storyboard in Resources */,
 				A397A106222091FF00E61051 /* Run.atlas in Resources */,
 				A397A109222091FF00E61051 /* Jump.atlas in Resources */,
@@ -478,14 +507,17 @@
 				1BDFA7F422272FED00622BC6 /* FighterDieState.swift in Sources */,
 				1BBDABAC2236AB4E00DCEDC9 /* FighterKnockbackState.swift in Sources */,
 				A397A10D22209C3700E61051 /* FighterWalkState.swift in Sources */,
+				48441D692229698F0005EC3A /* Arena.swift in Sources */,
 				A397A0E1221EDE5100E61051 /* MyScene.swift in Sources */,
 				A397A12422295A6100E61051 /* FighterAttack2State.swift in Sources */,
 				A397A0EA221EE1E400E61051 /* EntityManager.swift in Sources */,
 				A397A11B2222C3E600E61051 /* PreMatchLabel.swift in Sources */,
+				48441D6C22296A9C0005EC3A /* Platform.swift in Sources */,
 				A397A0E4221EDF2900E61051 /* Fighter.swift in Sources */,
 				A397A11822218EBB00E61051 /* PrepareFightState.swift in Sources */,
 				A397A1152220C5A300E61051 /* FighterAttackState.swift in Sources */,
 				A397A12822295C5600E61051 /* FighterAttack3State.swift in Sources */,
+				4857C9E12234300300EFA2E9 /* PListManager.swift in Sources */,
 				A397A0C5221EDCA400E61051 /* GameViewController.swift in Sources */,
 				6CCF8E0522282ABF00296148 /* MultiplayerService.swift in Sources */,
 				A397A0BD221EDCA400E61051 /* AppDelegate.swift in Sources */,

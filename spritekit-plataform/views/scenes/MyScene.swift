@@ -34,8 +34,7 @@ class MyScene: SKScene {
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         self.backgroundColor = UIColor.white
-        self.entityManager = EntityManager(withScene: self)
-
+        self.entityManager = EntityManager(withScene: self)                
         self.configureStates()
         self.configureGesturePad(for: view)
         self.configureCamera()
@@ -44,7 +43,8 @@ class MyScene: SKScene {
         self.suicideArea()
         
         // Temporarily
-        self.map = Map1(withScene: self)
+		    let arena = PListManager.loadArena(with: "FighterArena")
+        Map1(withScene: self, andArena: arena)
         
         allPlayers = MultiplayerService.shared.allocPlayers(in: self)
         if let player = allPlayers[GKLocalPlayer.local.playerID.toInt()] {

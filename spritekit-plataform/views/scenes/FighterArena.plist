@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>playerSlots</key>
+	<array>
+		<dict>
+			<key>positionX</key>
+			<real>33.3</real>
+			<key>positionY</key>
+			<real>2.21</real>
+		</dict>
+	</array>
+	<key>platforms</key>
+	<array>
+		<dict>
+			<key>atlas</key>
+			<string>Platform1</string>
+			<key>positionX</key>
+			<integer>300</integer>
+			<key>positionY</key>
+			<integer>70</integer>
+		</dict>
+		<dict>
+			<key>atlas</key>
+			<string>Platform1</string>
+			<key>positionX</key>
+			<integer>200</integer>
+			<key>positionY</key>
+			<integer>20</integer>
+		</dict>
+	</array>
+	<key>mode</key>
+	<string>survival</string>
+</dict>
+</plist>
