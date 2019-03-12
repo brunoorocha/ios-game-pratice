@@ -15,13 +15,15 @@ class InputController: SKSpriteNode {
     var virtualButtonA: VirtualButtonNode!
     var virtualButtonB: VirtualButtonNode!
     var isDown: Bool = false
+    var touchLeft = UITouch()
+    
     init(size: CGSize){
         
         super.init(texture: nil, color: SKColor.clear, size: size)
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         self.isUserInteractionEnabled = true
         joystick = JoystickNode(diameter: 120, colors: (substrate: SKColor.gray, stick: SKColor.gray))
-        joystick.isHidden = true
+        joystick.disabled = true
         let joystickXPosition = -(self.size.width/2) + 120
         let joystickYPosition = -(self.size.height/2) + 100
         joystick.position = CGPoint(x: joystickXPosition, y: joystickYPosition)
@@ -64,34 +66,27 @@ class InputController: SKSpriteNode {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         if let touch = touches.first, (touch.location(in: self).x < 0) {
+            touchLeft = touch
+            joystick.disabled = false
             joystick.position = touch.location(in: self)
-            joystick.joystickIsEnabled = true
-            joystick.isHidden = false
             joystick.touchesBegan([touch], with: event)
             joystickDelegate?.joystickDidStartTracking()
         }
-        if let touch = touches.first {
-            if virtualButtonA.frame.contains(touch.location(in: self)){
-                print("apertou botao a")
-            }
-        }
+    
     }
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first, (touch.location(in: self).x < 0) {
             joystick.touchesMoved([touch], with: event)
-            
-
             joystickDelegate?.joystickDidMoved(direction: joystick.direction)
-            print(joystick.direction.y)
-            
+        
             isDown = joystick.direction.y < -20 ? true : false
 
         }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let touch = touches.first, (touch.location(in: self).x < 0) {
-            joystick.isHidden = true
+        if let touch = touches.first {
+            joystick.disabled = true
             isDown = false
             joystick.touchesEnded([touch], with: event)
             joystickDelegate?.joystickDidEndTracking(direction: joystick.direction)
@@ -99,8 +94,8 @@ class InputController: SKSpriteNode {
         
     }
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let touch = touches.first, (touch.location(in: self).x < 0) {
-            joystick.isHidden = true
+        if let touch = touches.first, (touchLeft == touch) {
+            joystick.disabled = true
             isDown = false
             joystick.touchesCancelled([touch], with: event)
             joystickDelegate?.joystickDidEndTracking(direction: joystick.direction)

@@ -11,7 +11,7 @@ import SpriteKit
 open class JoystickNode: SKNode {
     var substrate : JoystickComponent!
     var stick: JoystickComponent!
-    var joystickIsEnabled = false
+    var joystickIsEnabled = true
     private(set) var tracking = false
     private(set) var direction = CGPoint.zero 
     
@@ -128,7 +128,6 @@ open class JoystickNode: SKNode {
     
     //MARK: - Private methods
     private func resetStick() {
-        isHidden = true
         tracking = false
         let moveToBack = SKAction.move(to: CGPoint.zero, duration: TimeInterval(0.1))
         moveToBack.timingMode = .easeOut

@@ -240,8 +240,9 @@ class Fighter: GKEntity {
     }
     
     func changePlayerPosition(position: CGPoint){
-
-        let move = SKAction.move(to: position, duration: 0.05)
+        var p = position
+        p.x = p.x + 30
+        let move = SKAction.move(to: p, duration: 0.05)
         //move.timingMode = .easeIn
         if let node = self.component(ofType: SpriteComponent.self)?.node {
             node.run(move)
