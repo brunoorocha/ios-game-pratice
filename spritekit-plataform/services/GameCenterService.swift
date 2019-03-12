@@ -47,8 +47,9 @@ class GameCenterService: NSObject {
         
         let request = GKMatchRequest()
         
-        request.minPlayers = MultiplayerService.shared.matchMaxPlayers
-        request.maxPlayers = MultiplayerService.shared.matchMinPlayers
+        request.minPlayers = MultiplayerService.shared.matchMinPlayers
+        request.maxPlayers = MultiplayerService.shared.matchMaxPlayers
+        request.defaultNumberOfPlayers = MultiplayerService.shared.defaultNumberOfPlayers
         
         request.inviteMessage = "Would you like to play?"
         
