@@ -303,7 +303,7 @@ class Fighter: GKEntity {
     
     func down(){
         // the player can make down move only if the jumpCount == 0
-        if let node = self.component(ofType: SpriteComponent.self)?.node, (jumpCount == 0) {
+        if let node = self.component(ofType: SpriteComponent.self)?.node, (self.jumpCount == 0), (!self.isDown) {
             self.isDown = true
             self.positionDyDownTapped = node.position.y
             node.physicsBody?.collisionBitMask &= ~CategoryMask.plataform
