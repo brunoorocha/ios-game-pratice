@@ -202,47 +202,47 @@ class MyScene: SKScene {
 
 extension MyScene: GesturePadDelegate {
     func performActionForAnalogMoving(inAngle angle: CGFloat, withDirectionX dx: CGFloat, AndDirectionY dy: CGFloat) {
-        //self.fighterCopy.walk(inDirectionX: dx)
+        self.fighterCopy.walk(inDirectionX: dx)
         
     }
     
     func performActionForAnalogStopMoving() {
-        //self.fighterCopy.idle()
+        self.fighterCopy.idle()
     }
     
     func performActionForTap() {
-//        let hittedPlayersArray = self.fighter.attack()
-//        var hitted = HittedPlayers()
-//        hitted.player1 = hittedPlayersArray[0]
-//        hitted.player2 = hittedPlayersArray[1]
-//        hitted.player3 = hittedPlayersArray[2]
-//        hitted.player4 = hittedPlayersArray[3]
-//
-//        let clientMessage: MessageType = .sendAttackRequest
-//        let hostMessage: MessageType = .sendAttackResponse(attackerID: selfPlayerID, receivedAtackIDs: hitted)
-//
-//        multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage, sendDataMode: .reliable) {
-//
-//            hittedPlayersArray.forEach { (playerID) in
-//                if let hittedPlayer = self.allPlayers[playerID] {
-//                    hittedPlayer.receiveDamage(damage: self.fighter.damage)
-//                    if let attacker = self.allPlayers[self.selfPlayerID]{
-//                        if attacker.stateMachine.currentState is FighterAttack3State{
-//                            //hittedPlayer.reiceivePushDamage(force: attacker.forcePush, direction: attacker.fighterDirection)
-//                        }
-//                    }
-//                }
-//            }
-//        }
+        let hittedPlayersArray = self.fighter.attack()
+        var hitted = HittedPlayers()
+        hitted.player1 = hittedPlayersArray[0]
+        hitted.player2 = hittedPlayersArray[1]
+        hitted.player3 = hittedPlayersArray[2]
+        hitted.player4 = hittedPlayersArray[3]
+
+        let clientMessage: MessageType = .sendAttackRequest
+        let hostMessage: MessageType = .sendAttackResponse(attackerID: selfPlayerID, receivedAtackIDs: hitted)
+
+        multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage, sendDataMode: .reliable) {
+
+            hittedPlayersArray.forEach { (playerID) in
+                if let hittedPlayer = self.allPlayers[playerID] {
+                    hittedPlayer.receiveDamage(damage: self.fighter.damage)
+                    if let attacker = self.allPlayers[self.selfPlayerID]{
+                        if attacker.stateMachine.currentState is FighterAttack3State{
+                            //hittedPlayer.reiceivePushDamage(force: attacker.forcePush, direction: attacker.fighterDirection)
+                        }
+                    }
+                }
+            }
+        }
 
     }
     
     func performActionForSwipeUp() {
-        //self.fighterCopy.jump()
+        self.fighterCopy.jump()
     }
     
     func performActionForSwipeDown() {
-        //self.fighterCopy.down()
+        self.fighterCopy.down()
     }
 }
 
