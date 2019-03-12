@@ -170,15 +170,9 @@ class MyScene: SKScene {
             self.camera?.run(move)
         
         
-        //Send Ping request
-        if Int(currentTime) % 2 == 1 && canSendPing{
-            let date = Int((Date().timeIntervalSince1970 * 1000))
-            MultiplayerService.shared.ping(message: .sendPingRequest(senderTime: date), sendToHost: true)
-            canSendPing = false
-        }else if Int(currentTime) % 2 != 1{
-            canSendPing = true
-        }
-        
+        //Send Ping request every frame
+        let date = Int((Date().timeIntervalSince1970 * 1000))
+        MultiplayerService.shared.ping(message: .sendPingRequest(senderTime: date), sendToHost: true)
 
         let distance = hypot(playerNodeCopy.position.x - previousPosition.x,
                              playerNodeCopy.position.y - previousPosition.y)
@@ -336,9 +330,15 @@ extension MyScene: UpdateSceneDelegate {
     }
     
     func showPing(ping: Int, host: GKPlayer) {
-        pingLabel.text = "ping: \(ping)ms, host player:\(host.alias)"
+        //update Ping every second
+        let currentDate = Int((Date().timeIntervalSince1970))
+        if currentDate % 2 == 1 && canSendPing {
+            pingLabel.text = "ping: \(ping)ms, host player:\(host.alias)"
+            canSendPing = false
+        }else if currentDate % 2 != 1{
+            canSendPing = true
+        }
     }
-    
 }
 
 extension MyScene: JoystickDelegate {
