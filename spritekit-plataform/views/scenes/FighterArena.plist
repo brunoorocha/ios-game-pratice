@@ -14,16 +14,20 @@
 	<key>platforms</key>
 	<array>
 		<dict>
-			<key>width</key>
-			<integer>300</integer>
-			<key>height</key>
-			<integer>32</integer>
 			<key>atlas</key>
-			<string>teste</string>
+			<string>Platform1</string>
 			<key>positionX</key>
-			<integer>50</integer>
+			<integer>300</integer>
 			<key>positionY</key>
+			<integer>70</integer>
+		</dict>
+		<dict>
+			<key>atlas</key>
+			<string>Platform1</string>
+			<key>positionX</key>
 			<integer>200</integer>
+			<key>positionY</key>
+			<integer>20</integer>
 		</dict>
 	</array>
 	<key>mode</key>

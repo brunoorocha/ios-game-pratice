@@ -44,7 +44,8 @@ class MyScene: SKScene {
         self.entityManager.add(entity: guineaPig2)
         
         // Temporarily
-        Map1(withScene: self)
+		let arena = PListManager.loadArena(with: "FighterArena")
+        Map1(withScene: self, andArena: arena)
 
         
         self.configureStates()
