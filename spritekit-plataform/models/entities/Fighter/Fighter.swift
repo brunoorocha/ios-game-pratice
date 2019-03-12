@@ -240,9 +240,7 @@ class Fighter: GKEntity {
     }
     
     func changePlayerPosition(position: CGPoint){
-
         let move = SKAction.move(to: position, duration: 0.05)
-        //move.timingMode = .easeIn
         if let node = self.component(ofType: SpriteComponent.self)?.node {
             node.run(move)
         }
@@ -260,6 +258,7 @@ class Fighter: GKEntity {
         if let node = self.component(ofType: SpriteComponent.self)?.node,
            let nameLabel = self.component(ofType: SpriteComponent.self)?.nameLabel {
             let nodeDirection: CGFloat = dx < 0 ? -1.0 : 1.0
+            
             // If direction new is right and old isn't right
             if (nodeDirection == 1.0 && self.fighterDirection != .right) {
                 self.fighterDirection = .right
@@ -270,7 +269,10 @@ class Fighter: GKEntity {
             }
             node.xScale = abs(node.xScale) * nodeDirection
             nameLabel.xScale = nodeDirection
+
             self.walk()
+
+            
         }
         
     }
