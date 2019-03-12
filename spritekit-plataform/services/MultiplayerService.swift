@@ -45,14 +45,14 @@ class MultiplayerService: NSObject {
         }
     }
     
-    func sendActionMessage(clientMessage: MessageType, hostMessage: MessageType, sendDataMode: GKMatch.SendDataMode, hostAction: @escaping () -> Void){
+    func sendActionMessage(clientMessage: MessageType, hostMessage: MessageType, sendDataMode: GKMatch.SendDataMode, hostActionCompletion: @escaping () -> Void){
         var messageType: MessageType = clientMessage
         
         if hostPlayer == selfPlayer {
             let ping = Double(pingHost) / 1000
 
             timer = Timer.scheduledTimer(withTimeInterval: ping, repeats: false) { (_) in
-                hostAction()
+                hostActionCompletion()
             }
             
             messageType = hostMessage
@@ -60,6 +60,17 @@ class MultiplayerService: NSObject {
         
         let data = Message(messageType: messageType)
         MultiplayerService.shared.sendData(data: data, sendDataMode: sendDataMode)
+    }
+    
+    func hostAction(completion: @escaping () -> Void) {
+        if hostPlayer == selfPlayer {
+            let ping = Double(pingHost) / 1000
+            
+            timer = Timer.scheduledTimer(withTimeInterval: ping, repeats: false) { (_) in
+                completion()
+            }
+            
+        }
     }
     
     func startingGame(){
@@ -101,6 +112,7 @@ class MultiplayerService: NSObject {
             }
             
             let playerCopy = Fighter(playerID: GKLocalPlayer.local.playerID, playerAlias: GKLocalPlayer.local.alias)
+            playerCopy.isCopy = true
             scene.entityManager.add(entity: playerCopy)
             scene.fighterCopy = playerCopy
             
@@ -126,7 +138,8 @@ class MultiplayerService: NSObject {
                 node.physicsBody?.collisionBitMask = CategoryMask.none;
             }
             
-            let playerCopy = Fighter(playerID: GKLocalPlayer.local.playerID, playerAlias: GKLocalPlayer.local.alias)
+            var playerCopy = Fighter(playerID: GKLocalPlayer.local.playerID, playerAlias: GKLocalPlayer.local.alias)
+            playerCopy.isCopy = true
             scene.entityManager.add(entity: playerCopy)
             scene.fighterCopy = playerCopy
 
@@ -213,15 +226,15 @@ extension MultiplayerService: ReceiveDataDelegate {
             updateSceneDelegate?.updatePlayerMove(dx: position, from: playerID)
            
         //PLAYER POSITION
-        case .sendPositionRequest(let position):
+        case .sendPositionRequest(let position, let state, let directionDx):
             if host == GKLocalPlayer.local {
-                updateSceneDelegate?.updatePlayerPosition(playerPosition: position, from: playerIDInt)
+                updateSceneDelegate?.updatePlayerPosition(playerPosition: position, from: playerIDInt, state: state, directionDx: directionDx)
             }
-            let data = Message(messageType: .sendPositionResponse(playerID: playerIDInt, position: position))
-            MultiplayerService.shared.sendData(data: data, sendDataMode: .reliable)
+            let data = Message(messageType: .sendPositionResponse(playerID: playerIDInt, position: position, state: state, directionDx: directionDx))
+            MultiplayerService.shared.sendData(data: data, sendDataMode: .unreliable)
             
-        case .sendPositionResponse(let playerID, let position):
-            updateSceneDelegate?.updatePlayerPosition(playerPosition: position, from: playerID)
+        case .sendPositionResponse(let playerID, let position, let state, let directionDx):
+            updateSceneDelegate?.updatePlayerPosition(playerPosition: position, from: playerID, state: state, directionDx: directionDx)
         
         //STOP PLAYER
         case .sendStopRequest(let position):

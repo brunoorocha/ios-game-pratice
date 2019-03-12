@@ -52,6 +52,9 @@ class Fighter: GKEntity {
     let comboTimeWindow: TimeInterval = 0.8
     var delayAttack: TimeInterval = 0.4
 
+    var isCopy = false;
+    var moveStates = [FighterWalkState.self,FighterJumpState.self, FighterIdleState.self, FighterFallState.self]
+    
     init(playerID: String, playerAlias: String) {
         super.init()
         
@@ -101,12 +104,12 @@ class Fighter: GKEntity {
             }
         }
         // If current is Fall
-        if (self.stateMachine.currentState is FighterFallState) {
+        if (self.stateMachine.currentState is FighterFallState) && isCopy {
             // When is grounded and haven't moviment set Idle
             if ((node.physicsBody?.velocity.dy)! == CGFloat(0))
             && ((node.physicsBody?.velocity.dx)! == CGFloat(0)){
                 // If is in attacking does not change
-                if (!comboList()){
+                if (!comboList()) && !(self.stateMachine.currentState is FighterIdleState){
                     self.stateMachine.enter(FighterIdleState.self)
                 }
             }
@@ -187,7 +190,57 @@ class Fighter: GKEntity {
         }        
     }
     
+    func repeatCopyMove(copy: Fighter){
+        
+        guard let originalNode = self.component(ofType: SpriteComponent.self)?.node else {return}
+        guard let copyNode = copy.component(ofType: SpriteComponent.self)?.node else {return}
+        guard let originalNameLabel = self.component(ofType: SpriteComponent.self)?.nameLabel else {return}
+        guard let copyNameLabel = copy.component(ofType: SpriteComponent.self)?.nameLabel else {return}
+        
+        let copyState = type(of: copy.stateMachine.currentState!).self
+        
+        if ((type(of: self.stateMachine.currentState!) != copyState) || (originalNode.xScale != copyNode.xScale)) && !(self.comboList()) {
+            self.stateMachine.enter(copyState)
+            originalNode.xScale = copyNode.xScale
+            originalNameLabel.xScale = copyNameLabel.xScale
+            self.fighterDirection = copy.fighterDirection
+        }
+
+    }
+    
+    func getCurrentStateEnum() -> State{
+        switch self.stateMachine.currentState  {
+        case is FighterWalkState:
+            return State.walk
+        case is FighterJumpState:
+            return State.jump
+        case is FighterIdleState:
+            return State.idle
+        case is FighterFallState:
+            return State.fall
+        default:
+            return State.idle
+        }
+    }
+    
+    func changePlayerState(state: State, inDirectionX dx: Int) {
+        if let node = self.component(ofType: SpriteComponent.self)?.node,
+           let nameLabel = self.component(ofType: SpriteComponent.self)?.nameLabel {
+        
+            if !self.comboList() {
+                let nodeDirection: CGFloat = dx < 0 ? -1.0 : 1.0
+                
+                self.fighterDirection = dx < 0 ? .left : .right
+                
+                node.xScale = nodeDirection
+                nameLabel.xScale = nodeDirection
+                self.stateMachine.enter(self.moveStates[state.rawValue])
+            }
+        }
+    }
+    
     func changePlayerPosition(position: CGPoint){
+
         let move = SKAction.move(to: position, duration: 0.05)
         //move.timingMode = .easeIn
         if let node = self.component(ofType: SpriteComponent.self)?.node {
@@ -199,6 +252,7 @@ class Fighter: GKEntity {
         if let node = self.component(ofType: SpriteComponent.self)?.node {
             node.physicsBody?.velocity.dx = 0.0
         }
+        
         self.stateMachine.enter(FighterIdleState.self)
     }
     
@@ -214,6 +268,7 @@ class Fighter: GKEntity {
             // If new direction is left and old isn't left
             else if (nodeDirection == -1.0 && self.fighterDirection != .left) {
                 self.fighterDirection = .left
+                
                 self.stateMachine.enter(FighterIdleState.self)
             }
             node.xScale = abs(node.xScale) * nodeDirection
@@ -297,7 +352,6 @@ class Fighter: GKEntity {
         self.stateMachine.enter(comboStateList[self.comboCount])
         self.comboCount = self.comboCount + 1
         self.lastAttackTimeCount = self.comboTimeCount
-
         return playersHitted
     }
     

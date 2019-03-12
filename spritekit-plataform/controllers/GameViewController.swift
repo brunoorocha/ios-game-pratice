@@ -24,7 +24,7 @@ class GameViewController: UIViewController {
         skView.showsFPS = true
         skView.showsNodeCount = true
         skView.ignoresSiblingOrder = true
-        skView.showsPhysics = true
+        //skView.showsPhysics = true
         
         GameCenterService.shared.authenticationViewController = self
     }
