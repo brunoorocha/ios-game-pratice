@@ -282,7 +282,8 @@ class Fighter: GKEntity {
         node.physicsBody?.velocity.dx = 0.0
         node.physicsBody?.applyImpulse(CGVector(dx: (velocity*self.fighterDirection.math), dy: 0.0))
         
-        if self.jumpCount == 0 { //if is in ground
+        //if is in ground and not falling, go to walk state
+        if self.jumpCount == 0 && !(self.stateMachine.currentState is FighterFallState) {
             self.stateMachine.enter(FighterWalkState.self)
         }
     }
