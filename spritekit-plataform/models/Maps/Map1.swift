@@ -97,7 +97,7 @@ class Map1 {
 		let area = SKSpriteNode(imageNamed: platform.atlas)
 		area.size = CGSize(width: 200, height: 7)
 		area.position = CGPoint(x: -1*(platform.position.x/2), y: platform.position.y)
-		area.zPosition = 2
+		area.zPosition = 5
 		let rect = CGRect(x: -(area.size.width/2), y: -(area.size.height/2), width: area.size.width, height: area.size.height)
 		area.physicsBody = SKPhysicsBody(edgeLoopFrom: rect)
 		area.physicsBody?.affectedByGravity = false
