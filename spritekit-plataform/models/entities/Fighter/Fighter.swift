@@ -263,13 +263,10 @@ class Fighter: GKEntity {
             // If direction new is right and old isn't right
             if (nodeDirection == 1.0 && self.fighterDirection != .right) {
                 self.fighterDirection = .right
-                self.stateMachine.enter(FighterIdleState.self)
             }
             // If new direction is left and old isn't left
             else if (nodeDirection == -1.0 && self.fighterDirection != .left) {
                 self.fighterDirection = .left
-                
-                self.stateMachine.enter(FighterIdleState.self)
             }
             node.xScale = abs(node.xScale) * nodeDirection
             nameLabel.xScale = nodeDirection
@@ -284,7 +281,10 @@ class Fighter: GKEntity {
         guard let node = self.component(ofType: SpriteComponent.self)?.node else { return }
         node.physicsBody?.velocity.dx = 0.0
         node.physicsBody?.applyImpulse(CGVector(dx: (velocity*self.fighterDirection.math), dy: 0.0))
-        self.stateMachine.enter(FighterWalkState.self)
+        
+        if self.jumpCount == 0 { //if is in ground
+            self.stateMachine.enter(FighterWalkState.self)
+        }
     }
     
     func jump() {
