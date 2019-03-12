@@ -44,7 +44,7 @@ class MyScene: SKScene {
         
         // Temporarily
 		    let arena = PListManager.loadArena(with: "FighterArena")
-        Map1(withScene: self, andArena: arena)
+        self.map = Map1(withScene: self, andArena: arena)
         
         allPlayers = MultiplayerService.shared.allocPlayers(in: self)
         if let player = allPlayers[GKLocalPlayer.local.playerID.toInt()] {
@@ -110,7 +110,7 @@ class MyScene: SKScene {
             pingLabel.fontName = "Helvetica"
             pingLabel.fontColor = SKColor.black
             pingLabel.fontSize = 18
-            pingLabel.zPosition = 2
+            pingLabel.zPosition = 10
             cam.addChild(pingLabel)
             
             //debug label

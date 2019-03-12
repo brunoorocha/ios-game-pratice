@@ -82,7 +82,7 @@ class Map1 {
     func drawRocks() {
         let rocks = SKSpriteNode(texture: SKTexture(imageNamed: "rocks"))
         rocks.setScale(1.2)
-        rocks.position = CGPoint(x: 400, y: 50)
+        rocks.position = CGPoint(x: 100, y: 50)
         rocks.texture?.filteringMode = .nearest
         rocks.zPosition = 3
         self.scene.addChild(rocks)
