@@ -60,6 +60,7 @@
 		A3ACB3332233EC0600AF5088 /* FighterJump.wav in Resources */ = {isa = PBXBuildFile; fileRef = A3ACB3322233EC0600AF5088 /* FighterJump.wav */; };
 		A3ACB3352233EC1600AF5088 /* FighterAttack.wav in Resources */ = {isa = PBXBuildFile; fileRef = A3ACB3342233EC1600AF5088 /* FighterAttack.wav */; };
 		A3ACB3372233ECB900AF5088 /* FighterDeath.wav in Resources */ = {isa = PBXBuildFile; fileRef = A3ACB3362233ECB900AF5088 /* FighterDeath.wav */; };
+		A3ACB3392237DD7000AF5088 /* ParallaxBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3ACB3382237DD7000AF5088 /* ParallaxBackground.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -118,6 +119,7 @@
 		A3ACB3322233EC0600AF5088 /* FighterJump.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = FighterJump.wav; sourceTree = "<group>"; };
 		A3ACB3342233EC1600AF5088 /* FighterAttack.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = FighterAttack.wav; sourceTree = "<group>"; };
 		A3ACB3362233ECB900AF5088 /* FighterDeath.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = FighterDeath.wav; sourceTree = "<group>"; };
+		A3ACB3382237DD7000AF5088 /* ParallaxBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParallaxBackground.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -386,6 +388,7 @@
 			isa = PBXGroup;
 			children = (
 				A397A11A2222C3E600E61051 /* PreMatchLabel.swift */,
+				A3ACB3382237DD7000AF5088 /* ParallaxBackground.swift */,
 			);
 			path = "ui-elements";
 			sourceTree = "<group>";
@@ -518,6 +521,7 @@
 				A397A0C5221EDCA400E61051 /* GameViewController.swift in Sources */,
 				6CCF8E0522282ABF00296148 /* MultiplayerService.swift in Sources */,
 				A397A0BD221EDCA400E61051 /* AppDelegate.swift in Sources */,
+				A3ACB3392237DD7000AF5088 /* ParallaxBackground.swift in Sources */,
 				A397A0E8221EDFE300E61051 /* SpriteComponent.swift in Sources */,
 				6CCF8E0B22282B7600296148 /* ReceiveDataDelegate.swift in Sources */,
 				A397A0F622208ACD00E61051 /* AtlasTextureBuilder.swift in Sources */,

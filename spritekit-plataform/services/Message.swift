@@ -12,8 +12,8 @@ enum MessageType {
     case sendMoveRequest(dx: CGFloat)
     case sendMoveResponse(playerID: Int, dx: CGFloat)
     
-    case sendPositionRequest(position: CGPoint)
-    case sendPositionResponse(playerID: Int, position: CGPoint)
+    case sendPositionRequest(position: CGPoint, state: State, directionDx: Int)
+    case sendPositionResponse(playerID: Int, position: CGPoint, state: State, directionDx: Int)
     
     case sendStopRequest(position: CGPoint)
     case sendStopResponse(playerID: Int, position: CGPoint)
@@ -66,4 +66,11 @@ struct HittedPlayers{
     var player2: Int = 0
     var player3: Int = 0
     var player4: Int = 0
+}
+
+enum State: Int {
+    case walk = 0
+    case jump = 1
+    case idle = 2
+    case fall = 3
 }
