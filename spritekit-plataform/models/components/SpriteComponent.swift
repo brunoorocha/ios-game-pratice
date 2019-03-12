@@ -15,7 +15,7 @@ class SpriteComponent: GKComponent {
     init(withTexture texture: SKTexture) {
         node = SKSpriteNode(texture: texture, color: .white, size: texture.size())
         nameLabel = SKLabelNode(fontNamed: "HelveticaNeue-Bold")
-        nameLabel.fontColor = SKColor.black
+        nameLabel.fontColor = SKColor(red: 255/255, green: 79/255, blue: 68/255, alpha: 1)
         nameLabel.position = CGPoint(x: 0, y: 20)
         nameLabel.fontSize = 10
         node.addChild(nameLabel)
