@@ -45,8 +45,8 @@ class MyScene: SKScene {
         self.suicideArea()
         
         //CONTROLS: choose one, comment the other
-        //self.configureGesturePad(for: view)
-        self.setupJoystick()
+        self.configureGesturePad(for: view)
+        //self.setupJoystick()
         
         // Temporarily
 		    let arena = PListManager.loadArena(with: "FighterArena")

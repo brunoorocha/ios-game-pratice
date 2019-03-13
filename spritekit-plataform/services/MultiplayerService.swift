@@ -13,7 +13,9 @@ class MultiplayerService: NSObject {
     static let shared = MultiplayerService()
     
     private(set) var matchMinPlayers : Int = 2
-    private(set) var matchMaxPlayers : Int = 2
+    private(set) var matchMaxPlayers : Int = 4
+    private(set) var defaultNumberOfPlayers : Int = 2
+    
     private(set) var hostPlayer: GKPlayer?
     private(set) var pingHost: Int = 40 // in miliseconds
     private(set) var allPlayers: [String : Float] = [String : Float]()

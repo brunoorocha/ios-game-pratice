@@ -280,6 +280,8 @@ class Fighter: GKEntity {
     private func walk(){
         // If is in attacking dont walk
         if (self.comboList()){ return }
+        if self.stateMachine.currentState is FighterHurtState ||
+            self.stateMachine.currentState is FighterDieState { return }
         guard let node = self.component(ofType: SpriteComponent.self)?.node else { return }
         node.physicsBody?.velocity.dx = 0.0
         node.physicsBody?.applyImpulse(CGVector(dx: (velocity*self.fighterDirection.math), dy: 0.0))
