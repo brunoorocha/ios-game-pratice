@@ -49,7 +49,13 @@ class Fighter: GKEntity {
     
     var playerID: String = ""
     var playerAlias: String = ""
-    var health : CGFloat = 100
+    var health : CGFloat = 100 {
+        didSet {
+            if let nameLabel = self.component(ofType: SpriteComponent.self)?.nameLabel {
+                nameLabel.text = "\(playerAlias) \(health)%"
+            }
+        }
+    }
     var damage : CGFloat = 5
     var forcePush : CGFloat = 5
     var jumpForce: CGFloat = 12.0
@@ -77,7 +83,7 @@ class Fighter: GKEntity {
         self.addComponent(spriteComponent)
         
         if let nameLabel = self.component(ofType: SpriteComponent.self)?.nameLabel {
-            nameLabel.text = playerAlias
+            nameLabel.text = "\(playerAlias) \(health)%"
         }
         
         self.setupStateMachine()
@@ -148,7 +154,6 @@ class Fighter: GKEntity {
             
             self.comboCount = 0
         }
-
     }
     
     func configurePhysicsBody() {

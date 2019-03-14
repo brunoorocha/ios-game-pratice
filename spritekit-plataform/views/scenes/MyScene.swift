@@ -44,8 +44,8 @@ class MyScene: SKScene {
         self.suicideArea()
         
         //CONTROLS: choose one, comment the other
-        self.configureGesturePad(for: view)
-        //self.setupJoystick()
+        //self.configureGesturePad(for: view)
+        self.setupJoystick()
         
         // Temporarily
         let arena = PListManager.loadArena(with: "FighterArena")
@@ -139,7 +139,7 @@ class MyScene: SKScene {
             debugLabel.fontColor = SKColor.black
             debugLabel.fontSize = 18
             debugLabel.zPosition = 2
-            cam.addChild(debugLabel)
+            //cam.addChild(debugLabel)
             
             
         }
@@ -158,12 +158,6 @@ class MyScene: SKScene {
         }
         self.fighterCopy.update(deltaTime: currentTime)
         
-        var fighters: [Fighter] = []
-        for (i, fighter) in self.allPlayers.enumerated() {
-            fighters.append(fighter.value)
-        }
-        
-        debugLabel.text = "1: \(fighters[0].health), 2: \(fighters[1].health)"
         
         guard let node = self.fighter.component(ofType: SpriteComponent.self)?.node else {return}
             let move = SKAction.move(to: node.position, duration: 0.3)
