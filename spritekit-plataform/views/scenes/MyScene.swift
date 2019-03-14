@@ -48,7 +48,7 @@ class MyScene: SKScene {
         //self.setupJoystick()
         
         // Temporarily
-		    let arena = PListManager.loadArena(with: "FighterArena")
+        let arena = PListManager.loadArena(with: "FighterArena")
         self.map = Map1(withScene: self, andArena: arena)
         
         allPlayers = MultiplayerService.shared.allocPlayers(in: self)
@@ -61,7 +61,7 @@ class MyScene: SKScene {
         }
         
         if let nodeCopy = self.fighterCopy.component(ofType: SpriteComponent.self)?.node  {
-            nodeCopy.alpha = 0.5;
+            nodeCopy.alpha = 0.01;
             self.playerNodeCopy = nodeCopy
         }
         
