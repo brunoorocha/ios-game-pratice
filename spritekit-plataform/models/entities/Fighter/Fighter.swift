@@ -9,9 +9,13 @@
 import GameplayKit
 import SpriteKit
 
-enum PlayerSide{
+enum PlayerSide: Int{
     case left
     case right
+    
+//    init?(raw: Int){
+//        self.init(raw: raw)
+//    }
 }
 
 extension PlayerSide{
@@ -29,7 +33,15 @@ class Fighter: GKEntity {
     
     var stateMachine: GKStateMachine!
     
-    var fighterDirection: PlayerSide = .right
+    var fighterDirection: PlayerSide = .right {
+        didSet{
+            if let node = self.component(ofType: SpriteComponent.self)?.node,
+               let name = self.component(ofType: SpriteComponent.self)?.nameLabel {
+                node.xScale = self.fighterDirection.math
+                name.xScale = self.fighterDirection.math
+            }
+        }
+    }
     var isDown: Bool = false
     var positionDyDownTapped: CGFloat = 0
     var jumpCount = 0
@@ -70,6 +82,7 @@ class Fighter: GKEntity {
         
         self.setupStateMachine()
         self.configurePhysicsBody()
+        self.idle()
 
     }
     
@@ -186,7 +199,6 @@ class Fighter: GKEntity {
             
             self.stateMachine = GKStateMachine(states: [idleState, walkState, jumpState, attackState, attack2State, attack3State, fallState, hurtState, dieState, knockbackState])
             
-            self.idle()
         }        
     }
     
@@ -194,15 +206,11 @@ class Fighter: GKEntity {
         
         guard let originalNode = self.component(ofType: SpriteComponent.self)?.node else {return}
         guard let copyNode = copy.component(ofType: SpriteComponent.self)?.node else {return}
-        guard let originalNameLabel = self.component(ofType: SpriteComponent.self)?.nameLabel else {return}
-        guard let copyNameLabel = copy.component(ofType: SpriteComponent.self)?.nameLabel else {return}
         
         let copyState = type(of: copy.stateMachine.currentState!).self
         
-        if ((type(of: self.stateMachine.currentState!) != copyState) || (originalNode.xScale != copyNode.xScale)) && !(self.comboList()) {
+        if ((type(of: self.stateMachine.currentState!) != copyState) || (originalNode.xScale != copyNode.xScale)) && !(self.comboList()) && !(self.stateMachine.currentState is FighterHurtState){
             self.stateMachine.enter(copyState)
-            originalNode.xScale = copyNode.xScale
-            originalNameLabel.xScale = copyNameLabel.xScale
             self.fighterDirection = copy.fighterDirection
         }
 
@@ -227,14 +235,17 @@ class Fighter: GKEntity {
         if let node = self.component(ofType: SpriteComponent.self)?.node,
            let nameLabel = self.component(ofType: SpriteComponent.self)?.nameLabel {
         
-            if !self.comboList() {
+            if !self.comboList() && !(self.stateMachine.currentState is FighterHurtState){
                 let nodeDirection: CGFloat = dx < 0 ? -1.0 : 1.0
                 
                 self.fighterDirection = dx < 0 ? .left : .right
                 
                 node.xScale = nodeDirection
                 nameLabel.xScale = nodeDirection
-                self.stateMachine.enter(self.moveStates[state.rawValue])
+                
+                if type(of: self.stateMachine.currentState!) != self.moveStates[state.rawValue] {
+                    self.stateMachine.enter(self.moveStates[state.rawValue])
+                }
             }
         }
     }
@@ -418,7 +429,7 @@ class Fighter: GKEntity {
         return damageArea
     }
     
-    private func comboList() -> Bool{
+    func comboList() -> Bool{
         if (self.stateMachine.currentState is FighterAttackState ||
             self.stateMachine.currentState is FighterAttack2State ||
             self.stateMachine.currentState is FighterAttack3State){
@@ -432,4 +443,17 @@ class Fighter: GKEntity {
         fatalError("init(coder:) has not been implemented")
     }
 
+}
+
+//Overrides
+extension Fighter {
+    override func copy() -> Any {
+        let player = Fighter(playerID: self.playerID, playerAlias: self.playerAlias)
+        player.addComponent(self.components.first!)
+        player.fighterDirection = self.fighterDirection
+        let currentState = type(of: self.stateMachine.currentState!).self
+        player.stateMachine.enter(currentState)
+        
+        return player
+    }
 }

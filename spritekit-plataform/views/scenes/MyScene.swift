@@ -25,7 +25,6 @@ class MyScene: SKScene {
     var pingLabel: SKLabelNode!
     var debugLabel: SKLabelNode!
     var canSendPing = true
-    var previousPosition: CGPoint = CGPoint.zero;
     let multiplayerService = MultiplayerService.shared
     let selfPlayerID = GKLocalPlayer.local.playerID.toInt()
     var lookingLeft = true
@@ -45,11 +44,11 @@ class MyScene: SKScene {
         self.suicideArea()
         
         //CONTROLS: choose one, comment the other
-        //self.configureGesturePad(for: view)
-        self.setupJoystick()
+        self.configureGesturePad(for: view)
+        //self.setupJoystick()
         
         // Temporarily
-		    let arena = PListManager.loadArena(with: "FighterArena")
+        let arena = PListManager.loadArena(with: "FighterArena")
         self.map = Map1(withScene: self, andArena: arena)
         
         allPlayers = MultiplayerService.shared.allocPlayers(in: self)
@@ -58,7 +57,6 @@ class MyScene: SKScene {
             
         }
         if let node = self.fighter.component(ofType: SpriteComponent.self)?.node {
-            previousPosition = node.position
             self.playerNode = node
         }
         
@@ -176,26 +174,22 @@ class MyScene: SKScene {
         let date = Int((Date().timeIntervalSince1970 * 1000))
         MultiplayerService.shared.ping(message: .sendPingRequest(senderTime: date), sendToHost: true)
 
-        let distance = hypot(playerNodeCopy.position.x - previousPosition.x,
-                             playerNodeCopy.position.y - previousPosition.y)
+    
+        let directionDx = Int(playerNodeCopy.xScale)
+        let currentState = self.fighterCopy.getCurrentStateEnum()
+        let currentPosition = self.playerNodeCopy.position
+        let clientMessage: MessageType = .sendPositionRequest(position: currentPosition, state: currentState, directionDx: directionDx)
+    
+        let hostMessage: MessageType = .sendPositionResponse(playerID: selfPlayerID, position: currentPosition, state: currentState, directionDx: directionDx)
+
+        let copy = self.fighterCopy.copy() as! Fighter
         
-        if distance > 0 {
-            let directionDx = Int(playerNodeCopy.xScale)
+        multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage, sendDataMode: .unreliable) {
+            self.fighter.changePlayerPosition(position: currentPosition)
+            self.fighter.repeatCopyMove(copy: copy)
             
-            let currentState = self.fighterCopy.getCurrentStateEnum()
-        
-            let clientMessage: MessageType = .sendPositionRequest(position: playerNodeCopy.position, state: currentState, directionDx: directionDx)
-            
-            let hostMessage: MessageType = .sendPositionResponse(playerID: selfPlayerID, position: playerNodeCopy.position, state: currentState, directionDx: directionDx)
-            
-            multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage, sendDataMode: .unreliable) {
-                self.fighter.changePlayerPosition(position: self.playerNodeCopy.position)
-                self.fighter.repeatCopyMove(copy: self.fighterCopy)
-            }
         }
         
-        self.previousPosition = self.playerNodeCopy.position
-
         self.map.updateParallaxBackground()
 
     }
