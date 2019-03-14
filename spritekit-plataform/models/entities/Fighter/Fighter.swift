@@ -209,7 +209,7 @@ class Fighter: GKEntity {
         
         let copyState = type(of: copy.stateMachine.currentState!).self
         
-        if ((type(of: self.stateMachine.currentState!) != copyState) || (originalNode.xScale != copyNode.xScale)) && !(self.comboList()) {
+        if ((type(of: self.stateMachine.currentState!) != copyState) || (originalNode.xScale != copyNode.xScale)) && !(self.comboList()) && !(self.stateMachine.currentState is FighterHurtState){
             self.stateMachine.enter(copyState)
             self.fighterDirection = copy.fighterDirection
         }
@@ -235,14 +235,17 @@ class Fighter: GKEntity {
         if let node = self.component(ofType: SpriteComponent.self)?.node,
            let nameLabel = self.component(ofType: SpriteComponent.self)?.nameLabel {
         
-            if !self.comboList() {
+            if !self.comboList() && !(self.stateMachine.currentState is FighterHurtState){
                 let nodeDirection: CGFloat = dx < 0 ? -1.0 : 1.0
                 
                 self.fighterDirection = dx < 0 ? .left : .right
                 
                 node.xScale = nodeDirection
                 nameLabel.xScale = nodeDirection
-                self.stateMachine.enter(self.moveStates[state.rawValue])
+                
+                if type(of: self.stateMachine.currentState!) != self.moveStates[state.rawValue] {
+                    self.stateMachine.enter(self.moveStates[state.rawValue])
+                }
             }
         }
     }
@@ -426,7 +429,7 @@ class Fighter: GKEntity {
         return damageArea
     }
     
-    private func comboList() -> Bool{
+    func comboList() -> Bool{
         if (self.stateMachine.currentState is FighterAttackState ||
             self.stateMachine.currentState is FighterAttack2State ||
             self.stateMachine.currentState is FighterAttack3State){
