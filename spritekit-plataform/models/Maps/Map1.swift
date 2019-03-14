@@ -70,7 +70,7 @@ class Map1 {
         let area = SKShapeNode(rect: CGRect(x: -1*(x/2), y: y, width: width, height: heigth))
         area.fillColor = .lightGray
         area.strokeColor = .init(white: 1.0, alpha: 0.0)
-        area.physicsBody = SKPhysicsBody(edgeLoopFrom: area.frame)
+        area.physicsBody = SKPhysicsBody(edgeLoopFrom: CGRect(x: area.frame.minX, y: area.frame.maxY - 3, width: width, height: 1))
         area.physicsBody?.affectedByGravity = false
         area.physicsBody?.categoryBitMask = CategoryMask.plataform
         area.physicsBody?.friction = 0
