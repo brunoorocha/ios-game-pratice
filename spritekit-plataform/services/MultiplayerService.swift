@@ -53,7 +53,7 @@ class MultiplayerService: NSObject {
         if hostPlayer == selfPlayer {
             let ping = Double(pingHost) / 1000
 
-            timer = Timer.scheduledTimer(withTimeInterval: ping, repeats: false) { (_) in
+            Timer.scheduledTimer(withTimeInterval: ping, repeats: false) { (_) in
                 hostActionCompletion()
             }
             
@@ -63,17 +63,7 @@ class MultiplayerService: NSObject {
         let data = Message(messageType: messageType)
         MultiplayerService.shared.sendData(data: data, sendDataMode: sendDataMode)
     }
-    
-    func hostAction(completion: @escaping () -> Void) {
-        if hostPlayer == selfPlayer {
-            let ping = Double(pingHost) / 1000
-            
-            timer = Timer.scheduledTimer(withTimeInterval: ping, repeats: false) { (_) in
-                completion()
-            }
-            
-        }
-    }
+
     
     func startingGame(){
 
