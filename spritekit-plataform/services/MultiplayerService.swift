@@ -83,7 +83,7 @@ class MultiplayerService: NSObject {
                     let name = otherPlayer.component(ofType: SpriteComponent.self)?.nameLabel {
                     //TODO: set randomly the start position of each player
                     node.position = CGPoint(x: 0, y: 0)
-                    name.text = $0.alias
+                    name.text = "\($0.alias) \(otherPlayer.health)"
                     node.physicsBody?.isDynamic = false;
                     node.physicsBody?.categoryBitMask = CategoryMask.player;
                     node.physicsBody?.collisionBitMask = CategoryMask.playerCopy;
