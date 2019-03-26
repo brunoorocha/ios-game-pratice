@@ -24,8 +24,8 @@ enum MessageType {
     case sendDownRequest
     case sendDownResponse(playerID: Int)
     
-    case sendAttackRequest
-    case sendAttackResponse(attackerID: Int, receivedAtackIDs: HittedPlayers)
+    case sendAttackRequest(is3rdAttack: Bool)
+    case sendAttackResponse(attackerID: Int, receivedAtackIDs: HittedPlayers, is3rdAttack: Bool)
     
     case startGame(randomNumber: Float)
     
@@ -62,10 +62,10 @@ struct Message {
 }
 
 struct HittedPlayers{
-    var player1: Int = 0
-    var player2: Int = 0
-    var player3: Int = 0
-    var player4: Int = 0
+    var player1: Int = -1
+    var player2: Int = -1
+    var player3: Int = -1
+    var player4: Int = -1
 }
 
 enum State: Int {
@@ -73,4 +73,8 @@ enum State: Int {
     case jump = 1
     case idle = 2
     case fall = 3
+    case attack1 = 4
+    case attack2 = 5
+    case attack3 = 6
+
 }

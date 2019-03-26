@@ -20,7 +20,7 @@ protocol UpdateSceneDelegate {
     func updateJumpPlayer(playerID: Int)
     func updateDownPlayer(playerID: Int)
     func updateAttackPlayerRequest(attackerID: Int) -> [Int]
-    func updateAttackPlayerResponse(attackerID: Int, receivedAttackIDs: [Int])
+    func updateAttackPlayerResponse(attackerID: Int, receivedAttackIDs: [Int], is3rdAttack: Bool)
     func showPing(ping: Int, host: GKPlayer)
 }
 

@@ -105,9 +105,9 @@ class MultiplayerService: NSObject {
             
             let playerCopy = Fighter(playerID: GKLocalPlayer.local.playerID, playerAlias: GKLocalPlayer.local.alias)
             playerCopy.isCopy = true
+            playerCopy.playerOriginal = player
             scene.entityManager.add(entity: playerCopy)
             scene.fighterCopy = playerCopy
-            
     
             if let node = playerCopy.component(ofType: SpriteComponent.self)?.node {
                 //uncomment this lines to activate collision between players
@@ -130,7 +130,7 @@ class MultiplayerService: NSObject {
                 node.physicsBody?.collisionBitMask = CategoryMask.none;
             }
             
-            var playerCopy = Fighter(playerID: GKLocalPlayer.local.playerID, playerAlias: GKLocalPlayer.local.alias)
+            let playerCopy = Fighter(playerID: GKLocalPlayer.local.playerID, playerAlias: GKLocalPlayer.local.alias)
             playerCopy.isCopy = true
             scene.entityManager.add(entity: playerCopy)
             scene.fighterCopy = playerCopy
@@ -267,11 +267,11 @@ extension MultiplayerService: ReceiveDataDelegate {
             
             updateSceneDelegate?.updateDownPlayer(playerID: playerID)
         
-        case .sendAttackRequest:
+        case .sendAttackRequest(let is3rdAttack):
             var hittedPlayersArray : [Int] = [-1, -1, -1, -1]
             if host == GKLocalPlayer.local {
                 hittedPlayersArray = (updateSceneDelegate?.updateAttackPlayerRequest(attackerID: playerIDInt))!
-                updateSceneDelegate?.updateAttackPlayerResponse(attackerID: playerIDInt, receivedAttackIDs: hittedPlayersArray)
+                updateSceneDelegate?.updateAttackPlayerResponse(attackerID: playerIDInt, receivedAttackIDs: hittedPlayersArray, is3rdAttack: is3rdAttack)
             }
             var hittedPlayers = HittedPlayers()
             
@@ -280,20 +280,20 @@ extension MultiplayerService: ReceiveDataDelegate {
             hittedPlayers.player3 = hittedPlayersArray[2]
             hittedPlayers.player4 = hittedPlayersArray[3]
             
-            let data = Message(messageType: .sendAttackResponse(attackerID: playerIDInt, receivedAtackIDs: hittedPlayers))
+            let data = Message(messageType: .sendAttackResponse(attackerID: playerIDInt, receivedAtackIDs: hittedPlayers, is3rdAttack: is3rdAttack))
             MultiplayerService.shared.sendData(data: data, sendDataMode: .reliable)
 
             
         
-        case .sendAttackResponse(let attackerID, let receivedAtackIDs):
-            var arrayHitted : [Int] = []
+        case .sendAttackResponse(let attackerID, let receivedAtackIDs, let is3rdAttack):
             
+            var arrayHitted : [Int] = []
             arrayHitted.append(receivedAtackIDs.player1)
             arrayHitted.append(receivedAtackIDs.player2)
             arrayHitted.append(receivedAtackIDs.player3)
             arrayHitted.append(receivedAtackIDs.player4)
-    
-            updateSceneDelegate?.updateAttackPlayerResponse(attackerID: attackerID, receivedAttackIDs: arrayHitted)
+            
+            updateSceneDelegate?.updateAttackPlayerResponse(attackerID: attackerID, receivedAttackIDs: arrayHitted, is3rdAttack: is3rdAttack)
             
             
         //PING
