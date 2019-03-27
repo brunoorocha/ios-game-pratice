@@ -14,6 +14,10 @@
 		1BDFA7F0222719F100622BC6 /* Hurt.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 1BDFA7EF222719F100622BC6 /* Hurt.atlas */; };
 		1BDFA7F222272F9200622BC6 /* Die.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 1BDFA7F122272F9200622BC6 /* Die.atlas */; };
 		1BDFA7F422272FED00622BC6 /* FighterDieState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDFA7F322272FED00622BC6 /* FighterDieState.swift */; };
+		48441D6522295C040005EC3A /* FighterArena.plist in Resources */ = {isa = PBXBuildFile; fileRef = 48441D6422295C040005EC3A /* FighterArena.plist */; };
+		48441D692229698F0005EC3A /* Arena.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48441D682229698F0005EC3A /* Arena.swift */; };
+		48441D6C22296A9C0005EC3A /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48441D6B22296A9C0005EC3A /* Platform.swift */; };
+		4857C9E12234300300EFA2E9 /* PListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4857C9E02234300300EFA2E9 /* PListManager.swift */; };
 		6C2F3F7A2237DE420087A768 /* VirtualButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2F3F792237DE420087A768 /* VirtualButtonNode.swift */; };
 		6C2F3F7C2237DE520087A768 /* JoystickComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2F3F7B2237DE520087A768 /* JoystickComponent.swift */; };
 		6C2F3F7E2237DE580087A768 /* JoystickNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2F3F7D2237DE580087A768 /* JoystickNode.swift */; };
@@ -27,10 +31,6 @@
 		6CCF8E0722282AF300296148 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCF8E0622282AF300296148 /* Message.swift */; };
 		6CCF8E0922282B1400296148 /* NotificationName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCF8E0822282B1400296148 /* NotificationName.swift */; };
 		6CCF8E0B22282B7600296148 /* ReceiveDataDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCF8E0A22282B7600296148 /* ReceiveDataDelegate.swift */; };
-		48441D6522295C040005EC3A /* FighterArena.plist in Resources */ = {isa = PBXBuildFile; fileRef = 48441D6422295C040005EC3A /* FighterArena.plist */; };
-		48441D692229698F0005EC3A /* Arena.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48441D682229698F0005EC3A /* Arena.swift */; };
-		48441D6C22296A9C0005EC3A /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48441D6B22296A9C0005EC3A /* Platform.swift */; };
-		4857C9E12234300300EFA2E9 /* PListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4857C9E02234300300EFA2E9 /* PListManager.swift */; };
 		A397A0BD221EDCA400E61051 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A0BC221EDCA400E61051 /* AppDelegate.swift */; };
 		A397A0C5221EDCA400E61051 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A0C4221EDCA400E61051 /* GameViewController.swift */; };
 		A397A0C8221EDCA400E61051 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A397A0C6221EDCA400E61051 /* Main.storyboard */; };
@@ -76,6 +76,10 @@
 		1BDFA7EF222719F100622BC6 /* Hurt.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Hurt.atlas; sourceTree = "<group>"; };
 		1BDFA7F122272F9200622BC6 /* Die.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Die.atlas; sourceTree = "<group>"; };
 		1BDFA7F322272FED00622BC6 /* FighterDieState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FighterDieState.swift; sourceTree = "<group>"; };
+		48441D6422295C040005EC3A /* FighterArena.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = FighterArena.plist; sourceTree = "<group>"; };
+		48441D682229698F0005EC3A /* Arena.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Arena.swift; sourceTree = "<group>"; };
+		48441D6B22296A9C0005EC3A /* Platform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
+		4857C9E02234300300EFA2E9 /* PListManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PListManager.swift; sourceTree = "<group>"; };
 		6C2F3F792237DE420087A768 /* VirtualButtonNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualButtonNode.swift; sourceTree = "<group>"; };
 		6C2F3F7B2237DE520087A768 /* JoystickComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoystickComponent.swift; sourceTree = "<group>"; };
 		6C2F3F7D2237DE580087A768 /* JoystickNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoystickNode.swift; sourceTree = "<group>"; };
@@ -89,10 +93,6 @@
 		6CCF8E0622282AF300296148 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		6CCF8E0822282B1400296148 /* NotificationName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationName.swift; sourceTree = "<group>"; };
 		6CCF8E0A22282B7600296148 /* ReceiveDataDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveDataDelegate.swift; sourceTree = "<group>"; };
-		48441D6422295C040005EC3A /* FighterArena.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = FighterArena.plist; sourceTree = "<group>"; };
-		48441D682229698F0005EC3A /* Arena.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Arena.swift; sourceTree = "<group>"; };
-		48441D6B22296A9C0005EC3A /* Platform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
-		4857C9E02234300300EFA2E9 /* PListManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PListManager.swift; sourceTree = "<group>"; };
 		A397A0B9221EDCA400E61051 /* spritekit-plataform.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "spritekit-plataform.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A397A0BC221EDCA400E61051 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A397A0C4221EDCA400E61051 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -152,6 +152,22 @@
 			path = Maps;
 			sourceTree = "<group>";
 		};
+		48441D662229675B0005EC3A /* fighter */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = fighter;
+			sourceTree = "<group>";
+		};
+		48441D6A22296A230005EC3A /* arena */ = {
+			isa = PBXGroup;
+			children = (
+				48441D682229698F0005EC3A /* Arena.swift */,
+				48441D6B22296A9C0005EC3A /* Platform.swift */,
+			);
+			path = arena;
+			sourceTree = "<group>";
+		};
 		6C2F3F782237DE190087A768 /* joystick */ = {
 			isa = PBXGroup;
 			children = (
@@ -182,22 +198,6 @@
 				6CCF8E0A22282B7600296148 /* ReceiveDataDelegate.swift */,
 			);
 			path = services;
-			sourceTree = "<group>";
-		};
-		48441D662229675B0005EC3A /* fighter */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = fighter;
-			sourceTree = "<group>";
-		};
-		48441D6A22296A230005EC3A /* arena */ = {
-			isa = PBXGroup;
-			children = (
-				48441D682229698F0005EC3A /* Arena.swift */,
-				48441D6B22296A9C0005EC3A /* Platform.swift */,
-			);
-			path = arena;
 			sourceTree = "<group>";
 		};
 		A397A0B0221EDCA400E61051 = {

@@ -28,6 +28,13 @@ class FighterHurtState: GKState {
         let hurtAction = SKAction.animate(with: self.stateAtlasTextures, timePerFrame: 0.15, resize: true, restore: true)
         let hurtSound = SKAction.playSoundFileNamed("FighterHurt.wav", waitForCompletion: true)
         
+        let colorize = SKAction.colorize(with: .red, colorBlendFactor: 1, duration: 0.2)
+        node.run(colorize){
+            let noColor = SKAction.colorize(with: .white, colorBlendFactor: 1, duration: 0.2)
+            self.node.run(noColor)
+        }
+        
+        
         node.run(SKAction.group([hurtAction, hurtSound]), completion: {
             self.stateMachine?.enter(FighterIdleState.self)
         })
