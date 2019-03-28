@@ -25,10 +25,12 @@ class MyScene: SKScene {
     var pingLabel: SKLabelNode!
     var debugLabel: SKLabelNode!
     var canSendPing = true
-    var previousPosition: CGPoint = CGPoint.zero;
     let multiplayerService = MultiplayerService.shared
     let selfPlayerID = GKLocalPlayer.local.playerID.toInt()
     var lookingLeft = true
+    var nodePosition = CGPoint.zero
+    var inputController: InputController!
+
     var map: Map1!
     
     override func didMove(to view: SKView) {
@@ -36,14 +38,17 @@ class MyScene: SKScene {
         self.backgroundColor = UIColor.white
         self.entityManager = EntityManager(withScene: self)                
         self.configureStates()
-        self.configureGesturePad(for: view)
         self.configureCamera()
         self.configureUI()
         self.configurePhysics()
         self.suicideArea()
         
+        //CONTROLS: choose one, comment the other
+        //self.configureGesturePad(for: view)
+        self.setupJoystick()
+        
         // Temporarily
-		    let arena = PListManager.loadArena(with: "FighterArena")
+        let arena = PListManager.loadArena(with: "FighterArena")
         self.map = Map1(withScene: self, andArena: arena)
         
         allPlayers = MultiplayerService.shared.allocPlayers(in: self)
@@ -52,7 +57,6 @@ class MyScene: SKScene {
             
         }
         if let node = self.fighter.component(ofType: SpriteComponent.self)?.node {
-            previousPosition = node.position
             self.playerNode = node
         }
         
@@ -62,6 +66,7 @@ class MyScene: SKScene {
         }
         
         MultiplayerService.shared.updateSceneDelegate = self
+        
     }
     
     func configureStates() {
@@ -76,6 +81,19 @@ class MyScene: SKScene {
     func configurePhysics() {
 //        self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
         self.physicsWorld.contactDelegate = self
+    }
+    
+    func setupJoystick(){
+        let inputSize = CGSize(width: self.size.width, height: self.size.height)
+        inputController = InputController(size: inputSize)
+        inputController.zPosition = 10
+        inputController.position = self.position
+        inputController.joystickDelegate = self
+        
+        if let cam = self.camera {
+            cam.addChild(inputController)
+        }
+        
     }
     
     private func suicideArea(){
@@ -100,9 +118,8 @@ class MyScene: SKScene {
     }
     
     func configureUI(){
-        
         if let cam = self.camera {
-            
+        
             //ping label
             pingLabel = SKLabelNode(text: "ping: 0 ms, host: \(MultiplayerService.shared.selfPlayer.alias)")
             pingLabel.position = CGPoint(x: self.size.width/2 - 20  , y: self.size.height/2 - 40)
@@ -121,7 +138,7 @@ class MyScene: SKScene {
             debugLabel.fontColor = SKColor.black
             debugLabel.fontSize = 18
             debugLabel.zPosition = 2
-            cam.addChild(debugLabel)
+            //cam.addChild(debugLabel)
             
             
         }
@@ -134,48 +151,84 @@ class MyScene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         
-        
         self.allPlayers.forEach { (key,value) in
             value.update(deltaTime: currentTime)
         }
+        
         self.fighterCopy.update(deltaTime: currentTime)
         
-        var fighters: [Fighter] = []
-        for (i, fighter) in self.allPlayers.enumerated() {
-            fighters.append(fighter.value)
-        }
-        
-        debugLabel.text = "1: \(fighters[0].health), 2: \(fighters[1].health)"
         
         guard let node = self.fighter.component(ofType: SpriteComponent.self)?.node else {return}
-            let move = SKAction.move(to: node.position, duration: 0.3)
-            self.camera?.run(move)
+        let move = SKAction.move(to: node.position, duration: 0.3)
+        self.camera?.run(move)
         
         
         //Send Ping request every frame
         let date = Int((Date().timeIntervalSince1970 * 1000))
         MultiplayerService.shared.ping(message: .sendPingRequest(senderTime: date), sendToHost: true)
+
         
-        let distance = hypot(playerNodeCopy.position.x - previousPosition.x,
-                             playerNodeCopy.position.y - previousPosition.y)
+        guard let nodeCopy = self.fighterCopy.component(ofType: SpriteComponent.self)?.node else {return}
+        let distance = hypot(nodeCopy.position.x - nodePosition.x,
+                             nodeCopy.position.y - nodePosition.y)
+        
+        
         
         if distance > 0 {
-            let directionDx = Int(playerNodeCopy.xScale)
-            
-            let currentState = self.fighterCopy.getCurrentStateEnum()
-        
-            let clientMessage: MessageType = .sendPositionRequest(position: playerNodeCopy.position, state: currentState, directionDx: directionDx)
-            
-            let hostMessage: MessageType = .sendPositionResponse(playerID: selfPlayerID, position: playerNodeCopy.position, state: currentState, directionDx: directionDx)
-            
-            multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage, sendDataMode: .unreliable) {
-                self.fighter.changePlayerPosition(position: self.playerNodeCopy.position)
-                self.fighter.repeatCopyMove(copy: self.fighterCopy)
-            }
+            print(distance)
+            self.copyStatesAndSend()
         }
         
-        self.previousPosition = self.playerNodeCopy.position
+        nodePosition = nodeCopy.position
+        
+        
         self.map.updateParallaxBackground()
+
+    }
+    
+    func copyStatesAndSend() {
+        let directionDx = Int(playerNodeCopy.xScale)
+        let currentState = self.fighterCopy.getCurrentStateEnum()
+        let currentPosition = self.playerNodeCopy.position
+        let clientMessage: MessageType = .sendPositionRequest(position: currentPosition, state: currentState, directionDx: directionDx)
+        
+        let hostMessage: MessageType = .sendPositionResponse(playerID: selfPlayerID, position: currentPosition, state: currentState, directionDx: directionDx)
+        
+        let copy = self.fighterCopy.copy() as! Fighter
+        let originalState = self.fighter.stateMachine.currentState
+        multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage, sendDataMode: .unreliable) {
+            self.fighter.changePlayerPosition(position: currentPosition)
+            self.fighter.repeatCopyMove(originalState: originalState, copy: copy)
+        }
+    }
+    
+    func attackTap() {
+        
+        let hittedPlayersArray = self.fighterCopy.attack(playAnim: true)
+        var hittedPlayers = HittedPlayers()
+        
+        hittedPlayers.player1 = hittedPlayersArray[0]
+        hittedPlayers.player2 = hittedPlayersArray[1]
+        hittedPlayers.player3 = hittedPlayersArray[2]
+        hittedPlayers.player4 = hittedPlayersArray[3]
+        
+        let is3rdAttack = (self.fighterCopy.stateMachine.currentState is FighterAttack3State)
+        let currentState = self.fighterCopy.getCurrentStateEnum()
+        
+        let clientMessage: MessageType = .sendAttackRequest(state: currentState)
+        let hostMessage: MessageType = .sendAttackResponse(attackerID: selfPlayerID, receivedAtackIDs: hittedPlayers, state: currentState)
+        
+        multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage, sendDataMode: .reliable) {
+            hittedPlayersArray.forEach { (playerID) in
+                let _ = self.fighter.attack(playAnim: true)
+                if let hittedPlayer = self.allPlayers[playerID] {
+                    hittedPlayer.receiveDamage(damage: self.fighter.damage)
+                        if self.fighterCopy.stateMachine.currentState is FighterAttack3State{
+                            //hittedPlayer.reiceivePushDamage(force: self.fighterCopy.forcePush, direction: self.fighterCopy.fighterDirection)
+                        }
+                }
+            }
+        }
     }
 
 }
@@ -183,97 +236,23 @@ class MyScene: SKScene {
 extension MyScene: GesturePadDelegate {
     func performActionForAnalogMoving(inAngle angle: CGFloat, withDirectionX dx: CGFloat, AndDirectionY dy: CGFloat) {
         self.fighterCopy.walk(inDirectionX: dx)
-//        if (dx >= 0 && lookingLeft) || (dx < 0 && !lookingLeft) && self.fighter.jumpCount == 0 {
-//
-//            lookingLeft = !lookingLeft
-//
-//            guard let playerNode = self.fighterCopy.component(ofType: SpriteComponent.self)?.node else {return}
-//            let clientMessage: MessageType = .sendPositionRequest(position: playerNode.position)
-//            let hostMessage: MessageType = .sendPositionResponse(playerID: selfPlayerID, position: playerNode.position)
-//
-//            multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage) {
-//                //self.fighter.changePlayerPosition(position: playerNode.position)
-//            }
-//
-//        }
-//
-//        let clientMessage: MessageType = .sendMoveRequest(dx: dx)
-//        let hostMessage: MessageType = .sendMoveResponse(playerID: selfPlayerID, dx: dx)
-//
-//        multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage) {
-//            self.fighter.walk(inDirectionX: dx)
-//        }
         
     }
     
     func performActionForAnalogStopMoving() {
         self.fighterCopy.idle()
-//        guard let playerNode = self.fighter.component(ofType: SpriteComponent.self)?.node else {return}
-//
-//        var positionXPredicted: CGFloat = playerNode.xScale < 0 ? -7.0 : 7.0
-//
-//        if playerNode.physicsBody?.velocity.dx == 0 {
-//            positionXPredicted = 0
-//        }
-//        let positionToSend = CGPoint(x: playerNode.position.x + positionXPredicted, y: playerNode.position.y)
-//
-//        let clientMessage: MessageType = .sendStopRequest(position: positionToSend)
-//        let hostMessage: MessageType = .sendStopResponse(playerID: selfPlayerID, position: positionToSend)
-//
-//        multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage) {
-//            self.fighter.idle()
-//            self.fighter.changePlayerPosition(position: positionToSend)
-//        }
-        
     }
     
     func performActionForTap() {
-        let hittedPlayersArray = self.fighter.attack()
-        var hitted = HittedPlayers()
-        hitted.player1 = hittedPlayersArray[0]
-        hitted.player2 = hittedPlayersArray[1]
-        hitted.player3 = hittedPlayersArray[2]
-        hitted.player4 = hittedPlayersArray[3]
-        
-        let clientMessage: MessageType = .sendAttackRequest
-        let hostMessage: MessageType = .sendAttackResponse(attackerID: selfPlayerID, receivedAtackIDs: hitted)
-        
-        multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage, sendDataMode: .reliable) {
-            
-            hittedPlayersArray.forEach { (playerID) in
-                if let hittedPlayer = self.allPlayers[playerID] {
-                    hittedPlayer.receiveDamage(damage: self.fighter.damage)
-                    if let attacker = self.allPlayers[self.selfPlayerID]{
-                        if attacker.stateMachine.currentState is FighterAttack3State{
-                            //hittedPlayer.reiceivePushDamage(force: attacker.forcePush, direction: attacker.fighterDirection)
-                        }
-                    }
-                }
-            }
-        }
-
+        self.attackTap()
     }
     
     func performActionForSwipeUp() {
         self.fighterCopy.jump()
-//        let clientMessage: MessageType = .sendJumpRequest
-//        let hostMessage: MessageType = .sendJumpResponse(playerID: selfPlayerID)
-//
-//        multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage) {
-//            self.fighter.jump()
-//        }
-        
     }
     
     func performActionForSwipeDown() {
         self.fighterCopy.down()
-//        let clientMessage: MessageType = .sendDownRequest
-//        let hostMessage: MessageType = .sendDownResponse(playerID: selfPlayerID)
-//
-//        multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage) {
-//            self.fighter.down()
-//        }
-        
     }
 }
 
@@ -304,11 +283,12 @@ extension MyScene: UpdateSceneDelegate {
         if let player = allPlayers[playerID] {
             player.changePlayerPosition(position: playerPosition)
             
-            player.changePlayerState(state: state, inDirectionX: directionDx)
-            
-            if playerID == GKLocalPlayer.local.playerID.toInt() {
-                //player.repeatCopyMove(copy: self.fighterCopy)
-            }
+//            if state != .attack1 || state != .attack3 || state != .attack3 {
+                player.changePlayerState(state: state, inDirectionX: directionDx)
+            //}
+//            if playerID == GKLocalPlayer.local.playerID.toInt() {
+//                self.fighterCopy.changePlayerState(state: state, inDirectionX: directionDx)
+//            }
         }
         
     }
@@ -334,30 +314,34 @@ extension MyScene: UpdateSceneDelegate {
     
     func updateAttackPlayerRequest(attackerID: Int) -> [Int] {
         if let player = allPlayers[attackerID] {
-            return player.attack()
+            return player.attack(playAnim: false)
         }
         
         return [-1,-1,-1,-1]
     }
     
-    func updateAttackPlayerResponse(attackerID: Int, receivedAttackIDs: [Int]) {
+    func updateAttackPlayerResponse(attackerID: Int, receivedAttackIDs: [Int], state: State) {
         guard let attackerPlayer = allPlayers[attackerID] else {return}
         
+        let _ = attackerPlayer.attack(playAnim: true)
         
-        let h = attackerPlayer.attack()
+        //attackerPlayer.changePlayerState(state: state, inDirectionX: 1)
         
         receivedAttackIDs.forEach { (playerID) in
             if let hittedPlayer = allPlayers[playerID] {
                 hittedPlayer.receiveDamage(damage: attackerPlayer.damage)
-                if let attacker = self.allPlayers[self.selfPlayerID]{
-                    if attacker.stateMachine.currentState is FighterAttack3State{
-                        hittedPlayer.reiceivePushDamage(force: attacker.forcePush, direction: attacker.fighterDirection)
-                    }
+//                if let attacker = self.allPlayers[self.selfPlayerID]{
+//                    if attacker.stateMachine.currentState is FighterAttack3State{
+//                        //hittedPlayer.reiceivePushDamage(force: attacker.forcePush, direction: attacker.fighterDirection)
+//                    }
+//                }
+                if hittedPlayer.playerID == GKLocalPlayer.local.playerID && state == .attack3 {
+                    guard let attacker = self.allPlayers[attackerID] else {return}
+                    self.fighterCopy.reiceivePushDamage(force: attacker.forcePush, direction: attacker.fighterDirection)
                 }
             }
         }
-        
-        
+    
     }
     
     func showPing(ping: Int, host: GKPlayer) {
@@ -369,6 +353,39 @@ extension MyScene: UpdateSceneDelegate {
         }else if currentDate % 2 != 1{
             canSendPing = true
         }
+
+    }
+}
+
+extension MyScene: JoystickDelegate {
+    
+    func joystickDidStartTracking() {
+        
+    }
+    
+    func joystickDidMoved(direction: CGPoint) {
+        self.fighterCopy.walk(inDirectionX: direction.x)
+    }
+    
+    func joystickUpdateTracking(direction: CGPoint) {
+        
+    }
+    
+    func joystickDidEndTracking(direction: CGPoint) {
+        self.fighterCopy.idle()
+    }
+    
+    func joystickDidTapButtonA() {
+        self.attackTap()
+    }
+    
+    func joystickDidTapButtonB() {
+        self.fighterCopy.jump()
+    }
+    
+    func joystickDidTapDown() {
+        self.fighterCopy.down()
+
     }
     
 }

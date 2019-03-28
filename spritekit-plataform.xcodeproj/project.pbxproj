@@ -18,6 +18,11 @@
 		48441D692229698F0005EC3A /* Arena.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48441D682229698F0005EC3A /* Arena.swift */; };
 		48441D6C22296A9C0005EC3A /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48441D6B22296A9C0005EC3A /* Platform.swift */; };
 		4857C9E12234300300EFA2E9 /* PListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4857C9E02234300300EFA2E9 /* PListManager.swift */; };
+		6C2F3F7A2237DE420087A768 /* VirtualButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2F3F792237DE420087A768 /* VirtualButtonNode.swift */; };
+		6C2F3F7C2237DE520087A768 /* JoystickComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2F3F7B2237DE520087A768 /* JoystickComponent.swift */; };
+		6C2F3F7E2237DE580087A768 /* JoystickNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2F3F7D2237DE580087A768 /* JoystickNode.swift */; };
+		6C2F3F802237DE9D0087A768 /* InputController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2F3F7F2237DE9D0087A768 /* InputController.swift */; };
+		6C2F3F822237DEA50087A768 /* JoystickDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2F3F812237DEA50087A768 /* JoystickDelegate.swift */; };
 		6C92348822294BA800F74567 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C92348722294BA800F74567 /* MenuScene.swift */; };
 		6C92348A22294BDA00F74567 /* MenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6C92348922294BDA00F74567 /* MenuScene.sks */; };
 		6C92348D22294CC800F74567 /* ButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C92348C22294CC800F74567 /* ButtonNode.swift */; };
@@ -81,6 +86,11 @@
 		48441D682229698F0005EC3A /* Arena.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Arena.swift; sourceTree = "<group>"; };
 		48441D6B22296A9C0005EC3A /* Platform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
 		4857C9E02234300300EFA2E9 /* PListManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PListManager.swift; sourceTree = "<group>"; };
+		6C2F3F792237DE420087A768 /* VirtualButtonNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualButtonNode.swift; sourceTree = "<group>"; };
+		6C2F3F7B2237DE520087A768 /* JoystickComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoystickComponent.swift; sourceTree = "<group>"; };
+		6C2F3F7D2237DE580087A768 /* JoystickNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoystickNode.swift; sourceTree = "<group>"; };
+		6C2F3F7F2237DE9D0087A768 /* InputController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputController.swift; sourceTree = "<group>"; };
+		6C2F3F812237DEA50087A768 /* JoystickDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoystickDelegate.swift; sourceTree = "<group>"; };
 		6C92348722294BA800F74567 /* MenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 		6C92348922294BDA00F74567 /* MenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MenuScene.sks; sourceTree = "<group>"; };
 		6C92348C22294CC800F74567 /* ButtonNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonNode.swift; sourceTree = "<group>"; };
@@ -169,6 +179,36 @@
 			);
 			path = arena;
 			sourceTree = "<group>";
+		};		
+		A318F830224BBCF70040D650 /* fonts */ = {
+			isa = PBXGroup;
+			children = (
+				A318F832224BBD310040D650 /* Rubik-Black.ttf */,
+				A318F831224BBD310040D650 /* Rubik-Bold.ttf */,
+				A318F833224BBD310040D650 /* Rubik-Regular.ttf */,
+			);
+			path = fonts;
+      sourceTree = "<group>";
+		};
+		6C2F3F782237DE190087A768 /* joystick */ = {
+			isa = PBXGroup;
+			children = (
+				6C2F3F792237DE420087A768 /* VirtualButtonNode.swift */,
+				6C2F3F7B2237DE520087A768 /* JoystickComponent.swift */,
+				6C2F3F7D2237DE580087A768 /* JoystickNode.swift */,
+				6C2F3F7F2237DE9D0087A768 /* InputController.swift */,
+				6C2F3F812237DEA50087A768 /* JoystickDelegate.swift */,
+			);
+			path = joystick;
+			sourceTree = "<group>";
+		};
+		6C92348B22294CB400F74567 /* nodes */ = {
+			isa = PBXGroup;
+			children = (
+				6C92348C22294CC800F74567 /* ButtonNode.swift */,
+			);
+			path = nodes;
+			sourceTree = "<group>";
 		};
 		6CCF8E0022282A1800296148 /* services */ = {
 			isa = PBXGroup;
@@ -180,16 +220,6 @@
 				6CCF8E0A22282B7600296148 /* ReceiveDataDelegate.swift */,
 			);
 			path = services;
-			sourceTree = "<group>";
-		};
-		A318F830224BBCF70040D650 /* fonts */ = {
-			isa = PBXGroup;
-			children = (
-				A318F832224BBD310040D650 /* Rubik-Black.ttf */,
-				A318F831224BBD310040D650 /* Rubik-Bold.ttf */,
-				A318F833224BBD310040D650 /* Rubik-Regular.ttf */,
-			);
-			path = fonts;
 			sourceTree = "<group>";
 		};
 		A397A0B0221EDCA400E61051 = {
@@ -306,6 +336,7 @@
 		A397A0E6221EDFC800E61051 /* components */ = {
 			isa = PBXGroup;
 			children = (
+				6C2F3F782237DE190087A768 /* joystick */,
 				A397A0E7221EDFE300E61051 /* SpriteComponent.swift */,
 			);
 			path = components;
@@ -537,6 +568,7 @@
 				A397A0E4221EDF2900E61051 /* Fighter.swift in Sources */,
 				A397A11822218EBB00E61051 /* PrepareFightState.swift in Sources */,
 				A397A1152220C5A300E61051 /* FighterAttackState.swift in Sources */,
+				6C2F3F802237DE9D0087A768 /* InputController.swift in Sources */,
 				A397A12822295C5600E61051 /* FighterAttack3State.swift in Sources */,
 				4857C9E12234300300EFA2E9 /* PListManager.swift in Sources */,
 				A397A0C5221EDCA400E61051 /* GameViewController.swift in Sources */,
@@ -545,11 +577,15 @@
 				A397A0BD221EDCA400E61051 /* AppDelegate.swift in Sources */,
 				A3ACB3392237DD7000AF5088 /* ParallaxBackground.swift in Sources */,
 				A397A0E8221EDFE300E61051 /* SpriteComponent.swift in Sources */,
+				6C2F3F7E2237DE580087A768 /* JoystickNode.swift in Sources */,
 				6CCF8E0B22282B7600296148 /* ReceiveDataDelegate.swift in Sources */,
 				A397A0F622208ACD00E61051 /* AtlasTextureBuilder.swift in Sources */,
+				6C2F3F822237DEA50087A768 /* JoystickDelegate.swift in Sources */,
 				1BDFA7EE2227148400622BC6 /* FighterHurtState.swift in Sources */,
+				6C2F3F7A2237DE420087A768 /* VirtualButtonNode.swift in Sources */,
 				A397A10F2220A02700E61051 /* FighterJumpState.swift in Sources */,
 				1B3FA0A82225B5D900280565 /* FighterFallState.swift in Sources */,
+				6C2F3F7C2237DE520087A768 /* JoystickComponent.swift in Sources */,
 				6C92348D22294CC800F74567 /* ButtonNode.swift in Sources */,
 				A397A0DC221EDDF700E61051 /* GesturePad.swift in Sources */,
 				A397A0FB22208C6000E61051 /* FighterIdleState.swift in Sources */,

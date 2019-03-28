@@ -9,9 +9,13 @@
 import GameplayKit
 import SpriteKit
 
-enum PlayerSide{
+enum PlayerSide: Int{
     case left
     case right
+    
+//    init?(raw: Int){
+//        self.init(raw: raw)
+//    }
 }
 
 extension PlayerSide{
@@ -29,7 +33,15 @@ class Fighter: GKEntity {
     
     var stateMachine: GKStateMachine!
     
-    var fighterDirection: PlayerSide = .right
+    var fighterDirection: PlayerSide = .right {
+        didSet{
+            if let node = self.component(ofType: SpriteComponent.self)?.node,
+               let name = self.component(ofType: SpriteComponent.self)?.nameLabel {
+                node.xScale = self.fighterDirection.math
+                name.xScale = self.fighterDirection.math
+            }
+        }
+    }
     var isDown: Bool = false
     var positionDyDownTapped: CGFloat = 0
     var jumpCount = 0
@@ -37,8 +49,14 @@ class Fighter: GKEntity {
     
     var playerID: String = ""
     var playerAlias: String = ""
-    var health : CGFloat = 100
-    var damage : CGFloat = 5
+    var health : CGFloat = 100 {
+        didSet {
+            if let nameLabel = self.component(ofType: SpriteComponent.self)?.nameLabel {
+                nameLabel.text = "\(playerAlias) \(health)%"
+            }
+        }
+    }
+    var damage : CGFloat = 10
     var forcePush : CGFloat = 5
     var jumpForce: CGFloat = 12.0
     let rangerAttack : CGFloat = 10
@@ -51,9 +69,22 @@ class Fighter: GKEntity {
     var lastAttackTimeCount: TimeInterval = 0
     let comboTimeWindow: TimeInterval = 0.8
     var delayAttack: TimeInterval = 0.4
-
+    var canControl: Bool = true {
+        didSet {
+            if !canControl {
+                if let copy = self.playerCopy, let nodeCopy = copy.component(ofType: SpriteComponent.self)?.node {
+                    nodeCopy.physicsBody?.velocity.dx = 0
+                }
+            }
+        }
+    }
+    
+    var playerOriginal: Fighter?
+    var playerCopy: Fighter?
+    
     var isCopy = false;
-    var moveStates = [FighterWalkState.self,FighterJumpState.self, FighterIdleState.self, FighterFallState.self]
+    
+    var allStates = [FighterWalkState.self,FighterJumpState.self, FighterIdleState.self, FighterFallState.self, FighterAttackState.self, FighterAttack2State.self, FighterAttack3State.self]
     
     init(playerID: String, playerAlias: String) {
         super.init()
@@ -65,11 +96,12 @@ class Fighter: GKEntity {
         self.addComponent(spriteComponent)
         
         if let nameLabel = self.component(ofType: SpriteComponent.self)?.nameLabel {
-            nameLabel.text = playerAlias
+            nameLabel.text = "\(playerAlias) \(health)%"
         }
         
         self.setupStateMachine()
         self.configurePhysicsBody()
+        self.idle()
 
     }
     
@@ -135,7 +167,6 @@ class Fighter: GKEntity {
             
             self.comboCount = 0
         }
-
     }
     
     func configurePhysicsBody() {
@@ -186,23 +217,18 @@ class Fighter: GKEntity {
             
             self.stateMachine = GKStateMachine(states: [idleState, walkState, jumpState, attackState, attack2State, attack3State, fallState, hurtState, dieState, knockbackState])
             
-            self.idle()
         }        
     }
     
-    func repeatCopyMove(copy: Fighter){
+    func repeatCopyMove(originalState: GKState?, copy: Fighter){
         
         guard let originalNode = self.component(ofType: SpriteComponent.self)?.node else {return}
         guard let copyNode = copy.component(ofType: SpriteComponent.self)?.node else {return}
-        guard let originalNameLabel = self.component(ofType: SpriteComponent.self)?.nameLabel else {return}
-        guard let copyNameLabel = copy.component(ofType: SpriteComponent.self)?.nameLabel else {return}
-        
+    
         let copyState = type(of: copy.stateMachine.currentState!).self
-        
-        if ((type(of: self.stateMachine.currentState!) != copyState) || (originalNode.xScale != copyNode.xScale)) && !(self.comboList()) {
+    
+        if ((type(of: originalState!) != copyState) || (originalNode.xScale != copyNode.xScale)) && !(originalState is FighterHurtState){
             self.stateMachine.enter(copyState)
-            originalNode.xScale = copyNode.xScale
-            originalNameLabel.xScale = copyNameLabel.xScale
             self.fighterDirection = copy.fighterDirection
         }
 
@@ -218,31 +244,53 @@ class Fighter: GKEntity {
             return State.idle
         case is FighterFallState:
             return State.fall
+        case is FighterAttackState:
+            return State.attack1
+        case is FighterAttack2State:
+            return State.attack2
+        case is FighterAttack3State:
+            return State.attack3
         default:
             return State.idle
         }
     }
     
     func changePlayerState(state: State, inDirectionX dx: Int) {
+
+        if let original = self.playerOriginal {
+            if !original.canControl {return}
+        }
+        
         if let node = self.component(ofType: SpriteComponent.self)?.node,
            let nameLabel = self.component(ofType: SpriteComponent.self)?.nameLabel {
         
-            if !self.comboList() {
+            if !(self.stateMachine.currentState is FighterHurtState) {
                 let nodeDirection: CGFloat = dx < 0 ? -1.0 : 1.0
                 
                 self.fighterDirection = dx < 0 ? .left : .right
                 
                 node.xScale = nodeDirection
                 nameLabel.xScale = nodeDirection
-                self.stateMachine.enter(self.moveStates[state.rawValue])
+                
+                
+                if (state != .attack1 || state != .attack2 || state != .attack3) && !self.comboList() {
+                    if type(of: self.stateMachine.currentState!) != self.allStates[state.rawValue] {
+                        self.stateMachine.enter(self.allStates[state.rawValue])
+                    }
+                }
+                
             }
         }
     }
     
     func changePlayerPosition(position: CGPoint){
 
-        let move = SKAction.move(to: position, duration: 0.05)
-        //move.timingMode = .easeIn
+        if let original = self.playerOriginal {
+            if !original.canControl {return}
+        }
+        var p = position
+        //p.x = p.x + 50
+        let move = SKAction.move(to: p, duration: 0.05)
         if let node = self.component(ofType: SpriteComponent.self)?.node {
             node.run(move)
         }
@@ -257,9 +305,14 @@ class Fighter: GKEntity {
     }
     
     func walk(inDirectionX dx: CGFloat) {
+        if let original = self.playerOriginal {
+            if !original.canControl {return}
+        }
+        
         if let node = self.component(ofType: SpriteComponent.self)?.node,
            let nameLabel = self.component(ofType: SpriteComponent.self)?.nameLabel {
             let nodeDirection: CGFloat = dx < 0 ? -1.0 : 1.0
+            
             // If direction new is right and old isn't right
             if (nodeDirection == 1.0 && self.fighterDirection != .right) {
                 self.fighterDirection = .right
@@ -270,16 +323,22 @@ class Fighter: GKEntity {
             }
             node.xScale = abs(node.xScale) * nodeDirection
             nameLabel.xScale = nodeDirection
+
             self.walk()
+
+            
         }
         
     }
     
     private func walk(){
+        
         // If is in attacking dont walk
         if (self.comboList()){ return }
         if self.stateMachine.currentState is FighterHurtState ||
-            self.stateMachine.currentState is FighterDieState { return }
+           self.stateMachine.currentState is FighterDieState ||
+           self.stateMachine.currentState is FighterKnockbackState { return }
+        
         guard let node = self.component(ofType: SpriteComponent.self)?.node else { return }
         node.physicsBody?.velocity.dx = 0.0
         node.physicsBody?.applyImpulse(CGVector(dx: (velocity*self.fighterDirection.math), dy: 0.0))
@@ -313,7 +372,10 @@ class Fighter: GKEntity {
     }
     
     //attack returns all players(playerID) that was hitted by attacker player
-    func attack() -> [Int]{
+    func attack(playAnim: Bool) -> [Int] {
+        if let original = self.playerOriginal {
+            original.canControl = false
+        }
         var playersHitted: [Int] = [-1,-1,-1,-1] // none player is -1
         if (self.stateMachine.currentState is FighterHurtState ||
             self.stateMachine.currentState is FighterDieState) { return playersHitted}
@@ -337,46 +399,76 @@ class Fighter: GKEntity {
             // Filter for fights to hit
             for (i, fighter) in scene.allPlayers.enumerated() {
                 if let fighterNode = fighter.value.component(ofType: SpriteComponent.self)?.node {
-                    if fighterNode.intersects(damageArea) && fighter.value != self {
+                    if fighterNode.intersects(damageArea) && fighter.value.playerID != self.playerID {
                         playersHitted[i] = fighter.value.playerID.toInt()
                         //fighter.receiveDamage(damage: self.damage)
                     }
                 }
             }
+            
+            node.run(SKAction.wait(forDuration: 0.5)) {
+                if let original = self.playerOriginal {
+                    original.canControl = true
+                }
+                
+            }
         }
-
         
         let comboStateList = [FighterAttackState.self, FighterAttack2State.self, FighterAttack3State.self]
-    
+        
         if ( self.comboCount == self.comboCountMax){
             self.comboCount = 0
         }
         
-        self.stateMachine.enter(comboStateList[self.comboCount])
+        //if playAnim {
+            self.stateMachine.enter(comboStateList[self.comboCount])
+        //}
+        
         self.comboCount = self.comboCount + 1
         self.lastAttackTimeCount = self.comboTimeCount
         return playersHitted
     }
+
     
     
-    func receiveDamage(damage: CGFloat){
+    func receiveDamage(damage: CGFloat) {
+        self.canControl = false
+        
         self.health -= damage
+        guard let node = self.component(ofType: SpriteComponent.self)?.node else { return }
         // Check if is alive
         if (health > 0) {
             // Necessary set idle to multiples hurt simultaneously
             self.stateMachine?.enter(FighterIdleState.self)
             self.stateMachine?.enter(FighterHurtState.self)
+            
+            node.run(SKAction.wait(forDuration: 1)) {
+                self.canControl = true
+            }
+            
         }else{
-            guard let node = self.component(ofType: SpriteComponent.self)?.node else { return }
             node.physicsBody?.velocity.dx = 0
             self.stateMachine?.enter(FighterDieState.self)
         }
     }
     
     func reiceivePushDamage(force: CGFloat, direction: PlayerSide){
+
+        self.canControl = false
+    
         guard let node = self.component(ofType: SpriteComponent.self)?.node else { return }
         if !(stateMachine.currentState is FighterDieState){
-            node.physicsBody?.applyImpulse(CGVector(dx: force*direction.math, dy: 0))
+            
+            let pushAction = SKAction.run {
+                node.physicsBody?.applyImpulse(CGVector(dx: force*direction.math, dy: 0))
+            }
+            
+            let waitAction = SKAction.wait(forDuration: 0.5)
+            let sequence = SKAction.sequence([pushAction, waitAction])
+            
+            node.run(sequence) {
+                self.canControl = true
+            }
         }
         self.stateMachine.enter(FighterKnockbackState.self)
     }
@@ -416,7 +508,7 @@ class Fighter: GKEntity {
         return damageArea
     }
     
-    private func comboList() -> Bool{
+    func comboList() -> Bool{
         if (self.stateMachine.currentState is FighterAttackState ||
             self.stateMachine.currentState is FighterAttack2State ||
             self.stateMachine.currentState is FighterAttack3State){
@@ -430,4 +522,17 @@ class Fighter: GKEntity {
         fatalError("init(coder:) has not been implemented")
     }
 
+}
+
+//Overrides
+extension Fighter {
+    override func copy() -> Any {
+        let player = Fighter(playerID: self.playerID, playerAlias: self.playerAlias)
+        player.addComponent(self.components.first!)
+        player.fighterDirection = self.fighterDirection
+        let currentState = type(of: self.stateMachine.currentState!).self
+        player.stateMachine.enter(currentState)
+        
+        return player
+    }
 }

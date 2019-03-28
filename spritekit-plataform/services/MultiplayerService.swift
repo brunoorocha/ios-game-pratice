@@ -17,7 +17,7 @@ class MultiplayerService: NSObject {
     private(set) var defaultNumberOfPlayers : Int = 2
     
     private(set) var hostPlayer: GKPlayer?
-    private(set) var pingHost: Int = 40 // in miliseconds
+    private(set) var pingHost: Int = 200 // in miliseconds
     private(set) var allPlayers: [String : Float] = [String : Float]()
     private(set) var selfPlayer = GKLocalPlayer.local
     private var timer: Timer = Timer()
@@ -53,7 +53,7 @@ class MultiplayerService: NSObject {
         if hostPlayer == selfPlayer {
             let ping = Double(pingHost) / 1000
 
-            timer = Timer.scheduledTimer(withTimeInterval: ping, repeats: false) { (_) in
+            Timer.scheduledTimer(withTimeInterval: ping, repeats: false) { (_) in
                 hostActionCompletion()
             }
             
@@ -63,17 +63,7 @@ class MultiplayerService: NSObject {
         let data = Message(messageType: messageType)
         MultiplayerService.shared.sendData(data: data, sendDataMode: sendDataMode)
     }
-    
-    func hostAction(completion: @escaping () -> Void) {
-        if hostPlayer == selfPlayer {
-            let ping = Double(pingHost) / 1000
-            
-            timer = Timer.scheduledTimer(withTimeInterval: ping, repeats: false) { (_) in
-                completion()
-            }
-            
-        }
-    }
+
     
     func startingGame(){
 
@@ -93,7 +83,7 @@ class MultiplayerService: NSObject {
                     let name = otherPlayer.component(ofType: SpriteComponent.self)?.nameLabel {
                     //TODO: set randomly the start position of each player
                     node.position = CGPoint(x: 0, y: 0)
-                    name.text = $0.alias
+                    name.text = "\($0.alias) \(otherPlayer.health)"
                     node.physicsBody?.isDynamic = false;
                     node.physicsBody?.categoryBitMask = CategoryMask.player;
                     node.physicsBody?.collisionBitMask = CategoryMask.playerCopy;
@@ -115,9 +105,12 @@ class MultiplayerService: NSObject {
             
             let playerCopy = Fighter(playerID: GKLocalPlayer.local.playerID, playerAlias: GKLocalPlayer.local.alias)
             playerCopy.isCopy = true
+            
+            playerCopy.playerOriginal = player
+            player.playerCopy = playerCopy
+            
             scene.entityManager.add(entity: playerCopy)
             scene.fighterCopy = playerCopy
-            
     
             if let node = playerCopy.component(ofType: SpriteComponent.self)?.node {
                 //uncomment this lines to activate collision between players
@@ -140,8 +133,10 @@ class MultiplayerService: NSObject {
                 node.physicsBody?.collisionBitMask = CategoryMask.none;
             }
             
-            var playerCopy = Fighter(playerID: GKLocalPlayer.local.playerID, playerAlias: GKLocalPlayer.local.alias)
+            let playerCopy = Fighter(playerID: GKLocalPlayer.local.playerID, playerAlias: GKLocalPlayer.local.alias)
             playerCopy.isCopy = true
+            playerCopy.playerOriginal = player
+            player.playerCopy = playerCopy
             scene.entityManager.add(entity: playerCopy)
             scene.fighterCopy = playerCopy
 
@@ -277,11 +272,11 @@ extension MultiplayerService: ReceiveDataDelegate {
             
             updateSceneDelegate?.updateDownPlayer(playerID: playerID)
         
-        case .sendAttackRequest:
+        case .sendAttackRequest(let state):
             var hittedPlayersArray : [Int] = [-1, -1, -1, -1]
             if host == GKLocalPlayer.local {
                 hittedPlayersArray = (updateSceneDelegate?.updateAttackPlayerRequest(attackerID: playerIDInt))!
-                updateSceneDelegate?.updateAttackPlayerResponse(attackerID: playerIDInt, receivedAttackIDs: hittedPlayersArray)
+                updateSceneDelegate?.updateAttackPlayerResponse(attackerID: playerIDInt, receivedAttackIDs: hittedPlayersArray, state: state)
             }
             var hittedPlayers = HittedPlayers()
             
@@ -290,20 +285,19 @@ extension MultiplayerService: ReceiveDataDelegate {
             hittedPlayers.player3 = hittedPlayersArray[2]
             hittedPlayers.player4 = hittedPlayersArray[3]
             
-            let data = Message(messageType: .sendAttackResponse(attackerID: playerIDInt, receivedAtackIDs: hittedPlayers))
+            let data = Message(messageType: .sendAttackResponse(attackerID: playerIDInt, receivedAtackIDs: hittedPlayers, state: state))
             MultiplayerService.shared.sendData(data: data, sendDataMode: .reliable)
 
             
-        
-        case .sendAttackResponse(let attackerID, let receivedAtackIDs):
-            var arrayHitted : [Int] = []
+        case .sendAttackResponse(let attackerID, let receivedAtackIDs, let state):
             
+            var arrayHitted : [Int] = []
             arrayHitted.append(receivedAtackIDs.player1)
             arrayHitted.append(receivedAtackIDs.player2)
             arrayHitted.append(receivedAtackIDs.player3)
             arrayHitted.append(receivedAtackIDs.player4)
-    
-            updateSceneDelegate?.updateAttackPlayerResponse(attackerID: attackerID, receivedAttackIDs: arrayHitted)
+            
+            updateSceneDelegate?.updateAttackPlayerResponse(attackerID: attackerID, receivedAttackIDs: arrayHitted, state: state)
             
             
         //PING
