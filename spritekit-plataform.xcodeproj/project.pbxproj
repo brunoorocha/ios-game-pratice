@@ -14,6 +14,10 @@
 		1BDFA7F0222719F100622BC6 /* Hurt.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 1BDFA7EF222719F100622BC6 /* Hurt.atlas */; };
 		1BDFA7F222272F9200622BC6 /* Die.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 1BDFA7F122272F9200622BC6 /* Die.atlas */; };
 		1BDFA7F422272FED00622BC6 /* FighterDieState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDFA7F322272FED00622BC6 /* FighterDieState.swift */; };
+		48441D6522295C040005EC3A /* FighterArena.plist in Resources */ = {isa = PBXBuildFile; fileRef = 48441D6422295C040005EC3A /* FighterArena.plist */; };
+		48441D692229698F0005EC3A /* Arena.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48441D682229698F0005EC3A /* Arena.swift */; };
+		48441D6C22296A9C0005EC3A /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48441D6B22296A9C0005EC3A /* Platform.swift */; };
+		4857C9E12234300300EFA2E9 /* PListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4857C9E02234300300EFA2E9 /* PListManager.swift */; };
 		6C92348822294BA800F74567 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C92348722294BA800F74567 /* MenuScene.swift */; };
 		6C92348A22294BDA00F74567 /* MenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6C92348922294BDA00F74567 /* MenuScene.sks */; };
 		6C92348D22294CC800F74567 /* ButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C92348C22294CC800F74567 /* ButtonNode.swift */; };
@@ -22,10 +26,12 @@
 		6CCF8E0722282AF300296148 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCF8E0622282AF300296148 /* Message.swift */; };
 		6CCF8E0922282B1400296148 /* NotificationName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCF8E0822282B1400296148 /* NotificationName.swift */; };
 		6CCF8E0B22282B7600296148 /* ReceiveDataDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CCF8E0A22282B7600296148 /* ReceiveDataDelegate.swift */; };
-		48441D6522295C040005EC3A /* FighterArena.plist in Resources */ = {isa = PBXBuildFile; fileRef = 48441D6422295C040005EC3A /* FighterArena.plist */; };
-		48441D692229698F0005EC3A /* Arena.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48441D682229698F0005EC3A /* Arena.swift */; };
-		48441D6C22296A9C0005EC3A /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48441D6B22296A9C0005EC3A /* Platform.swift */; };
-		4857C9E12234300300EFA2E9 /* PListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4857C9E02234300300EFA2E9 /* PListManager.swift */; };
+		A303426E224CF06600D0B9AF /* SettingsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A303426D224CF06600D0B9AF /* SettingsScene.swift */; };
+		A3034270224D083100D0B9AF /* PlayerDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = A303426F224D083100D0B9AF /* PlayerDefaults.swift */; };
+		A318F834224BBD310040D650 /* Rubik-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A318F831224BBD310040D650 /* Rubik-Bold.ttf */; };
+		A318F835224BBD310040D650 /* Rubik-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A318F832224BBD310040D650 /* Rubik-Black.ttf */; };
+		A318F836224BBD310040D650 /* Rubik-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A318F833224BBD310040D650 /* Rubik-Regular.ttf */; };
+		A318F838224BF2E20040D650 /* SwitchButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A318F837224BF2E20040D650 /* SwitchButton.swift */; };
 		A397A0BD221EDCA400E61051 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A0BC221EDCA400E61051 /* AppDelegate.swift */; };
 		A397A0C5221EDCA400E61051 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A0C4221EDCA400E61051 /* GameViewController.swift */; };
 		A397A0C8221EDCA400E61051 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A397A0C6221EDCA400E61051 /* Main.storyboard */; };
@@ -71,6 +77,10 @@
 		1BDFA7EF222719F100622BC6 /* Hurt.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Hurt.atlas; sourceTree = "<group>"; };
 		1BDFA7F122272F9200622BC6 /* Die.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Die.atlas; sourceTree = "<group>"; };
 		1BDFA7F322272FED00622BC6 /* FighterDieState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FighterDieState.swift; sourceTree = "<group>"; };
+		48441D6422295C040005EC3A /* FighterArena.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = FighterArena.plist; sourceTree = "<group>"; };
+		48441D682229698F0005EC3A /* Arena.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Arena.swift; sourceTree = "<group>"; };
+		48441D6B22296A9C0005EC3A /* Platform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
+		4857C9E02234300300EFA2E9 /* PListManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PListManager.swift; sourceTree = "<group>"; };
 		6C92348722294BA800F74567 /* MenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 		6C92348922294BDA00F74567 /* MenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MenuScene.sks; sourceTree = "<group>"; };
 		6C92348C22294CC800F74567 /* ButtonNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonNode.swift; sourceTree = "<group>"; };
@@ -79,10 +89,12 @@
 		6CCF8E0622282AF300296148 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		6CCF8E0822282B1400296148 /* NotificationName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationName.swift; sourceTree = "<group>"; };
 		6CCF8E0A22282B7600296148 /* ReceiveDataDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveDataDelegate.swift; sourceTree = "<group>"; };
-		48441D6422295C040005EC3A /* FighterArena.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = FighterArena.plist; sourceTree = "<group>"; };
-		48441D682229698F0005EC3A /* Arena.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Arena.swift; sourceTree = "<group>"; };
-		48441D6B22296A9C0005EC3A /* Platform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
-		4857C9E02234300300EFA2E9 /* PListManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PListManager.swift; sourceTree = "<group>"; };
+		A303426D224CF06600D0B9AF /* SettingsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScene.swift; sourceTree = "<group>"; };
+		A303426F224D083100D0B9AF /* PlayerDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDefaults.swift; sourceTree = "<group>"; };
+		A318F831224BBD310040D650 /* Rubik-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-Bold.ttf"; sourceTree = "<group>"; };
+		A318F832224BBD310040D650 /* Rubik-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-Black.ttf"; sourceTree = "<group>"; };
+		A318F833224BBD310040D650 /* Rubik-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-Regular.ttf"; sourceTree = "<group>"; };
+		A318F837224BF2E20040D650 /* SwitchButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchButton.swift; sourceTree = "<group>"; };
 		A397A0B9221EDCA400E61051 /* spritekit-plataform.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "spritekit-plataform.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A397A0BC221EDCA400E61051 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A397A0C4221EDCA400E61051 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -142,26 +154,6 @@
 			path = Maps;
 			sourceTree = "<group>";
 		};
-		6C92348B22294CB400F74567 /* nodes */ = {
-			isa = PBXGroup;
-			children = (
-				6C92348C22294CC800F74567 /* ButtonNode.swift */,
-			);
-			path = nodes;
-			sourceTree = "<group>";
-		};
-		6CCF8E0022282A1800296148 /* services */ = {
-			isa = PBXGroup;
-			children = (
-				6CCF8E0222282A5400296148 /* GameCenterService.swift */,
-				6CCF8E0422282ABF00296148 /* MultiplayerService.swift */,
-				6CCF8E0622282AF300296148 /* Message.swift */,
-				6CCF8E0822282B1400296148 /* NotificationName.swift */,
-				6CCF8E0A22282B7600296148 /* ReceiveDataDelegate.swift */,
-			);
-			path = services;
-			sourceTree = "<group>";
-		};
 		48441D662229675B0005EC3A /* fighter */ = {
 			isa = PBXGroup;
 			children = (
@@ -176,6 +168,28 @@
 				48441D6B22296A9C0005EC3A /* Platform.swift */,
 			);
 			path = arena;
+			sourceTree = "<group>";
+		};
+		6CCF8E0022282A1800296148 /* services */ = {
+			isa = PBXGroup;
+			children = (
+				6CCF8E0222282A5400296148 /* GameCenterService.swift */,
+				6CCF8E0422282ABF00296148 /* MultiplayerService.swift */,
+				6CCF8E0622282AF300296148 /* Message.swift */,
+				6CCF8E0822282B1400296148 /* NotificationName.swift */,
+				6CCF8E0A22282B7600296148 /* ReceiveDataDelegate.swift */,
+			);
+			path = services;
+			sourceTree = "<group>";
+		};
+		A318F830224BBCF70040D650 /* fonts */ = {
+			isa = PBXGroup;
+			children = (
+				A318F832224BBD310040D650 /* Rubik-Black.ttf */,
+				A318F831224BBD310040D650 /* Rubik-Bold.ttf */,
+				A318F833224BBD310040D650 /* Rubik-Regular.ttf */,
+			);
+			path = fonts;
 			sourceTree = "<group>";
 		};
 		A397A0B0221EDCA400E61051 = {
@@ -223,6 +237,7 @@
 			isa = PBXGroup;
 			children = (
 				A397A0BC221EDCA400E61051 /* AppDelegate.swift */,
+				A303426F224D083100D0B9AF /* PlayerDefaults.swift */,
 			);
 			path = application;
 			sourceTree = "<group>";
@@ -246,6 +261,7 @@
 				6C92348722294BA800F74567 /* MenuScene.swift */,
 				6C92348922294BDA00F74567 /* MenuScene.sks */,
 				48441D6422295C040005EC3A /* FighterArena.plist */,
+				A303426D224CF06600D0B9AF /* SettingsScene.swift */,
 			);
 			path = scenes;
 			sourceTree = "<group>";
@@ -253,6 +269,7 @@
 		A397A0D8221EDD6600E61051 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				A318F830224BBCF70040D650 /* fonts */,
 				A3ACB32F2233EA3400AF5088 /* SFX */,
 				A397A0FE222091E700E61051 /* Atlas */,
 				A397A0C9221EDCA700E61051 /* Assets.xcassets */,
@@ -318,7 +335,6 @@
 				A397A1122220C29900E61051 /* CategoryMask.swift */,
 				A397A0D4221EDD2100E61051 /* entities */,
 				A397A0E6221EDFC800E61051 /* components */,
-				6C92348B22294CB400F74567 /* nodes */,
 				1B3FA0A42225741C00280565 /* Maps */,
 			);
 			path = models;
@@ -389,6 +405,8 @@
 			children = (
 				A397A11A2222C3E600E61051 /* PreMatchLabel.swift */,
 				A3ACB3382237DD7000AF5088 /* ParallaxBackground.swift */,
+				6C92348C22294CC800F74567 /* ButtonNode.swift */,
+				A318F837224BF2E20040D650 /* SwitchButton.swift */,
 			);
 			path = "ui-elements";
 			sourceTree = "<group>";
@@ -478,18 +496,21 @@
 				48441D6522295C040005EC3A /* FighterArena.plist in Resources */,
 				A397A0C8221EDCA400E61051 /* Main.storyboard in Resources */,
 				A397A106222091FF00E61051 /* Run.atlas in Resources */,
+				A318F835224BBD310040D650 /* Rubik-Black.ttf in Resources */,
 				A397A109222091FF00E61051 /* Jump.atlas in Resources */,
 				A3ACB3352233EC1600AF5088 /* FighterAttack.wav in Resources */,
 				A397A0CA221EDCA700E61051 /* Assets.xcassets in Resources */,
 				A3ACB3332233EC0600AF5088 /* FighterJump.wav in Resources */,
 				A397A105222091FF00E61051 /* Idle.atlas in Resources */,
 				A397A12A22295D6200E61051 /* Attack3.atlas in Resources */,
+				A318F834224BBD310040D650 /* Rubik-Bold.ttf in Resources */,
 				A397A0DF221EDE2E00E61051 /* MyScene.sks in Resources */,
 				A3ACB3312233EA4500AF5088 /* FighterHurt.wav in Resources */,
 				A397A0CD221EDCA700E61051 /* LaunchScreen.storyboard in Resources */,
 				6C92348A22294BDA00F74567 /* MenuScene.sks in Resources */,
 				A397A107222091FF00E61051 /* Attack.atlas in Resources */,
 				1BDFA7F0222719F100622BC6 /* Hurt.atlas in Resources */,
+				A318F836224BBD310040D650 /* Rubik-Regular.ttf in Resources */,
 				1BDFA7F222272F9200622BC6 /* Die.atlas in Resources */,
 				A397A12622295B5800E61051 /* Attack2.atlas in Resources */,
 				A3ACB3372233ECB900AF5088 /* FighterDeath.wav in Resources */,
@@ -520,6 +541,7 @@
 				4857C9E12234300300EFA2E9 /* PListManager.swift in Sources */,
 				A397A0C5221EDCA400E61051 /* GameViewController.swift in Sources */,
 				6CCF8E0522282ABF00296148 /* MultiplayerService.swift in Sources */,
+				A318F838224BF2E20040D650 /* SwitchButton.swift in Sources */,
 				A397A0BD221EDCA400E61051 /* AppDelegate.swift in Sources */,
 				A3ACB3392237DD7000AF5088 /* ParallaxBackground.swift in Sources */,
 				A397A0E8221EDFE300E61051 /* SpriteComponent.swift in Sources */,
@@ -536,7 +558,9 @@
 				1B3FA0A6222574B700280565 /* Map1.swift in Sources */,
 				6CCF8E0722282AF300296148 /* Message.swift in Sources */,
 				A397A1132220C29900E61051 /* CategoryMask.swift in Sources */,
+				A303426E224CF06600D0B9AF /* SettingsScene.swift in Sources */,
 				6CCF8E0922282B1400296148 /* NotificationName.swift in Sources */,
+				A3034270224D083100D0B9AF /* PlayerDefaults.swift in Sources */,
 				A397A11D2222DAB200E61051 /* FightingState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

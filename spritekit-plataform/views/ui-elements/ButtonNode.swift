@@ -8,9 +8,33 @@
 
 import SpriteKit
 
-class ButtonNode: SKNode {
+class ButtonNode: SKSpriteNode {
     
     var actionBlock : (() -> Void)?
+    static let buttonTexture = SKTexture(imageNamed: "button-bg")
+    
+    static func makeButton(withText text: String, andSize size: CGSize = CGSize.zero) -> ButtonNode {
+        var buttonNode = ButtonNode(texture: ButtonNode.buttonTexture)
+        
+        if size != CGSize.zero {
+            buttonNode = ButtonNode(texture: ButtonNode.buttonTexture, size: size)
+        }
+        
+        buttonNode.isUserInteractionEnabled = true
+        buttonNode.addChild(buttonNode.createButtonLabel(withText: text))
+        buttonNode.zPosition = 1
+        return buttonNode
+    }
+    
+    private func createButtonLabel(withText text: String) -> SKLabelNode {
+        let label = SKLabelNode(text: text)
+        label.fontName = "Rubik Bold"
+        label.fontColor = .white
+        label.fontSize = 12
+        label.position.y = -6
+        label.zPosition = 2
+        return label
+    }
     
     var isEnabled: Bool = true {
         didSet {

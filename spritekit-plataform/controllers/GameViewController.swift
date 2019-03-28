@@ -16,10 +16,10 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         let skView = view as! SKView
         
-        if let scene = SKScene(fileNamed: "MenuScene") {
-            scene.scaleMode = .resizeFill
-            skView.presentScene(scene)
-        }
+        let scene = MenuScene(size: self.view.frame.size)
+        scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        scene.scaleMode = .resizeFill
+        skView.presentScene(scene)        
         
         skView.showsFPS = true
         skView.showsNodeCount = true
