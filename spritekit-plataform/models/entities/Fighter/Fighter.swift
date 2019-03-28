@@ -271,11 +271,10 @@ class Fighter: GKEntity {
                 
                 node.xScale = nodeDirection
                 nameLabel.xScale = nodeDirection
-                //print(type(of: self.stateMachine.currentState!), "state:", self.allStates[state.rawValue])
+                
                 
                 if (state != .attack1 || state != .attack2 || state != .attack3) && !self.comboList() {
                     if type(of: self.stateMachine.currentState!) != self.allStates[state.rawValue] {
-                        print(type(of: self.stateMachine.currentState!), self.allStates[state.rawValue])
                         self.stateMachine.enter(self.allStates[state.rawValue])
                     }
                 }

@@ -322,7 +322,7 @@ extension MyScene: UpdateSceneDelegate {
     
     func updateAttackPlayerResponse(attackerID: Int, receivedAttackIDs: [Int], state: State) {
         guard let attackerPlayer = allPlayers[attackerID] else {return}
-        print("response attack: \(attackerPlayer.playerAlias)")
+        
         let _ = attackerPlayer.attack(playAnim: true)
         
         //attackerPlayer.changePlayerState(state: state, inDirectionX: 1)
