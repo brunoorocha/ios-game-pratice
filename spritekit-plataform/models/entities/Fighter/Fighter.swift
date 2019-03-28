@@ -56,7 +56,7 @@ class Fighter: GKEntity {
             }
         }
     }
-    var damage : CGFloat = 0.1
+    var damage : CGFloat = 10
     var forcePush : CGFloat = 5
     var jumpForce: CGFloat = 12.0
     let rangerAttack : CGFloat = 10
