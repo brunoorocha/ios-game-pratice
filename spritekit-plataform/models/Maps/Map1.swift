@@ -83,7 +83,7 @@ class Map1 {
 	
 	private func drawPlataform(_ platform: Platform){
 		let area = SKSpriteNode(imageNamed: platform.atlas)
-		area.size = CGSize(width: 200, height: 7)
+		area.size = CGSize(width: 190, height: 12)
 		area.position = CGPoint(x: -1*(platform.position.x/2), y: platform.position.y)
 		area.zPosition = 5
 		let rect = CGRect(x: -(area.size.width/2), y: +((area.size.height/2) - 1), width: area.size.width, height: 1)
