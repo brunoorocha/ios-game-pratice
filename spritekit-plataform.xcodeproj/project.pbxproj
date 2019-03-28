@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		1B3FA0A6222574B700280565 /* Map1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3FA0A5222574B700280565 /* Map1.swift */; };
 		1B3FA0A82225B5D900280565 /* FighterFallState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3FA0A72225B5D900280565 /* FighterFallState.swift */; };
+		1B88ECBC224D45E400A369D0 /* FighterJump.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1B88ECB9224D45E300A369D0 /* FighterJump.wav */; };
+		1B88ECBD224D45E400A369D0 /* FighterAttack.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1B88ECBA224D45E400A369D0 /* FighterAttack.wav */; };
+		1B88ECBE224D45E400A369D0 /* FighterHurt.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1B88ECBB224D45E400A369D0 /* FighterHurt.wav */; };
 		1BBDABAC2236AB4E00DCEDC9 /* FighterKnockbackState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBDABAB2236AB4E00DCEDC9 /* FighterKnockbackState.swift */; };
 		1BDFA7EE2227148400622BC6 /* FighterHurtState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDFA7ED2227148400622BC6 /* FighterHurtState.swift */; };
 		1BDFA7F0222719F100622BC6 /* Hurt.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 1BDFA7EF222719F100622BC6 /* Hurt.atlas */; };
@@ -67,9 +70,6 @@
 		A397A12622295B5800E61051 /* Attack2.atlas in Resources */ = {isa = PBXBuildFile; fileRef = A397A12522295B5800E61051 /* Attack2.atlas */; };
 		A397A12822295C5600E61051 /* FighterAttack3State.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A12722295C5600E61051 /* FighterAttack3State.swift */; };
 		A397A12A22295D6200E61051 /* Attack3.atlas in Resources */ = {isa = PBXBuildFile; fileRef = A397A12922295D6200E61051 /* Attack3.atlas */; };
-		A3ACB3312233EA4500AF5088 /* FighterHurt.wav in Resources */ = {isa = PBXBuildFile; fileRef = A3ACB3302233EA4500AF5088 /* FighterHurt.wav */; };
-		A3ACB3332233EC0600AF5088 /* FighterJump.wav in Resources */ = {isa = PBXBuildFile; fileRef = A3ACB3322233EC0600AF5088 /* FighterJump.wav */; };
-		A3ACB3352233EC1600AF5088 /* FighterAttack.wav in Resources */ = {isa = PBXBuildFile; fileRef = A3ACB3342233EC1600AF5088 /* FighterAttack.wav */; };
 		A3ACB3372233ECB900AF5088 /* FighterDeath.wav in Resources */ = {isa = PBXBuildFile; fileRef = A3ACB3362233ECB900AF5088 /* FighterDeath.wav */; };
 		A3ACB3392237DD7000AF5088 /* ParallaxBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3ACB3382237DD7000AF5088 /* ParallaxBackground.swift */; };
 /* End PBXBuildFile section */
@@ -77,6 +77,9 @@
 /* Begin PBXFileReference section */
 		1B3FA0A5222574B700280565 /* Map1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Map1.swift; sourceTree = "<group>"; };
 		1B3FA0A72225B5D900280565 /* FighterFallState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FighterFallState.swift; sourceTree = "<group>"; };
+		1B88ECB9224D45E300A369D0 /* FighterJump.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = FighterJump.wav; sourceTree = "<group>"; };
+		1B88ECBA224D45E400A369D0 /* FighterAttack.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = FighterAttack.wav; sourceTree = "<group>"; };
+		1B88ECBB224D45E400A369D0 /* FighterHurt.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = FighterHurt.wav; sourceTree = "<group>"; };
 		1BBDABAB2236AB4E00DCEDC9 /* FighterKnockbackState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FighterKnockbackState.swift; sourceTree = "<group>"; };
 		1BDFA7ED2227148400622BC6 /* FighterHurtState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FighterHurtState.swift; sourceTree = "<group>"; };
 		1BDFA7EF222719F100622BC6 /* Hurt.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Hurt.atlas; sourceTree = "<group>"; };
@@ -137,9 +140,6 @@
 		A397A12522295B5800E61051 /* Attack2.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Attack2.atlas; sourceTree = "<group>"; };
 		A397A12722295C5600E61051 /* FighterAttack3State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FighterAttack3State.swift; sourceTree = "<group>"; };
 		A397A12922295D6200E61051 /* Attack3.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Attack3.atlas; sourceTree = "<group>"; };
-		A3ACB3302233EA4500AF5088 /* FighterHurt.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = FighterHurt.wav; sourceTree = "<group>"; };
-		A3ACB3322233EC0600AF5088 /* FighterJump.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = FighterJump.wav; sourceTree = "<group>"; };
-		A3ACB3342233EC1600AF5088 /* FighterAttack.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = FighterAttack.wav; sourceTree = "<group>"; };
 		A3ACB3362233ECB900AF5088 /* FighterDeath.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = FighterDeath.wav; sourceTree = "<group>"; };
 		A3ACB3382237DD7000AF5088 /* ParallaxBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParallaxBackground.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -179,16 +179,6 @@
 			);
 			path = arena;
 			sourceTree = "<group>";
-		};		
-		A318F830224BBCF70040D650 /* fonts */ = {
-			isa = PBXGroup;
-			children = (
-				A318F832224BBD310040D650 /* Rubik-Black.ttf */,
-				A318F831224BBD310040D650 /* Rubik-Bold.ttf */,
-				A318F833224BBD310040D650 /* Rubik-Regular.ttf */,
-			);
-			path = fonts;
-      sourceTree = "<group>";
 		};
 		6C2F3F782237DE190087A768 /* joystick */ = {
 			isa = PBXGroup;
@@ -202,14 +192,6 @@
 			path = joystick;
 			sourceTree = "<group>";
 		};
-		6C92348B22294CB400F74567 /* nodes */ = {
-			isa = PBXGroup;
-			children = (
-				6C92348C22294CC800F74567 /* ButtonNode.swift */,
-			);
-			path = nodes;
-			sourceTree = "<group>";
-		};
 		6CCF8E0022282A1800296148 /* services */ = {
 			isa = PBXGroup;
 			children = (
@@ -220,6 +202,16 @@
 				6CCF8E0A22282B7600296148 /* ReceiveDataDelegate.swift */,
 			);
 			path = services;
+			sourceTree = "<group>";
+		};
+		A318F830224BBCF70040D650 /* fonts */ = {
+			isa = PBXGroup;
+			children = (
+				A318F832224BBD310040D650 /* Rubik-Black.ttf */,
+				A318F831224BBD310040D650 /* Rubik-Bold.ttf */,
+				A318F833224BBD310040D650 /* Rubik-Regular.ttf */,
+			);
+			path = fonts;
 			sourceTree = "<group>";
 		};
 		A397A0B0221EDCA400E61051 = {
@@ -453,9 +445,9 @@
 		A3ACB32F2233EA3400AF5088 /* SFX */ = {
 			isa = PBXGroup;
 			children = (
-				A3ACB3302233EA4500AF5088 /* FighterHurt.wav */,
-				A3ACB3322233EC0600AF5088 /* FighterJump.wav */,
-				A3ACB3342233EC1600AF5088 /* FighterAttack.wav */,
+				1B88ECBA224D45E400A369D0 /* FighterAttack.wav */,
+				1B88ECBB224D45E400A369D0 /* FighterHurt.wav */,
+				1B88ECB9224D45E300A369D0 /* FighterJump.wav */,
 				A3ACB3362233ECB900AF5088 /* FighterDeath.wav */,
 			);
 			path = SFX;
@@ -528,15 +520,15 @@
 				A397A0C8221EDCA400E61051 /* Main.storyboard in Resources */,
 				A397A106222091FF00E61051 /* Run.atlas in Resources */,
 				A318F835224BBD310040D650 /* Rubik-Black.ttf in Resources */,
+				1B88ECBC224D45E400A369D0 /* FighterJump.wav in Resources */,
 				A397A109222091FF00E61051 /* Jump.atlas in Resources */,
-				A3ACB3352233EC1600AF5088 /* FighterAttack.wav in Resources */,
 				A397A0CA221EDCA700E61051 /* Assets.xcassets in Resources */,
-				A3ACB3332233EC0600AF5088 /* FighterJump.wav in Resources */,
+				1B88ECBE224D45E400A369D0 /* FighterHurt.wav in Resources */,
 				A397A105222091FF00E61051 /* Idle.atlas in Resources */,
 				A397A12A22295D6200E61051 /* Attack3.atlas in Resources */,
+				1B88ECBD224D45E400A369D0 /* FighterAttack.wav in Resources */,
 				A318F834224BBD310040D650 /* Rubik-Bold.ttf in Resources */,
 				A397A0DF221EDE2E00E61051 /* MyScene.sks in Resources */,
-				A3ACB3312233EA4500AF5088 /* FighterHurt.wav in Resources */,
 				A397A0CD221EDCA700E61051 /* LaunchScreen.storyboard in Resources */,
 				6C92348A22294BDA00F74567 /* MenuScene.sks in Resources */,
 				A397A107222091FF00E61051 /* Attack.atlas in Resources */,
