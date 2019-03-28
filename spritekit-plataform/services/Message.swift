@@ -24,8 +24,8 @@ enum MessageType {
     case sendDownRequest
     case sendDownResponse(playerID: Int)
     
-    case sendAttackRequest(is3rdAttack: Bool)
-    case sendAttackResponse(attackerID: Int, receivedAtackIDs: HittedPlayers, is3rdAttack: Bool)
+    case sendAttackRequest(state: State)
+    case sendAttackResponse(attackerID: Int, receivedAtackIDs: HittedPlayers, state: State)
     
     case startGame(randomNumber: Float)
     

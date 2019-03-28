@@ -28,7 +28,7 @@ class MyScene: SKScene {
     let multiplayerService = MultiplayerService.shared
     let selfPlayerID = GKLocalPlayer.local.playerID.toInt()
     var lookingLeft = true
-
+    var nodePosition = CGPoint.zero
     var inputController: InputController!
 
     var map: Map1!
@@ -154,6 +154,7 @@ class MyScene: SKScene {
         self.allPlayers.forEach { (key,value) in
             value.update(deltaTime: currentTime)
         }
+        
         self.fighterCopy.update(deltaTime: currentTime)
         
         
@@ -166,13 +167,26 @@ class MyScene: SKScene {
         let date = Int((Date().timeIntervalSince1970 * 1000))
         MultiplayerService.shared.ping(message: .sendPingRequest(senderTime: date), sendToHost: true)
 
-        self.copyStatesAndSend()
+        
+        guard let nodeCopy = self.fighterCopy.component(ofType: SpriteComponent.self)?.node else {return}
+        let distance = hypot(nodeCopy.position.x - nodePosition.x,
+                             nodeCopy.position.y - nodePosition.y)
+        
+        
+        
+        if distance > 0 {
+            print(distance)
+            self.copyStatesAndSend()
+        }
+        
+        nodePosition = nodeCopy.position
+        
         
         self.map.updateParallaxBackground()
 
     }
     
-    func copyStatesAndSend(){
+    func copyStatesAndSend() {
         let directionDx = Int(playerNodeCopy.xScale)
         let currentState = self.fighterCopy.getCurrentStateEnum()
         let currentPosition = self.playerNodeCopy.position
@@ -188,8 +202,9 @@ class MyScene: SKScene {
         }
     }
     
-    func attackTap(){
-        let hittedPlayersArray = self.fighterCopy.attack()
+    func attackTap() {
+        
+        let hittedPlayersArray = self.fighterCopy.attack(playAnim: true)
         var hittedPlayers = HittedPlayers()
         
         hittedPlayers.player1 = hittedPlayersArray[0]
@@ -198,13 +213,14 @@ class MyScene: SKScene {
         hittedPlayers.player4 = hittedPlayersArray[3]
         
         let is3rdAttack = (self.fighterCopy.stateMachine.currentState is FighterAttack3State)
-        print("current attack state: ", self.fighterCopy.stateMachine.currentState )
-        let clientMessage: MessageType = .sendAttackRequest(is3rdAttack: is3rdAttack)
-        let hostMessage: MessageType = .sendAttackResponse(attackerID: selfPlayerID, receivedAtackIDs: hittedPlayers, is3rdAttack: is3rdAttack)
+        let currentState = self.fighterCopy.getCurrentStateEnum()
         
-        print("is 3rd attack send: \(is3rdAttack)")
+        let clientMessage: MessageType = .sendAttackRequest(state: currentState)
+        let hostMessage: MessageType = .sendAttackResponse(attackerID: selfPlayerID, receivedAtackIDs: hittedPlayers, state: currentState)
+        
         multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage, sendDataMode: .reliable) {
             hittedPlayersArray.forEach { (playerID) in
+                let _ = self.fighter.attack(playAnim: true)
                 if let hittedPlayer = self.allPlayers[playerID] {
                     hittedPlayer.receiveDamage(damage: self.fighter.damage)
                         if self.fighterCopy.stateMachine.currentState is FighterAttack3State{
@@ -267,11 +283,12 @@ extension MyScene: UpdateSceneDelegate {
         if let player = allPlayers[playerID] {
             player.changePlayerPosition(position: playerPosition)
             
-            player.changePlayerState(state: state, inDirectionX: directionDx)
-            
-            if playerID == GKLocalPlayer.local.playerID.toInt() {
-                //self.fighterCopy.changePlayerState(state: state, inDirectionX: directionDx)
-            }
+//            if state != .attack1 || state != .attack3 || state != .attack3 {
+                player.changePlayerState(state: state, inDirectionX: directionDx)
+            //}
+//            if playerID == GKLocalPlayer.local.playerID.toInt() {
+//                self.fighterCopy.changePlayerState(state: state, inDirectionX: directionDx)
+//            }
         }
         
     }
@@ -297,16 +314,18 @@ extension MyScene: UpdateSceneDelegate {
     
     func updateAttackPlayerRequest(attackerID: Int) -> [Int] {
         if let player = allPlayers[attackerID] {
-            return player.attack()
+            return player.attack(playAnim: false)
         }
         
         return [-1,-1,-1,-1]
     }
     
-    func updateAttackPlayerResponse(attackerID: Int, receivedAttackIDs: [Int], is3rdAttack: Bool) {
+    func updateAttackPlayerResponse(attackerID: Int, receivedAttackIDs: [Int], state: State) {
         guard let attackerPlayer = allPlayers[attackerID] else {return}
+        print("response attack: \(attackerPlayer.playerAlias)")
+        let _ = attackerPlayer.attack(playAnim: true)
         
-        //let _ = attackerPlayer.attack()
+        //attackerPlayer.changePlayerState(state: state, inDirectionX: 1)
         
         receivedAttackIDs.forEach { (playerID) in
             if let hittedPlayer = allPlayers[playerID] {
@@ -316,8 +335,7 @@ extension MyScene: UpdateSceneDelegate {
 //                        //hittedPlayer.reiceivePushDamage(force: attacker.forcePush, direction: attacker.fighterDirection)
 //                    }
 //                }
-                print("is 3rd attack receive: \(is3rdAttack)")
-                if hittedPlayer.playerID == GKLocalPlayer.local.playerID && is3rdAttack {
+                if hittedPlayer.playerID == GKLocalPlayer.local.playerID && state == .attack3 {
                     guard let attacker = self.allPlayers[attackerID] else {return}
                     self.fighterCopy.reiceivePushDamage(force: attacker.forcePush, direction: attacker.fighterDirection)
                 }
