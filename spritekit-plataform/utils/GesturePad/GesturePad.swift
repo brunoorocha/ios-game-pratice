@@ -11,6 +11,8 @@ import SpriteKit
 class GesturePad: NSObject {
     var view: SKView!
     var delegate: GesturePadDelegate!
+    var leftArea: UIView!
+    var rightArea: UIView!
     
     private var tapRecognizer: UITapGestureRecognizer!
     private var panRecognizer: UIPanGestureRecognizer!
@@ -27,36 +29,38 @@ class GesturePad: NSObject {
     private func setupRecognizers() {
         let areaSize = CGSize(width: self.view.frame.width / 2, height: self.view.frame.height)
         let xCenterPoint = self.view.frame.width / 2
-        let leftArea = UIView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: areaSize))        
-        let rightArea = UIView(frame: CGRect(origin: CGPoint(x: xCenterPoint, y: 0), size: areaSize))
+        self.leftArea = UIView(frame: CGRect(origin: CGPoint(x: 0, y: 64.0), size: areaSize))
+        self.rightArea = UIView(frame: CGRect(origin: CGPoint(x: xCenterPoint, y: 64.0), size: areaSize))
         
-        tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:)))
-        panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
-        swipeUpRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeGesture(_:)))
-        swipeDownRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeGesture(_:)))
-        swipeUpRecognizer.direction = .up
-        swipeDownRecognizer.direction = .down
+        self.tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:)))
+        self.panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
+        self.swipeUpRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeGesture(_:)))
+        self.swipeDownRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeGesture(_:)))
+        self.swipeUpRecognizer.direction = .up
+        self.swipeDownRecognizer.direction = .down
         
-        tapRecognizer.delegate = self
-        panRecognizer.delegate = self
-        swipeUpRecognizer.delegate = self
-        swipeDownRecognizer.delegate = self
+        self.tapRecognizer.delegate = self
+        self.panRecognizer.delegate = self
+        self.swipeUpRecognizer.delegate = self
+        self.swipeDownRecognizer.delegate = self
         
         
-        leftArea.addGestureRecognizer(panRecognizer)
-        rightArea.addGestureRecognizer(tapRecognizer)
-        rightArea.addGestureRecognizer(swipeUpRecognizer)
-        rightArea.addGestureRecognizer(swipeDownRecognizer)
-        self.view.addSubview(leftArea)
-        self.view.addSubview(rightArea)
+        self.leftArea.addGestureRecognizer(self.panRecognizer)
+        self.rightArea.addGestureRecognizer(self.tapRecognizer)
+        self.rightArea.addGestureRecognizer(self.swipeUpRecognizer)
+        self.rightArea.addGestureRecognizer(self.swipeDownRecognizer)
+        self.view.addSubview(self.leftArea)
+        self.view.addSubview(self.rightArea)
     }
     
     func disable() {
-        self.view.isUserInteractionEnabled = false
+        self.leftArea.isUserInteractionEnabled = false
+        self.rightArea.isUserInteractionEnabled = false
     }
     
     func enable() {
-        self.view.isUserInteractionEnabled = true
+        self.leftArea.isUserInteractionEnabled = true
+        self.rightArea.isUserInteractionEnabled = true
     }
     
     @objc private func handleTapGesture(_ gesture: UITapGestureRecognizer) {

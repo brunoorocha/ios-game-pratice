@@ -30,22 +30,29 @@ class MyScene: SKScene {
     var lookingLeft = true
     var nodePosition = CGPoint.zero
     var inputController: InputController!
+    
+    var isControlsVisible: Bool = PlayerDefaults.isControlsVisible
+    var isSoundEnabled: Bool = PlayerDefaults.isSoundEnabled
 
     var map: Map1!
     
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         self.backgroundColor = UIColor.white
-        self.entityManager = EntityManager(withScene: self)                
-        self.configureStates()
+        self.entityManager = EntityManager(withScene: self)
         self.configureCamera()
+        self.configureStates()
         self.configureUI()
         self.configurePhysics()
         self.suicideArea()
+        self.showBackButton()
         
-        //CONTROLS: choose one, comment the other
-        //self.configureGesturePad(for: view)
-        self.setupJoystick()
+        if (isControlsVisible) {
+            self.setupJoystick()
+        }
+        else {
+            self.configureGesturePad(for: view)
+        }
         
         // Sounds
         self.addChild(SoundManager.shared())
@@ -75,10 +82,11 @@ class MyScene: SKScene {
     func configureStates() {
         let prepareState = PrepareFightState(withScene: self)
         let fightingState = FightingState(withScene: self)
-        self.stateMachine = GKStateMachine(states: [prepareState, fightingState])
+        let pausedState = PausedState(withScene: self)
+        self.stateMachine = GKStateMachine(states: [prepareState, fightingState, pausedState])
 
-//        self.stateMachine.enter(PrepareFightState.self)
-        self.stateMachine.enter(FightingState.self)
+        self.stateMachine.enter(PrepareFightState.self)
+//        self.stateMachine.enter(FightingState.self)
     }
     
     func configurePhysics() {
@@ -121,33 +129,34 @@ class MyScene: SKScene {
     }
     
     func configureUI(){
-        if let cam = self.camera {
-        
-            //ping label
-            pingLabel = SKLabelNode(text: "ping: 0 ms, host: \(MultiplayerService.shared.selfPlayer.alias)")
-            pingLabel.position = CGPoint(x: self.size.width/2 - 20  , y: self.size.height/2 - 40)
-            pingLabel.horizontalAlignmentMode = .right
-            pingLabel.fontName = "Helvetica"
-            pingLabel.fontColor = SKColor.black
-            pingLabel.fontSize = 18
-            pingLabel.zPosition = 10
-            cam.addChild(pingLabel)
-            
-            //debug label
-            debugLabel = SKLabelNode(text: "debug label")
-            debugLabel.position = CGPoint(x: -self.size.width/2 + 20  , y: self.size.height/2 - 40)
-            debugLabel.horizontalAlignmentMode = .left
-            debugLabel.fontName = "Helvetica"
-            debugLabel.fontColor = SKColor.black
-            debugLabel.fontSize = 18
-            debugLabel.zPosition = 2
-            //cam.addChild(debugLabel)
-            
-            
-        }
+//        if let cam = self.camera {
+//
+//            //ping label
+//            pingLabel = SKLabelNode(text: "ping: 0 ms, host: \(MultiplayerService.shared.selfPlayer.alias)")
+//            pingLabel.position = CGPoint(x: self.size.width/2 - 20  , y: self.size.height/2 - 40)
+//            pingLabel.horizontalAlignmentMode = .right
+//            pingLabel.fontName = "Helvetica"
+//            pingLabel.fontColor = SKColor.black
+//            pingLabel.fontSize = 18
+//            pingLabel.zPosition = 10
+//            cam.addChild(pingLabel)
+//
+//            //debug label
+//            debugLabel = SKLabelNode(text: "debug label")
+//            debugLabel.position = CGPoint(x: -self.size.width/2 + 20  , y: self.size.height/2 - 40)
+//            debugLabel.horizontalAlignmentMode = .left
+//            debugLabel.fontName = "Helvetica"
+//            debugLabel.fontColor = SKColor.black
+//            debugLabel.fontSize = 18
+//            debugLabel.zPosition = 2
+//            //cam.addChild(debugLabel)
+//
+//
+//        }
     }
     
     func configureGesturePad(for view: SKView) {
+        guard let view = self.view else { return }
         self.gesturePad = GesturePad(forView: view)
         self.gesturePad.delegate = self
     }
@@ -178,7 +187,6 @@ class MyScene: SKScene {
         
         
         if distance > 0 {
-            print(distance)
             self.copyStatesAndSend()
         }
         
@@ -199,6 +207,7 @@ class MyScene: SKScene {
         
         let copy = self.fighterCopy.copy() as! Fighter
         let originalState = self.fighter.stateMachine.currentState
+        
         multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage, sendDataMode: .unreliable) {
             self.fighter.changePlayerPosition(position: currentPosition)
             self.fighter.repeatCopyMove(originalState: originalState, copy: copy)
@@ -215,7 +224,7 @@ class MyScene: SKScene {
         hittedPlayers.player3 = hittedPlayersArray[2]
         hittedPlayers.player4 = hittedPlayersArray[3]
         
-        let is3rdAttack = (self.fighterCopy.stateMachine.currentState is FighterAttack3State)
+        //let is3rdAttack = (self.fighterCopy.stateMachine.currentState is FighterAttack3State)
         let currentState = self.fighterCopy.getCurrentStateEnum()
         
         let clientMessage: MessageType = .sendAttackRequest(state: currentState)
@@ -232,6 +241,25 @@ class MyScene: SKScene {
                 }
             }
         }
+    }
+    
+    func showBackButton() {
+        guard let camera = self.camera, let view = self.view else { return }
+        let sceneTop = self.size.height / 2
+        let sceneRight = self.size.width / 2
+        let topOverlay = SKSpriteNode(texture: SKTexture(imageNamed: "gradient-overlay"), size: CGSize(width: view.frame.size.width, height: 52.0))
+        topOverlay.position.y = sceneTop - (topOverlay.size.height / 2)
+        topOverlay.zPosition = 11
+        
+        let menuButton = ButtonNode.makeButton(withText: "MENU", andSize: CGSize(width: 56, height: 32))
+        menuButton.position.x = sceneRight - (menuButton.size.width / 2) - 16
+        menuButton.zPosition = 6
+        menuButton.actionBlock = {
+            self.stateMachine.enter(PausedState.self)
+        }
+        
+        topOverlay.addChild(menuButton)
+        camera.addChild(topOverlay)
     }
 
 }
@@ -349,13 +377,13 @@ extension MyScene: UpdateSceneDelegate {
     
     func showPing(ping: Int, host: GKPlayer) {
         //update Ping every second
-        let currentDate = Int((Date().timeIntervalSince1970))
-        if currentDate % 2 == 1 && canSendPing {
-            pingLabel.text = "ping: \(ping)ms, host player:\(host.alias)"
-            canSendPing = false
-        }else if currentDate % 2 != 1{
-            canSendPing = true
-        }
+//        let currentDate = Int((Date().timeIntervalSince1970))
+//        if currentDate % 2 == 1 && canSendPing {
+//            pingLabel.text = "ping: \(ping)ms, host player:\(host.alias)"
+//            canSendPing = false
+//        }else if currentDate % 2 != 1{
+//            canSendPing = true
+//        }
 
     }
 }

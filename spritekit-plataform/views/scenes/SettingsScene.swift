@@ -31,21 +31,23 @@ class SettingsScene: SKScene {
         titleLabel.zPosition = 2
         
         let controlsSwitch = Switch.makeSwitch(withFirstOption: "HIDE", andSecondOption: "SHOW", andValue: PlayerDefaults.isControlsVisible)
+        controlsSwitch.position.x = controlsSwitch.button1.size.width / 2
         controlsSwitch.toggleAction = {
             PlayerDefaults.isControlsVisible = controlsSwitch.value
         }
         
         let controlsLabel = self.makeSettingsLabel(withText: "CONTROLS")
-        controlsLabel.position.x = -(controlsSwitch.position.x + (controlsLabel.frame.width / 2) + (controlsSwitch.frame.width / 2))
+        controlsLabel.position.x = -(controlsSwitch.position.x + (controlsLabel.frame.width / 2))
         controlsLabel.position.y = controlsSwitch.position.y - (controlsLabel.frame.height / 2)
         
         let soundsSwitch = Switch.makeSwitch(withFirstOption: "OFF", andSecondOption: "ON", andValue: PlayerDefaults.isSoundEnabled)
+        soundsSwitch.position.x = soundsSwitch.button1.size.width / 2
         soundsSwitch.toggleAction = {
             PlayerDefaults.isSoundEnabled = soundsSwitch.value
         }
         soundsSwitch.position.y = -(controlsSwitch.frame.height + 16)
         let soundsLabel = self.makeSettingsLabel(withText: "SOUNDS")
-        soundsLabel.position.x = -(soundsSwitch.position.x + (soundsLabel.frame.width / 2) + (soundsSwitch.frame.width / 2))
+        soundsLabel.position.x = -(soundsSwitch.position.x + (soundsLabel.frame.width / 2))
         soundsLabel.position.y = soundsSwitch.position.y - 8
         
         self.addChild(titleLabel)
@@ -74,7 +76,7 @@ class SettingsScene: SKScene {
             let menuScene = MenuScene(size: self.size)
             menuScene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
             menuScene.scaleMode = .resizeFill
-            let fadeTransition = SKTransition.fade(withDuration: 0.3)
+            let fadeTransition = SKTransition.fade(withDuration: 0.5)
             self.view?.presentScene(menuScene, transition: fadeTransition)
         }
         self.addChild(backButton)

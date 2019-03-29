@@ -10,10 +10,10 @@ import SpriteKit
 import GameplayKit
 
 class FightingState: GKState {
-    var scene: SKScene!
+    var scene: MyScene!
     private var timeCount: Double = 0
     
-    init(withScene scene: SKScene) {
+    init(withScene scene: MyScene) {
         self.scene = scene
     }
     
@@ -22,6 +22,10 @@ class FightingState: GKState {
     }
     
     override func didEnter(from previousState: GKState?) {
+        if (!self.scene.isControlsVisible) {
+            self.scene.gesturePad.enable()
+        }
+        
         self.scene.view?.isUserInteractionEnabled = true
     }
 }

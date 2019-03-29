@@ -21,12 +21,15 @@ class PrepareFightState: GKState {
         return stateClass is FightingState.Type
     }
     
-    override func didEnter(from previousState: GKState?) {                
+    override func didEnter(from previousState: GKState?) {
         self.scene.view?.isUserInteractionEnabled = false
         let getReadyLabel = PreMatchLabel(withText: "GET READY", andWidth: scene.size.width)
+        getReadyLabel.node.zPosition = 5
         let fightLabel = PreMatchLabel(withText: "FIGHT", andWidth: scene.size.width)
-        scene.addChild(getReadyLabel.node)
-        scene.addChild(fightLabel.node)
+        fightLabel.node.zPosition = 5
+        guard let camera = self.scene.camera else { return }        
+        camera.addChild(getReadyLabel.node)
+        camera.addChild(fightLabel.node)
         getReadyLabel.show {
             fightLabel.show(afterTime: 0.5) {
                 self.stateMachine?.enter(FightingState.self)

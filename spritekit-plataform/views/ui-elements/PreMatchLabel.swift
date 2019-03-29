@@ -19,7 +19,8 @@ class PreMatchLabel {
         self.textLabel = SKLabelNode(text: text)
         let labelYPosition = -((node.size.height / 2) - (textLabel.fontSize - 8.0))
         self.textLabel.position = CGPoint(x: 0, y: labelYPosition)
-        self.textLabel.fontName = "Helvetica Neue Bold"
+        self.textLabel.fontName = "Rubik Bold"
+        self.textLabel.fontSize = 32
         self.textLabel.zPosition = 9
         self.node.zPosition = 8
         self.node.addChild(textLabel)
