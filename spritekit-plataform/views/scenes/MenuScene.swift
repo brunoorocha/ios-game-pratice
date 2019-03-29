@@ -58,8 +58,9 @@ class MenuScene: SKScene {
         practiceButton.position.y = -(practiceButton.size.height + buttonMargin + startMargin)
         practiceButton.actionBlock = {
             let practiceScene = MyScene(size: self.size)
+            practiceScene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
             practiceScene.scaleMode = .resizeFill
-            let fadeTransition = SKTransition.fade(withDuration: 0.3)
+            let fadeTransition = SKTransition.fade(withDuration: 0.5)
             self.view?.presentScene(practiceScene, transition: fadeTransition)
         }
         
@@ -69,7 +70,7 @@ class MenuScene: SKScene {
             let settingsScene = SettingsScene(size: self.size)
             settingsScene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
             settingsScene.scaleMode = .resizeFill
-            let fadeTransition = SKTransition.fade(withDuration: 0.3)
+            let fadeTransition = SKTransition.fade(withDuration: 0.5)
             self.view?.presentScene(settingsScene, transition: fadeTransition)
         }
         
