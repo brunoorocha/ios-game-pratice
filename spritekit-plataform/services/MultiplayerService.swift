@@ -17,7 +17,7 @@ class MultiplayerService: NSObject {
     private(set) var defaultNumberOfPlayers : Int = 2
     
     private(set) var hostPlayer: GKPlayer?
-    private(set) var pingHost: Int = 200 // in miliseconds
+    private(set) var pingHost: Int = 40 // in miliseconds
     private(set) var allPlayers: [String : Float] = [String : Float]()
     private(set) var selfPlayer = GKLocalPlayer.local
     private var timer: Timer = Timer()
@@ -112,7 +112,7 @@ class MultiplayerService: NSObject {
             scene.entityManager.add(entity: playerCopy)
             scene.fighterCopy = playerCopy
     
-            if let node = playerCopy.component(ofType: SpriteComponent.self)?.node {
+            if let _ = playerCopy.component(ofType: SpriteComponent.self)?.node {
                 //uncomment this lines to activate collision between players
                 //node.physicsBody?.categoryBitMask = CategoryMask.playerCopy
                 //node.physicsBody?.collisionBitMask = CategoryMask.player

@@ -74,8 +74,14 @@ class Fighter: GKEntity {
             if !canControl {
                 if let copy = self.playerCopy, let nodeCopy = copy.component(ofType: SpriteComponent.self)?.node {
                     nodeCopy.physicsBody?.velocity.dx = 0
+                    nodeCopy.run(SKAction.wait(forDuration: 0.5)) {
+                        self.canControl = true
+                    }
                 }
+                
+                
             }
+            
         }
     }
     
@@ -288,9 +294,7 @@ class Fighter: GKEntity {
         if let original = self.playerOriginal {
             if !original.canControl {return}
         }
-        var p = position
-        //p.x = p.x + 50
-        let move = SKAction.move(to: p, duration: 0.05)
+        let move = SKAction.move(to: position, duration: 0.05)
         if let node = self.component(ofType: SpriteComponent.self)?.node {
             node.run(move)
         }
@@ -373,10 +377,12 @@ class Fighter: GKEntity {
     
     //attack returns all players(playerID) that was hitted by attacker player
     func attack(playAnim: Bool) -> [Int] {
-        if let original = self.playerOriginal {
-            original.canControl = false
-        }
         var playersHitted: [Int] = [-1,-1,-1,-1] // none player is -1
+        
+        if let original = self.playerOriginal { //stop player when attack
+            if !original.canControl {return playersHitted}
+        }
+        
         if (self.stateMachine.currentState is FighterHurtState ||
             self.stateMachine.currentState is FighterDieState) { return playersHitted}
         
@@ -405,13 +411,12 @@ class Fighter: GKEntity {
                     }
                 }
             }
-            
-            node.run(SKAction.wait(forDuration: 0.5)) {
-                if let original = self.playerOriginal {
-                    original.canControl = true
-                }
-                
-            }
+            node.physicsBody?.velocity.dx = 0
+//            node.run(SKAction.wait(forDuration: 0.5)) {
+//                if let original = self.playerOriginal {
+//                    original.canControl = true
+//                }
+//            }
         }
         
         let comboStateList = [FighterAttackState.self, FighterAttack2State.self, FighterAttack3State.self]
@@ -467,6 +472,7 @@ class Fighter: GKEntity {
             let sequence = SKAction.sequence([pushAction, waitAction])
             
             node.run(sequence) {
+                node.physicsBody?.velocity.dx = 0
                 self.canControl = true
             }
         }

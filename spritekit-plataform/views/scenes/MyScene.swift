@@ -184,7 +184,6 @@ class MyScene: SKScene {
         
         
         if distance > 0 {
-            print(distance)
             self.copyStatesAndSend()
         }
         
@@ -205,6 +204,7 @@ class MyScene: SKScene {
         
         let copy = self.fighterCopy.copy() as! Fighter
         let originalState = self.fighter.stateMachine.currentState
+        
         multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage, sendDataMode: .unreliable) {
             self.fighter.changePlayerPosition(position: currentPosition)
             self.fighter.repeatCopyMove(originalState: originalState, copy: copy)
@@ -221,7 +221,7 @@ class MyScene: SKScene {
         hittedPlayers.player3 = hittedPlayersArray[2]
         hittedPlayers.player4 = hittedPlayersArray[3]
         
-        let is3rdAttack = (self.fighterCopy.stateMachine.currentState is FighterAttack3State)
+        //let is3rdAttack = (self.fighterCopy.stateMachine.currentState is FighterAttack3State)
         let currentState = self.fighterCopy.getCurrentStateEnum()
         
         let clientMessage: MessageType = .sendAttackRequest(state: currentState)

@@ -18,8 +18,14 @@ class PListManager {
 		let platformsData = plistData!["platforms"] as! [Any]
 		let platforms = self.loadPlatforms(platformsData)
 		let gameMode = plistData!["mode"] as! String
+		let environmentData = plistData!["environment"] as! [String: Any]
 		
-		let arena = Arena(slots: slots, platforms: platforms, mode: gameMode)
+		let floor = environmentData["floor"] as! String
+		let propData = environmentData["prop"] as! [String: Any]
+		let prop = self.loadProp(propData)
+		let background = environmentData["background"] as! [String]
+		
+		let arena = Arena(slots: slots, platforms: platforms, mode: gameMode, background: background, floor: floor, prop: prop)
 		return arena
 	}
 	
@@ -61,5 +67,15 @@ class PListManager {
 		}
 		
 		return platforms
+	}
+	
+	static func loadProp(_ dictionary: [String: Any]) -> Prop {
+		let positionX = dictionary["positionX"] as! Double
+		let positionY = dictionary["positionY"] as! Double
+		let position = CGPoint(x: positionX, y: positionY)
+		let scale = dictionary["scale"] as! CGFloat
+		let atlas = dictionary["atlas"] as! String
+		
+		return Prop(scale: scale, position: position, atlas: atlas)
 	}
 }
