@@ -30,9 +30,12 @@ class FighterAttack3State: GKState {
     
     override func didEnter(from previousState: GKState?) {
         let attackAction = SKAction.animate(with: self.stateAtlasTextures, timePerFrame: 0.1, resize: true, restore: true)
-        let attackSound = SKAction.playSoundFileNamed("FighterAttack.wav", waitForCompletion: true)
-        node.run(SKAction.group([attackAction, attackSound]), completion: {
+        if let _ = self.node.parent, self.node.alpha > 0.1{
+            // Run Sound
+            FighterSound.run(type: .attack)
+        }
+        node.run(attackAction) {
             self.stateMachine?.enter(FighterIdleState.self)
-        })
+        }
     }
 }
