@@ -39,17 +39,13 @@ class FighterJumpState: GKState {
     }
     
     override func didEnter(from previousState: GKState?) {
-        var actions: [SKAction] = []
         let jumpAction = SKAction.animate(with: self.stateAtlasTextures, timePerFrame: 0.15, resize: true, restore: true)
-        actions.append(jumpAction)
-                
-        if (PlayerDefaults.isSoundEnabled) {
-            let jumpSound = SKAction.playSoundFileNamed("FighterJump.wav", waitForCompletion: true)
-            actions.append(jumpSound)
+        if let _ = self.node.parent, self.node.alpha > 0.1{
+            // Run Sound
+            FighterSound.run(type: .jump)
         }
-        
-        node.run(SKAction.group(actions), completion: {
+        node.run(jumpAction){
             self.stateMachine?.enter(FighterIdleState.self)
-        })
+        }
     }
 }

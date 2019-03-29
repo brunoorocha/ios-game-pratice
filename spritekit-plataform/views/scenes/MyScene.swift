@@ -54,6 +54,9 @@ class MyScene: SKScene {
             self.configureGesturePad(for: view)
         }
         
+        // Sounds
+        self.addChild(SoundManager.shared())
+        
         // Temporarily
         let arena = PListManager.loadArena(with: "FighterArena")
         self.map = Map1(withScene: self, andArena: arena)

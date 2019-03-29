@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B1EE87B224E36CB00B434D5 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B1EE87A224E36CB00B434D5 /* SoundManager.swift */; };
+		1B1EE87D224E45D100B434D5 /* FighterSound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B1EE87C224E45D100B434D5 /* FighterSound.swift */; };
 		1B3FA0A6222574B700280565 /* Map1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3FA0A5222574B700280565 /* Map1.swift */; };
 		1B3FA0A82225B5D900280565 /* FighterFallState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3FA0A72225B5D900280565 /* FighterFallState.swift */; };
 		1B88ECBC224D45E400A369D0 /* FighterJump.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1B88ECB9224D45E300A369D0 /* FighterJump.wav */; };
@@ -77,6 +79,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1B1EE87A224E36CB00B434D5 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
+		1B1EE87C224E45D100B434D5 /* FighterSound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FighterSound.swift; sourceTree = "<group>"; };
 		1B3FA0A5222574B700280565 /* Map1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Map1.swift; sourceTree = "<group>"; };
 		1B3FA0A72225B5D900280565 /* FighterFallState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FighterFallState.swift; sourceTree = "<group>"; };
 		1B88ECB9224D45E300A369D0 /* FighterJump.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = FighterJump.wav; sourceTree = "<group>"; };
@@ -206,6 +210,7 @@
 				6CCF8E0622282AF300296148 /* Message.swift */,
 				6CCF8E0822282B1400296148 /* NotificationName.swift */,
 				6CCF8E0A22282B7600296148 /* ReceiveDataDelegate.swift */,
+				1B1EE87A224E36CB00B434D5 /* SoundManager.swift */,
 			);
 			path = services;
 			sourceTree = "<group>";
@@ -345,6 +350,7 @@
 			children = (
 				A397A0F922208BDC00E61051 /* states */,
 				A397A0E3221EDF2900E61051 /* Fighter.swift */,
+				1B1EE87C224E45D100B434D5 /* FighterSound.swift */,
 			);
 			path = Fighter;
 			sourceTree = "<group>";
@@ -562,9 +568,11 @@
 				A397A0E1221EDE5100E61051 /* MyScene.swift in Sources */,
 				A397A12422295A6100E61051 /* FighterAttack2State.swift in Sources */,
 				A397A0EA221EE1E400E61051 /* EntityManager.swift in Sources */,
+				1B1EE87D224E45D100B434D5 /* FighterSound.swift in Sources */,
 				A397A11B2222C3E600E61051 /* PreMatchLabel.swift in Sources */,
 				48441D6C22296A9C0005EC3A /* Platform.swift in Sources */,
 				A397A0E4221EDF2900E61051 /* Fighter.swift in Sources */,
+				1B1EE87B224E36CB00B434D5 /* SoundManager.swift in Sources */,
 				A397A11822218EBB00E61051 /* PrepareFightState.swift in Sources */,
 				A397A1152220C5A300E61051 /* FighterAttackState.swift in Sources */,
 				6C2F3F802237DE9D0087A768 /* InputController.swift in Sources */,
