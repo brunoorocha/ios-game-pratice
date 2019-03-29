@@ -179,8 +179,6 @@ class MyScene: SKScene {
         }
         
         nodePosition = nodeCopy.position
-        
-        
         self.map.updateParallaxBackground()
 
     }
@@ -223,7 +221,7 @@ class MyScene: SKScene {
                 let _ = self.fighter.attack(playAnim: true)
                 if let hittedPlayer = self.allPlayers[playerID] {
                     hittedPlayer.receiveDamage(damage: self.fighter.damage)
-                        if self.fighterCopy.stateMachine.currentState is FighterAttack3State{
+                        if self.fighterCopy.stateMachine.currentState is FighterAttack3State {
                             //hittedPlayer.reiceivePushDamage(force: self.fighterCopy.forcePush, direction: self.fighterCopy.fighterDirection)
                         }
                 }
@@ -236,7 +234,6 @@ class MyScene: SKScene {
 extension MyScene: GesturePadDelegate {
     func performActionForAnalogMoving(inAngle angle: CGFloat, withDirectionX dx: CGFloat, AndDirectionY dy: CGFloat) {
         self.fighterCopy.walk(inDirectionX: dx)
-        
     }
     
     func performActionForAnalogStopMoving() {
@@ -282,13 +279,8 @@ extension MyScene: UpdateSceneDelegate {
     func updatePlayerPosition(playerPosition: CGPoint, from playerID: Int, state: State, directionDx: Int) {
         if let player = allPlayers[playerID] {
             player.changePlayerPosition(position: playerPosition)
-            
-//            if state != .attack1 || state != .attack3 || state != .attack3 {
-                player.changePlayerState(state: state, inDirectionX: directionDx)
-            //}
-//            if playerID == GKLocalPlayer.local.playerID.toInt() {
-//                self.fighterCopy.changePlayerState(state: state, inDirectionX: directionDx)
-//            }
+            player.changePlayerState(state: state, inDirectionX: directionDx)
+
         }
         
     }
