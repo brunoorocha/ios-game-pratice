@@ -212,7 +212,7 @@ class MyScene: SKScene {
         hittedPlayers.player3 = hittedPlayersArray[2]
         hittedPlayers.player4 = hittedPlayersArray[3]
         
-        let is3rdAttack = (self.fighterCopy.stateMachine.currentState is FighterAttack3State)
+        //let is3rdAttack = (self.fighterCopy.stateMachine.currentState is FighterAttack3State)
         let currentState = self.fighterCopy.getCurrentStateEnum()
         
         let clientMessage: MessageType = .sendAttackRequest(state: currentState)

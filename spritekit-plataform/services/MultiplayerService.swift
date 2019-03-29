@@ -112,7 +112,7 @@ class MultiplayerService: NSObject {
             scene.entityManager.add(entity: playerCopy)
             scene.fighterCopy = playerCopy
     
-            if let node = playerCopy.component(ofType: SpriteComponent.self)?.node {
+            if let _ = playerCopy.component(ofType: SpriteComponent.self)?.node {
                 //uncomment this lines to activate collision between players
                 //node.physicsBody?.categoryBitMask = CategoryMask.playerCopy
                 //node.physicsBody?.collisionBitMask = CategoryMask.player

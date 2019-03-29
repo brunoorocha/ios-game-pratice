@@ -74,8 +74,14 @@ class Fighter: GKEntity {
             if !canControl {
                 if let copy = self.playerCopy, let nodeCopy = copy.component(ofType: SpriteComponent.self)?.node {
                     nodeCopy.physicsBody?.velocity.dx = 0
+                    nodeCopy.run(SKAction.wait(forDuration: 0.5)) {
+                        self.canControl = true
+                    }
                 }
+                
+                
             }
+            
         }
     }
     
@@ -228,7 +234,6 @@ class Fighter: GKEntity {
         let copyState = type(of: copy.stateMachine.currentState!).self
     
         if ((type(of: originalState!) != copyState) || (originalNode.xScale != copyNode.xScale)) && !(originalState is FighterHurtState){
-            print(copyState)
             self.stateMachine.enter(copyState)
             self.fighterDirection = copy.fighterDirection
         }
@@ -289,9 +294,7 @@ class Fighter: GKEntity {
         if let original = self.playerOriginal {
             if !original.canControl {return}
         }
-        var p = position
-        //p.x = p.x + 50
-        let move = SKAction.move(to: p, duration: 0.05)
+        let move = SKAction.move(to: position, duration: 0.05)
         if let node = self.component(ofType: SpriteComponent.self)?.node {
             node.run(move)
         }
@@ -376,10 +379,11 @@ class Fighter: GKEntity {
     func attack(playAnim: Bool) -> [Int] {
         var playersHitted: [Int] = [-1,-1,-1,-1] // none player is -1
         
-        if let original = self.playerOriginal {
+        if let original = self.playerOriginal { //stop player when attack
             if !original.canControl {return playersHitted}
             original.canControl = false
         }
+        
         if (self.stateMachine.currentState is FighterHurtState ||
             self.stateMachine.currentState is FighterDieState) { return playersHitted}
         
