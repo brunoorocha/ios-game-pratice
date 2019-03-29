@@ -78,8 +78,6 @@ class Fighter: GKEntity {
                         self.canControl = true
                     }
                 }
-                
-                
             }
             
         }
@@ -354,10 +352,12 @@ class Fighter: GKEntity {
     }
     
     func jump() {
+        
         if (self.jumpCount < self.jumpCountMax) {
             guard let node = self.component(ofType: SpriteComponent.self)?.node else { return }
             if !(comboList()){
                 self.stateMachine.enter(FighterIdleState.self)
+                print("isCopy", self.isCopy)
                 self.stateMachine.enter(FighterJumpState.self)
             }
             node.physicsBody?.velocity.dy = 0.0

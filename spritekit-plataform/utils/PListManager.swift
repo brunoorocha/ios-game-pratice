@@ -40,6 +40,7 @@ class PListManager {
 	}
 	
 	static func loadSlots(_ array: [Any]) -> [CGPoint] {
+    
 		var slots: [CGPoint] = []
 		
 		array.forEach { (dictionary) in

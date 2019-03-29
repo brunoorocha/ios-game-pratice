@@ -73,10 +73,11 @@ class MultiplayerService: NSObject {
     }
     
     //For each player in match, alloc in the scene
-    func allocPlayers(in scene: MyScene) -> [Int: Fighter]{
+    func allocPlayers(in scene: MyScene) -> [Int: Fighter] {
         var allPlayers : [Int: Fighter] = [:]
         if let match = GameCenterService.shared.currentMatch {
             //for each other player(except self), put in the scene
+            print("count players: ", match.players.count)
             match.players.forEach {
                 let otherPlayer = Fighter(playerID: $0.playerID, playerAlias: $0.alias)
                 if  let node = otherPlayer.component(ofType: SpriteComponent.self)?.node,

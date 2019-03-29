@@ -122,18 +122,19 @@ class MenuScene: SKScene {
         }
     }
 
-    @objc private func presentGame(_ notification: Notification){
+    @objc private func presentGame(_ notification: Notification) {
         guard let match = notification.object as? GKMatch else {
             return
         }
 
         if let gameScene = SKScene(fileNamed: "MyScene") as? MyScene {
+            GameCenterService.shared.playerConnectedDelegate = gameScene
             // Set the scale mode to scale to fit the window
             gameScene.scaleMode = .resizeFill
             //gameScene.currentMatch = match
-
+            self.view?.ignoresSiblingOrder = true
             // Present the scene
-            self.view?.presentScene(gameScene)
+            self.view?.presentScene(gameScene, transition: SKTransition.crossFade(withDuration: 1.0))
         }
 
         GameCenterService.shared.currentMatch = match

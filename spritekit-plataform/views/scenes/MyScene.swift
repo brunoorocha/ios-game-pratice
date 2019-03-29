@@ -389,3 +389,30 @@ extension MyScene: JoystickDelegate {
     }
     
 }
+
+extension MyScene: PlayerConnectedDelegate {
+    func didPlayerConnected() {
+        self.allPlayers.forEach { (i,fighter) in
+            if let node = fighter.component(ofType: SpriteComponent.self)?.node {
+                node.removeFromParent()
+            }
+        }
+        
+        self.playerNodeCopy.removeFromParent()
+        self.playerNode.removeFromParent()
+        
+        self.allPlayers = MultiplayerService.shared.allocPlayers(in: self)
+        
+        if let player = allPlayers[GKLocalPlayer.local.playerID.toInt()] {
+            self.fighter = player
+        }
+        if let node = self.fighter.component(ofType: SpriteComponent.self)?.node {
+            self.playerNode = node
+        }
+        
+        if let nodeCopy = self.fighterCopy.component(ofType: SpriteComponent.self)?.node  {
+            nodeCopy.alpha = 0.01;
+            self.playerNodeCopy = nodeCopy
+        }
+    }
+}
