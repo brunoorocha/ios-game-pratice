@@ -17,7 +17,7 @@ class MultiplayerService: NSObject {
     private(set) var defaultNumberOfPlayers : Int = 2
     
     private(set) var hostPlayer: GKPlayer?
-    private(set) var pingHost: Int = 200 // in miliseconds
+    private(set) var pingHost: Int = 40 // in miliseconds
     private(set) var allPlayers: [String : Float] = [String : Float]()
     private(set) var selfPlayer = GKLocalPlayer.local
     private var timer: Timer = Timer()

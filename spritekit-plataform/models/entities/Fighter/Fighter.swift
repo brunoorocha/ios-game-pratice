@@ -56,7 +56,7 @@ class Fighter: GKEntity {
             }
         }
     }
-    var damage : CGFloat = 10
+    var damage : CGFloat = 0.01
     var forcePush : CGFloat = 5
     var jumpForce: CGFloat = 12.0
     let rangerAttack : CGFloat = 10
@@ -228,6 +228,7 @@ class Fighter: GKEntity {
         let copyState = type(of: copy.stateMachine.currentState!).self
     
         if ((type(of: originalState!) != copyState) || (originalNode.xScale != copyNode.xScale)) && !(originalState is FighterHurtState){
+            print(copyState)
             self.stateMachine.enter(copyState)
             self.fighterDirection = copy.fighterDirection
         }
@@ -373,10 +374,12 @@ class Fighter: GKEntity {
     
     //attack returns all players(playerID) that was hitted by attacker player
     func attack(playAnim: Bool) -> [Int] {
+        var playersHitted: [Int] = [-1,-1,-1,-1] // none player is -1
+        
         if let original = self.playerOriginal {
+            if !original.canControl {return playersHitted}
             original.canControl = false
         }
-        var playersHitted: [Int] = [-1,-1,-1,-1] // none player is -1
         if (self.stateMachine.currentState is FighterHurtState ||
             self.stateMachine.currentState is FighterDieState) { return playersHitted}
         
@@ -467,6 +470,7 @@ class Fighter: GKEntity {
             let sequence = SKAction.sequence([pushAction, waitAction])
             
             node.run(sequence) {
+                node.physicsBody?.velocity.dx = 0
                 self.canControl = true
             }
         }
