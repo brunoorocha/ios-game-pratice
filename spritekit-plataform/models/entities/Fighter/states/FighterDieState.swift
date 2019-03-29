@@ -24,13 +24,16 @@ class FighterDieState: GKState {
     override func didEnter(from previousState: GKState?) {
         self.node.physicsBody?.velocity.dx = 0
         let dieAction = SKAction.animate(with: self.stateAtlasTextures, timePerFrame: 0.15, resize: true, restore: true)
-        let dieSound = SKAction.playSoundFileNamed("FighterDeath.wav", waitForCompletion: false)
-        node.run(SKAction.group([dieAction, dieSound]), completion: {
+        if let _ = self.node.parent, self.node.alpha > 0.1{
+            // Run Sound
+            FighterSound.run(type: .death)
+        }
+        node.run(dieAction){
             // Stop forever loops
             self.node.removeAllActions()
             // Temporarily - Used because dead texture are bugged
             self.node.removeFromParent()
-        })
+        }
     }
 }
 
