@@ -56,7 +56,7 @@ class Fighter: GKEntity {
             }
         }
     }
-    var damage : CGFloat = 0.01
+    var damage : CGFloat = 10
     var forcePush : CGFloat = 5
     var jumpForce: CGFloat = 12.0
     let rangerAttack : CGFloat = 10
@@ -381,7 +381,6 @@ class Fighter: GKEntity {
         
         if let original = self.playerOriginal { //stop player when attack
             if !original.canControl {return playersHitted}
-            original.canControl = false
         }
         
         if (self.stateMachine.currentState is FighterHurtState ||
@@ -412,13 +411,12 @@ class Fighter: GKEntity {
                     }
                 }
             }
-            
-            node.run(SKAction.wait(forDuration: 0.5)) {
-                if let original = self.playerOriginal {
-                    original.canControl = true
-                }
-                
-            }
+            node.physicsBody?.velocity.dx = 0
+//            node.run(SKAction.wait(forDuration: 0.5)) {
+//                if let original = self.playerOriginal {
+//                    original.canControl = true
+//                }
+//            }
         }
         
         let comboStateList = [FighterAttackState.self, FighterAttack2State.self, FighterAttack3State.self]
