@@ -2,6 +2,27 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>environment</key>
+	<dict>
+		<key>prop</key>
+		<dict>
+			<key>scale</key>
+			<real>1.2</real>
+			<key>positionY</key>
+			<real>50</real>
+			<key>positionX</key>
+			<integer>100</integer>
+			<key>atlas</key>
+			<string>rocks</string>
+		</dict>
+		<key>floor</key>
+		<string>ground</string>
+		<key>background</key>
+		<array>
+			<string>sky</string>
+			<string>sea</string>
+		</array>
+	</dict>
 	<key>playerSlots</key>
 	<array>
 		<dict>
@@ -15,7 +36,7 @@
 	<array>
 		<dict>
 			<key>atlas</key>
-			<string>Platform1</string>
+			<string>platform-final</string>
 			<key>positionX</key>
 			<integer>300</integer>
 			<key>positionY</key>
@@ -23,7 +44,7 @@
 		</dict>
 		<dict>
 			<key>atlas</key>
-			<string>Platform1</string>
+			<string>platform-final</string>
 			<key>positionX</key>
 			<integer>200</integer>
 			<key>positionY</key>

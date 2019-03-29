@@ -15,43 +15,53 @@ class Map1 {
     
 	init(withScene scene: SKScene, andArena arena: Arena) {
         self.scene = scene
-        self.drawBackground()
-        self.drawRocks()
-        self.drawFloor()
-//        self.drawPlataform(x: 200, y: 20, width: 200, heigth: 5)
-		let platform = arena.platforms[0]
-		drawPlataform(platform)
-		let platform2 = arena.platforms[1]
-		drawPlataform(platform2)
-//        self.drawPlataform(x: 300, y: 70, width: 200, heigth: 7)'
+		//draw platforms
+		arena.platforms.forEach { (platform) in
+			drawPlataform(platform)
+		}
+		
+		//draw floor
+		drawFloor(arena.floor)
+		
+		//draw background
+		arena.background.enumerated().forEach { (index, background) in
+			//the index in draw background initiate in 1
+			let layer = index + 1
+			drawBackground(background, withLayer: layer)
+		}
+		
+		//prop
+		drawProp(arena.prop)
     }
+	
+	private func drawBackground(_ background: String, withLayer layer: Int) {
+		let parallaxNode = SKSpriteNode(texture: SKTexture(imageNamed: "sky"))
+		parallaxNode.size.height = self.scene.size.height
+		parallaxNode.setScale(1.2)
+		parallaxNode.position = CGPoint(x: 0, y: 50)
+		parallaxNode.texture?.filteringMode = .nearest
+		parallaxNode.zPosition = CGFloat(layer)
+		
+		//preciso saber pq tem o parallax como propriedade
+		//mudar init do ParallaxBackground para receber o layer
+		let parallax = ParallaxBackground(withCamera: self.scene.camera!, andNode: parallaxNode)
+		parallax.layer = layer
+		
+		switch (layer) {
+		case 1:
+			parallaxSky = parallax
+		case 2:
+			parallaxSea = parallax
+		default:
+			break
+		}
+		
+		self.scene.addChild(parallaxNode)
+	}
     
-    private func drawBackground() {
-        let sky = SKSpriteNode(texture: SKTexture(imageNamed: "sky"))
-        sky.size.height = self.scene.size.height
-        sky.setScale(1.2)
-        sky.position = CGPoint(x: 0, y: 50)
-        sky.texture?.filteringMode = .nearest
-        sky.zPosition = 1
-        
-        let sea = SKSpriteNode(texture: SKTexture(imageNamed: "sea"))
-        sea.size.height = self.scene.size.height
-        sea.setScale(1.2)
-        sea.position = CGPoint(x: 0, y: 50)
-        sea.texture?.filteringMode = .nearest
-        sea.zPosition = 2
-        
-        self.parallaxSky = ParallaxBackground(withCamera: self.scene.camera!, andNode: sky)
-        self.parallaxSea = ParallaxBackground(withCamera: self.scene.camera!, andNode: sea)
-        self.parallaxSea.layer = 2
-        
-        self.scene.addChild(sky)
-        self.scene.addChild(sea)
-    }
-    
-    private func drawFloor(){
+	private func drawFloor(_ floor: String){
         let y = CGFloat(-80.0)
-        let ground = SKSpriteNode(texture: SKTexture(imageNamed: "ground"))
+        let ground = SKSpriteNode(texture: SKTexture(imageNamed: floor))
         ground.texture?.filteringMode = .nearest
         ground.position = CGPoint(x: 0, y: y)
         let groundFrame = CGRect(x: -(ground.size.width / 2), y: -((ground.size.height / 2) + 24), width: ground.size.width, height: ground.size.height)
@@ -62,30 +72,8 @@ class Map1 {
         ground.physicsBody?.restitution = 0
         ground.physicsBody?.friction = 0
         ground.zPosition = 5
-//        self.scene.addChild(area)
+		
         self.scene.addChild(ground)
-    }
-    
-    private func drawPlataform(x: CGFloat, y: CGFloat, width: CGFloat, heigth: CGFloat){
-        let area = SKShapeNode(rect: CGRect(x: -1*(x/2), y: y, width: width, height: heigth))
-        area.fillColor = .lightGray
-        area.strokeColor = .init(white: 1.0, alpha: 0.0)
-        area.physicsBody = SKPhysicsBody(edgeLoopFrom: CGRect(x: area.frame.minX, y: area.frame.maxY - 3, width: width, height: 1))
-        area.physicsBody?.affectedByGravity = false
-        area.physicsBody?.categoryBitMask = CategoryMask.plataform
-        area.physicsBody?.friction = 0
-        area.physicsBody?.restitution = 0
-        area.zPosition = 4
-        self.scene.addChild(area)
-    }
-    
-    func drawRocks() {
-        let rocks = SKSpriteNode(texture: SKTexture(imageNamed: "rocks"))
-        rocks.setScale(1.2)
-        rocks.position = CGPoint(x: 100, y: 50)
-        rocks.texture?.filteringMode = .nearest
-        rocks.zPosition = 3
-        self.scene.addChild(rocks)
     }
     
     func updateParallaxBackground() {
@@ -95,15 +83,26 @@ class Map1 {
 	
 	private func drawPlataform(_ platform: Platform){
 		let area = SKSpriteNode(imageNamed: platform.atlas)
-		area.size = CGSize(width: 200, height: 7)
+		area.size = CGSize(width: 190, height: 12)
 		area.position = CGPoint(x: -1*(platform.position.x/2), y: platform.position.y)
 		area.zPosition = 5
-		let rect = CGRect(x: -(area.size.width/2), y: -(area.size.height/2), width: area.size.width, height: area.size.height)
+		let rect = CGRect(x: -(area.size.width/2), y: +((area.size.height/2) - 1), width: area.size.width, height: 1)
 		area.physicsBody = SKPhysicsBody(edgeLoopFrom: rect)
 		area.physicsBody?.affectedByGravity = false
 		area.physicsBody?.categoryBitMask = CategoryMask.plataform
 		area.physicsBody?.friction = 0
 		area.physicsBody?.restitution = 0
+		
 		self.scene.addChild(area)
+	}
+	
+	func drawProp(_ prop: Prop) {
+		let propNode = SKSpriteNode(texture: SKTexture(imageNamed: prop.atlas))
+		propNode.setScale(prop.scale)
+		propNode.position = prop.position
+		propNode.texture?.filteringMode = .nearest
+		propNode.zPosition = 3
+		
+		self.scene.addChild(propNode)
 	}
 }
