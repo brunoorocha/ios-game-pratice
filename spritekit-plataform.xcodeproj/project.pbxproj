@@ -44,6 +44,7 @@
 		A318F836224BBD310040D650 /* Rubik-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A318F833224BBD310040D650 /* Rubik-Regular.ttf */; };
 		A318F838224BF2E20040D650 /* SwitchButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A318F837224BF2E20040D650 /* SwitchButton.swift */; };
 		A389A6F2224D50BB002A26C8 /* PausedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A389A6F1224D50BB002A26C8 /* PausedState.swift */; };
+		A389A6F8224E8854002A26C8 /* LoseState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A389A6F7224E8854002A26C8 /* LoseState.swift */; };
 		A397A0BD221EDCA400E61051 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A0BC221EDCA400E61051 /* AppDelegate.swift */; };
 		A397A0C5221EDCA400E61051 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A397A0C4221EDCA400E61051 /* GameViewController.swift */; };
 		A397A0C8221EDCA400E61051 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A397A0C6221EDCA400E61051 /* Main.storyboard */; };
@@ -116,6 +117,7 @@
 		A318F833224BBD310040D650 /* Rubik-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-Regular.ttf"; sourceTree = "<group>"; };
 		A318F837224BF2E20040D650 /* SwitchButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchButton.swift; sourceTree = "<group>"; };
 		A389A6F1224D50BB002A26C8 /* PausedState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PausedState.swift; sourceTree = "<group>"; };
+		A389A6F7224E8854002A26C8 /* LoseState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoseState.swift; sourceTree = "<group>"; };
 		A397A0B9221EDCA400E61051 /* spritekit-plataform.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "spritekit-plataform.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A397A0BC221EDCA400E61051 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A397A0C4221EDCA400E61051 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -432,6 +434,7 @@
 				A397A11722218EBB00E61051 /* PrepareFightState.swift */,
 				A397A11C2222DAB200E61051 /* FightingState.swift */,
 				A389A6F1224D50BB002A26C8 /* PausedState.swift */,
+				A389A6F7224E8854002A26C8 /* LoseState.swift */,
 			);
 			path = states;
 			sourceTree = "<group>";
@@ -581,6 +584,7 @@
 				A397A0C5221EDCA400E61051 /* GameViewController.swift in Sources */,
 				6CCF8E0522282ABF00296148 /* MultiplayerService.swift in Sources */,
 				A318F838224BF2E20040D650 /* SwitchButton.swift in Sources */,
+				A389A6F8224E8854002A26C8 /* LoseState.swift in Sources */,
 				A397A0BD221EDCA400E61051 /* AppDelegate.swift in Sources */,
 				A3ACB3392237DD7000AF5088 /* ParallaxBackground.swift in Sources */,
 				A397A0E8221EDFE300E61051 /* SpriteComponent.swift in Sources */,

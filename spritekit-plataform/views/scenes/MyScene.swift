@@ -83,7 +83,9 @@ class MyScene: SKScene {
         let prepareState = PrepareFightState(withScene: self)
         let fightingState = FightingState(withScene: self)
         let pausedState = PausedState(withScene: self)
-        self.stateMachine = GKStateMachine(states: [prepareState, fightingState, pausedState])
+        let loseState = LoseState(withScene: self)
+        
+        self.stateMachine = GKStateMachine(states: [prepareState, fightingState, pausedState, loseState])
 
         self.stateMachine.enter(PrepareFightState.self)
 //        self.stateMachine.enter(FightingState.self)
@@ -287,7 +289,8 @@ extension MyScene: GesturePadDelegate {
 extension MyScene: SKPhysicsContactDelegate {
     func didBegin(_ contact: SKPhysicsContact) {
         let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
-        if ( collision == CategoryMask.player | CategoryMask.suicideArea ) {
+        if ( collision == CategoryMask.player | CategoryMask.suicideArea ) {            
+            self.stateMachine.enter(LoseState.self)
             print("Commited suicide")
             let playerNode = contact.bodyA.categoryBitMask == CategoryMask.player ? contact.bodyA.node : contact.bodyB.node
             self.fighters.forEach({
