@@ -56,6 +56,8 @@ class MyScene: SKScene {
         
         // Sounds
         SoundManager.shared().removeFromParent()
+        SoundManager.shared().isMutedAction = !self.isSoundEnabled
+        SoundManager.shared().isMutedMusic = !self.isSoundEnabled
         self.addChild(SoundManager.shared())
         
         // Temporarily
