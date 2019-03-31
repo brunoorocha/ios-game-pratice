@@ -207,7 +207,7 @@ class MyScene: SKScene {
         let copy = self.fighterCopy.copy() as! Fighter
         let originalState = self.fighter.stateMachine.currentState
         
-        multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage, sendDataMode: .reliable) {
+        multiplayerService.sendActionMessage(isMoving: true, clientMessage: clientMessage, hostMessage: hostMessage, sendDataMode: .unreliable) {
             self.fighter.changePlayerPosition(position: currentPosition)
             self.fighter.repeatCopyMove(originalState: originalState, copy: copy)
         }
@@ -229,7 +229,7 @@ class MyScene: SKScene {
         let clientMessage: MessageType = .sendAttackRequest(state: currentState)
         let hostMessage: MessageType = .sendAttackResponse(attackerID: selfPlayerID, receivedAtackIDs: hittedPlayers, state: currentState)
         
-        multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage, sendDataMode: .reliable) {
+        multiplayerService.sendActionMessage(isMoving: false, clientMessage: clientMessage, hostMessage: hostMessage, sendDataMode: .reliable) {
             hittedPlayersArray.forEach { (playerID) in
                 let _ = self.fighter.attack(playAnim: true)
                 if let hittedPlayer = self.allPlayers[playerID] {
@@ -310,9 +310,10 @@ extension MyScene: UpdateSceneDelegate {
     }
     func updatePlayerPosition(playerPosition: CGPoint, from playerID: Int, state: State, directionDx: Int, senderTime: Int) {
         if let player = allPlayers[playerID] {
-            
-            player.changePlayerPosition(position: playerPosition)
-            player.changePlayerState(state: state, inDirectionX: directionDx)
+            if player.playerID != GKLocalPlayer.local.playerID {
+                player.changePlayerPosition(position: playerPosition)
+                player.changePlayerState(state: state, inDirectionX: directionDx)
+            }
         
         }
         

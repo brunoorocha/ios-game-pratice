@@ -79,6 +79,7 @@ extension GameCenterService : GKMatchmakerViewControllerDelegate {
         self.currentMatch = match
         match.delegate = self
         
+        MultiplayerService.shared.setRandomNumber()
         MultiplayerService.shared.startingGame()
         
         NotificationCenter.default.post(name: .presentGame, object: match)

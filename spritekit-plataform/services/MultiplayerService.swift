@@ -26,10 +26,13 @@ class MultiplayerService: NSObject {
         super.init()
         
         hostPlayer = GKLocalPlayer.local
+        setRandomNumber()
+        GameCenterService.shared.receiveDataDelegate = self
+    }
+    
+    func setRandomNumber(){
         let randomNumber = GKRandomSource.sharedRandom().nextUniform()
         allPlayers[GKLocalPlayer.local.playerID] = randomNumber
-        
-        GameCenterService.shared.receiveDataDelegate = self
     }
     
     func sendData(data : Message, sendDataMode: GKMatch.SendDataMode){
@@ -47,17 +50,21 @@ class MultiplayerService: NSObject {
         }
     }
     
-    func sendActionMessage(clientMessage: MessageType, hostMessage: MessageType, sendDataMode: GKMatch.SendDataMode, hostActionCompletion: @escaping () -> Void){
+    func sendActionMessage(isMoving: Bool, clientMessage: MessageType, hostMessage: MessageType, sendDataMode: GKMatch.SendDataMode, hostActionCompletion: @escaping () -> Void){
         var messageType: MessageType = clientMessage
+        print("pingHost: \(pingHost)")
+        let ping = Double(pingHost) / 1000
         
-        if hostPlayer == selfPlayer {
-            let ping = Double(pingHost) / 1000
-
-            Timer.scheduledTimer(withTimeInterval: ping, repeats: false) { (_) in
+        
+        if isMoving || hostPlayer == selfPlayer {
+            Timer.scheduledTimer(withTimeInterval: 0.06, repeats: false) { (_) in
                 hostActionCompletion()
             }
-            
+        }
+        
+        if hostPlayer == selfPlayer {
             messageType = hostMessage
+        
         }
         
         let data = Message(messageType: messageType)
@@ -174,8 +181,13 @@ class MultiplayerService: NSObject {
         
         guard let hostPlayerID = (allPlayers.sorted { $0.1 < $1.1 }).first?.key else {return}
         
+        (allPlayers.sorted { $0.1 < $1.1 }).forEach { (key,value) in
+            print("ID in order: ", key, "randomNumber: \(value)")
+        }
+        
         GKPlayer.loadPlayers(forIdentifiers: [hostPlayerID]) { (players, error) in
             self.hostPlayer = (players?.first)!
+            print("host: ",self.hostPlayer?.alias, "id: \(self.hostPlayer?.playerID)")
         }
         
     }

@@ -57,6 +57,7 @@ class PausedState: GKState {
             menuScene.scaleMode = .resizeFill
             let fadeTransition = SKTransition.fade(withDuration: 1.0)
             view.presentScene(menuScene, transition: fadeTransition)
+            GameCenterService.shared.currentMatch?.disconnect()
         }
         
         pausedBackground.addChild(titleLabel)
