@@ -52,9 +52,8 @@ class MultiplayerService: NSObject {
     
     func sendActionMessage(isMoving: Bool, clientMessage: MessageType, hostMessage: MessageType, sendDataMode: GKMatch.SendDataMode, hostActionCompletion: @escaping () -> Void){
         var messageType: MessageType = clientMessage
-        print("pingHost: \(pingHost)")
-        let ping = Double(pingHost) / 1000
         
+        //let ping = Double(pingHost) / 1000
         
         if isMoving || hostPlayer == selfPlayer {
             Timer.scheduledTimer(withTimeInterval: 0.06, repeats: false) { (_) in
@@ -84,7 +83,7 @@ class MultiplayerService: NSObject {
         var allPlayers : [Int: Fighter] = [:]
         if let match = GameCenterService.shared.currentMatch {
             //for each other player(except self), put in the scene
-            print("count players: ", match.players.count)
+
             match.players.forEach {
                 let otherPlayer = Fighter(playerID: $0.playerID, playerAlias: $0.alias)
                 if  let node = otherPlayer.component(ofType: SpriteComponent.self)?.node,
@@ -180,14 +179,10 @@ class MultiplayerService: NSObject {
     func setHostPlayer(){
         
         guard let hostPlayerID = (allPlayers.sorted { $0.1 < $1.1 }).first?.key else {return}
-        
-        (allPlayers.sorted { $0.1 < $1.1 }).forEach { (key,value) in
-            print("ID in order: ", key, "randomNumber: \(value)")
-        }
+
         
         GKPlayer.loadPlayers(forIdentifiers: [hostPlayerID]) { (players, error) in
             self.hostPlayer = (players?.first)!
-            print("host: ",self.hostPlayer?.alias, "id: \(self.hostPlayer?.playerID)")
         }
         
     }

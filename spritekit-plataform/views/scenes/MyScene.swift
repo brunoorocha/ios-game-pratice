@@ -42,7 +42,7 @@ class MyScene: SKScene {
         self.entityManager = EntityManager(withScene: self)
         self.configureCamera()
         self.configureStates()
-        self.configureUI()
+        //self.configureUI()
         self.configurePhysics()
         self.suicideArea()
         self.showBackButton()
