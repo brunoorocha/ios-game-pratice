@@ -33,7 +33,7 @@ class MyScene: SKScene {
     
     var isControlsVisible: Bool = PlayerDefaults.isControlsVisible
     var isSoundEnabled: Bool = PlayerDefaults.isSoundEnabled
-
+    
     var map: Map1!
     
     override func didMove(to view: SKView) {
@@ -129,30 +129,29 @@ class MyScene: SKScene {
     }
     
     func configureUI(){
-//        if let cam = self.camera {
-//
-//            //ping label
-//            pingLabel = SKLabelNode(text: "ping: 0 ms, host: \(MultiplayerService.shared.selfPlayer.alias)")
-//            pingLabel.position = CGPoint(x: self.size.width/2 - 20  , y: self.size.height/2 - 40)
-//            pingLabel.horizontalAlignmentMode = .right
-//            pingLabel.fontName = "Helvetica"
-//            pingLabel.fontColor = SKColor.black
-//            pingLabel.fontSize = 18
-//            pingLabel.zPosition = 10
-//            cam.addChild(pingLabel)
-//
-//            //debug label
-//            debugLabel = SKLabelNode(text: "debug label")
-//            debugLabel.position = CGPoint(x: -self.size.width/2 + 20  , y: self.size.height/2 - 40)
-//            debugLabel.horizontalAlignmentMode = .left
-//            debugLabel.fontName = "Helvetica"
-//            debugLabel.fontColor = SKColor.black
-//            debugLabel.fontSize = 18
-//            debugLabel.zPosition = 2
-//            //cam.addChild(debugLabel)
-//
-//
-//        }
+        if let cam = self.camera {
+            //ping label
+            pingLabel = SKLabelNode(text: "ping: 0 ms, host: \(MultiplayerService.shared.selfPlayer.alias)")
+            pingLabel.position = CGPoint(x: self.size.width/2 - 20  , y: self.size.height/2 - 40)
+            pingLabel.horizontalAlignmentMode = .right
+            pingLabel.fontName = "Helvetica"
+            pingLabel.fontColor = SKColor.black
+            pingLabel.fontSize = 18
+            pingLabel.zPosition = 10
+            cam.addChild(pingLabel)
+
+            //debug label
+            debugLabel = SKLabelNode(text: "debug label")
+            debugLabel.position = CGPoint(x: -self.size.width/2 + 20  , y: self.size.height/2 - 40)
+            debugLabel.horizontalAlignmentMode = .left
+            debugLabel.fontName = "Helvetica"
+            debugLabel.fontColor = SKColor.black
+            debugLabel.fontSize = 18
+            debugLabel.zPosition = 2
+            //cam.addChild(debugLabel)
+
+
+        }
     }
     
     func configureGesturePad(for view: SKView) {
@@ -199,14 +198,15 @@ class MyScene: SKScene {
         let directionDx = Int(playerNodeCopy.xScale)
         let currentState = self.fighterCopy.getCurrentStateEnum()
         let currentPosition = self.playerNodeCopy.position
-        let clientMessage: MessageType = .sendPositionRequest(position: currentPosition, state: currentState, directionDx: directionDx)
+        let currentTime = Int((Date().timeIntervalSince1970 * 1000))
+        let clientMessage: MessageType = .sendPositionRequest(position: currentPosition, state: currentState, directionDx: directionDx, senderTime: currentTime)
         
-        let hostMessage: MessageType = .sendPositionResponse(playerID: selfPlayerID, position: currentPosition, state: currentState, directionDx: directionDx)
+        let hostMessage: MessageType = .sendPositionResponse(playerID: selfPlayerID, position: currentPosition, state: currentState, directionDx: directionDx, senderTime: currentTime)
         
         let copy = self.fighterCopy.copy() as! Fighter
         let originalState = self.fighter.stateMachine.currentState
         
-        multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage, sendDataMode: .unreliable) {
+        multiplayerService.sendActionMessage(clientMessage: clientMessage, hostMessage: hostMessage, sendDataMode: .reliable) {
             self.fighter.changePlayerPosition(position: currentPosition)
             self.fighter.repeatCopyMove(originalState: originalState, copy: copy)
         }
@@ -307,11 +307,12 @@ extension MyScene: UpdateSceneDelegate {
             player.walk(inDirectionX: dx)
         }
     }
-    func updatePlayerPosition(playerPosition: CGPoint, from playerID: Int, state: State, directionDx: Int) {
+    func updatePlayerPosition(playerPosition: CGPoint, from playerID: Int, state: State, directionDx: Int, senderTime: Int) {
         if let player = allPlayers[playerID] {
+            
             player.changePlayerPosition(position: playerPosition)
             player.changePlayerState(state: state, inDirectionX: directionDx)
-
+        
         }
         
     }
@@ -368,14 +369,15 @@ extension MyScene: UpdateSceneDelegate {
     }
     
     func showPing(ping: Int, host: GKPlayer) {
+        
         //update Ping every second
-//        let currentDate = Int((Date().timeIntervalSince1970))
-//        if currentDate % 2 == 1 && canSendPing {
-//            pingLabel.text = "ping: \(ping)ms, host player:\(host.alias)"
-//            canSendPing = false
-//        }else if currentDate % 2 != 1{
-//            canSendPing = true
-//        }
+        let currentDate = Int((Date().timeIntervalSince1970))
+        if currentDate % 2 == 1 && canSendPing {
+            pingLabel.text = "ping: \(ping)ms, host player:\(host.alias)"
+            canSendPing = false
+        }else if currentDate % 2 != 1{
+            canSendPing = true
+        }
 
     }
 }

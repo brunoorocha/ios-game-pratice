@@ -224,15 +224,15 @@ extension MultiplayerService: ReceiveDataDelegate {
             updateSceneDelegate?.updatePlayerMove(dx: position, from: playerID)
            
         //PLAYER POSITION
-        case .sendPositionRequest(let position, let state, let directionDx):
+        case .sendPositionRequest(let position, let state, let directionDx, let senderTime):
             if host == GKLocalPlayer.local {
-                updateSceneDelegate?.updatePlayerPosition(playerPosition: position, from: playerIDInt, state: state, directionDx: directionDx)
+                updateSceneDelegate?.updatePlayerPosition(playerPosition: position, from: playerIDInt, state: state, directionDx: directionDx, senderTime: senderTime)
             }
-            let data = Message(messageType: .sendPositionResponse(playerID: playerIDInt, position: position, state: state, directionDx: directionDx))
+            let data = Message(messageType: .sendPositionResponse(playerID: playerIDInt, position: position, state: state, directionDx: directionDx, senderTime: senderTime))
             MultiplayerService.shared.sendData(data: data, sendDataMode: .unreliable)
             
-        case .sendPositionResponse(let playerID, let position, let state, let directionDx):
-            updateSceneDelegate?.updatePlayerPosition(playerPosition: position, from: playerID, state: state, directionDx: directionDx)
+        case .sendPositionResponse(let playerID, let position, let state, let directionDx, let senderTime):
+            updateSceneDelegate?.updatePlayerPosition(playerPosition: position, from: playerID, state: state, directionDx: directionDx, senderTime: senderTime)
         
         //STOP PLAYER
         case .sendStopRequest(let position):

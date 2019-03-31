@@ -292,6 +292,7 @@ class Fighter: GKEntity {
         if let original = self.playerOriginal {
             if !original.canControl {return}
         }
+        
         let move = SKAction.move(to: position, duration: 0.05)
         if let node = self.component(ofType: SpriteComponent.self)?.node {
             node.run(move)
@@ -357,7 +358,6 @@ class Fighter: GKEntity {
             guard let node = self.component(ofType: SpriteComponent.self)?.node else { return }
             if !(comboList()){
                 self.stateMachine.enter(FighterIdleState.self)
-                print("isCopy", self.isCopy)
                 self.stateMachine.enter(FighterJumpState.self)
             }
             node.physicsBody?.velocity.dy = 0.0
