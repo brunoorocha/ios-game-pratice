@@ -17,10 +17,11 @@ class LoseState: GKState {
     }
     
     override func isValidNextState(_ stateClass: AnyClass) -> Bool {
-        return true
+        return !(stateClass is LoseState.Type)
     }
     
     override func didEnter(from previousState: GKState?) {
+        
         guard let camera = self.scene.camera, let view = self.scene.view else { return }
         
         if (!self.scene.isControlsVisible) {
@@ -28,9 +29,10 @@ class LoseState: GKState {
         }
         
         let background = SKShapeNode(rectOf: view.frame.size)
-        background.fillColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.8)
-        background.strokeColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.8)
+        background.fillColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
+        background.strokeColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
         background.zPosition = 20
+        background.alpha = 0
         
         let titleLabel = SKLabelNode(text: "YOU DIED ☠️")
         titleLabel.fontName = "Rubik Bold"
@@ -40,6 +42,15 @@ class LoseState: GKState {
         titleLabel.zPosition = 20
         
         let marginTop: CGFloat = 56.0
+        
+        let watchButton = ButtonNode.makeButton(withText: "KEEP WATCHING")
+        watchButton.position.y = -marginTop
+        watchButton.zPosition = 20
+        watchButton.actionBlock = {
+            background.run(SKAction.fadeAlpha(to: 0, duration: 0.5)) {
+                background.removeFromParent()
+            }
+        }
         
         let returnButton = ButtonNode.makeButton(withText: "RETURN TO MENU")
         returnButton.position.y = -(marginTop + returnButton.size.height + 20)
@@ -52,8 +63,12 @@ class LoseState: GKState {
             view.presentScene(menuScene, transition: fadeTransition)
         }
         
+        background.addChild(watchButton)
         background.addChild(returnButton)
         background.addChild(titleLabel)
         camera.addChild(background)
+        background.run(SKAction.fadeAlpha(to: 1.0, duration: 0.5)) {
+            self.stateMachine?.enter(WatchingState.self)
+        }
     }
 }

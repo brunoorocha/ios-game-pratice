@@ -33,7 +33,7 @@ class MyScene: SKScene {
     
     var isControlsVisible: Bool = PlayerDefaults.isControlsVisible
     var isSoundEnabled: Bool = PlayerDefaults.isSoundEnabled
-
+    var isWatchingMode = false
     var map: Map1!
     
     override func didMove(to view: SKView) {
@@ -84,8 +84,9 @@ class MyScene: SKScene {
         let fightingState = FightingState(withScene: self)
         let pausedState = PausedState(withScene: self)
         let loseState = LoseState(withScene: self)
+        let watchingState = WatchingState(withScene: self)
         
-        self.stateMachine = GKStateMachine(states: [prepareState, fightingState, pausedState, loseState])
+        self.stateMachine = GKStateMachine(states: [prepareState, fightingState, pausedState, loseState, watchingState])
 
         self.stateMachine.enter(PrepareFightState.self)
 //        self.stateMachine.enter(FightingState.self)
@@ -171,10 +172,11 @@ class MyScene: SKScene {
         
         self.fighterCopy.update(deltaTime: currentTime)
         
-        
-        guard let node = self.fighter.component(ofType: SpriteComponent.self)?.node else {return}
-        let move = SKAction.move(to: node.position, duration: 0.3)
-        self.camera?.run(move)
+        if (!self.isWatchingMode) {
+            guard let node = self.fighter.component(ofType: SpriteComponent.self)?.node else {return}
+            let move = SKAction.move(to: node.position, duration: 0.3)
+            self.camera?.run(move)
+        }
         
         
         //Send Ping request every frame
