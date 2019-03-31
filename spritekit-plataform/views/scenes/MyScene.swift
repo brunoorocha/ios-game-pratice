@@ -55,6 +55,7 @@ class MyScene: SKScene {
         }
         
         // Sounds
+        SoundManager.shared().removeFromParent()
         self.addChild(SoundManager.shared())
         
         // Temporarily
