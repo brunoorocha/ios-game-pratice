@@ -33,7 +33,7 @@ class MyScene: SKScene {
     
     var isControlsVisible: Bool = PlayerDefaults.isControlsVisible
     var isSoundEnabled: Bool = PlayerDefaults.isSoundEnabled
-
+    var isWatchingMode = false
     var map: Map1!
     
     override func didMove(to view: SKView) {
@@ -84,7 +84,10 @@ class MyScene: SKScene {
         let prepareState = PrepareFightState(withScene: self)
         let fightingState = FightingState(withScene: self)
         let pausedState = PausedState(withScene: self)
-        self.stateMachine = GKStateMachine(states: [prepareState, fightingState, pausedState])
+        let loseState = LoseState(withScene: self)
+        let watchingState = WatchingState(withScene: self)
+        
+        self.stateMachine = GKStateMachine(states: [prepareState, fightingState, pausedState, loseState, watchingState])
 
         self.stateMachine.enter(PrepareFightState.self)
 //        self.stateMachine.enter(FightingState.self)
@@ -170,10 +173,11 @@ class MyScene: SKScene {
         
         self.fighterCopy.update(deltaTime: currentTime)
         
-        
-        guard let node = self.fighter.component(ofType: SpriteComponent.self)?.node else {return}
-        let move = SKAction.move(to: node.position, duration: 0.3)
-        self.camera?.run(move)
+        if (!self.isWatchingMode) {
+            guard let node = self.fighter.component(ofType: SpriteComponent.self)?.node else {return}
+            let move = SKAction.move(to: node.position, duration: 0.3)
+            self.camera?.run(move)
+        }
         
         
         //Send Ping request every frame
@@ -288,7 +292,8 @@ extension MyScene: GesturePadDelegate {
 extension MyScene: SKPhysicsContactDelegate {
     func didBegin(_ contact: SKPhysicsContact) {
         let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
-        if ( collision == CategoryMask.player | CategoryMask.suicideArea ) {
+        if ( collision == CategoryMask.player | CategoryMask.suicideArea ) {            
+            self.stateMachine.enter(LoseState.self)
             print("Commited suicide")
             let playerNode = contact.bodyA.categoryBitMask == CategoryMask.player ? contact.bodyA.node : contact.bodyB.node
             self.fighters.forEach({
