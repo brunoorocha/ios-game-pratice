@@ -26,7 +26,7 @@ class WatchingState: GKState {
 //        watchingCamera.setScale(1.0)
         watchingCamera.run(
             .group([
-                .move(to: CGPoint.zero, duration: 1.0),
+                .move(to: CGPoint(x: 0, y: 100), duration: 1.0),
                 .scale(to: 1.2, duration: 1.0)
             ])
         )
