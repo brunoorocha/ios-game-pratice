@@ -1,17 +1,17 @@
 //
-//  LoseState.swift
+//  EndState.swift
 //  spritekit-plataform
 //
-//  Created by Bruno Rocha on 29/03/19.
+//  Created by João Paulo de Oliveira Sabino on 31/03/19.
 //  Copyright © 2019 Bruno Rocha. All rights reserved.
 //
 
 import SpriteKit
 import GameplayKit
 
-class LoseState: GKState {
+class EndState: GKState {
     var scene: MyScene!
-    var killerAlias: String?
+    var winnerAlias: String?
     init(withScene scene: MyScene) {
         self.scene = scene
     }
@@ -34,20 +34,19 @@ class LoseState: GKState {
         background.zPosition = 20
         background.alpha = 0
         
-        let titleLabel = SKLabelNode(text: "YOU DIED ☠️")
+        let titleLabel = SKLabelNode(text: "END GAME!")
         titleLabel.fontName = "Rubik Bold"
         titleLabel.color = .white
-        titleLabel.fontSize = 32
+        titleLabel.fontSize = 18
         titleLabel.position.y = 24
         titleLabel.zPosition = 20
         
         
-        
-        if let killer = killerAlias {
-            let subTitleLabel = SKLabelNode(text: "Killer: \(killer)")
+        if let winner = winnerAlias {
+            let subTitleLabel = SKLabelNode(text: "WINNER: \(winner)")
             subTitleLabel.fontName = "Rubik Bold"
             subTitleLabel.color = .white
-            subTitleLabel.fontSize = 20
+            subTitleLabel.fontSize = 32
             subTitleLabel.position.y = -15
             subTitleLabel.zPosition = 20
             background.addChild(subTitleLabel)
@@ -55,14 +54,6 @@ class LoseState: GKState {
         
         let marginTop: CGFloat = 56.0
         
-        let watchButton = ButtonNode.makeButton(withText: "KEEP WATCHING")
-        watchButton.position.y = -marginTop
-        watchButton.zPosition = 20
-        watchButton.actionBlock = {
-            background.run(SKAction.fadeAlpha(to: 0, duration: 0.5)) {
-                background.removeFromParent()
-            }
-        }
         
         let returnButton = ButtonNode.makeButton(withText: "RETURN TO MENU")
         returnButton.position.y = -(marginTop + returnButton.size.height + 20)
@@ -76,11 +67,10 @@ class LoseState: GKState {
             GameCenterService.shared.currentMatch?.disconnect()
         }
         
-        background.addChild(watchButton)
         background.addChild(returnButton)
         background.addChild(titleLabel)
         camera.addChild(background)
-        background.run(SKAction.fadeAlpha(to: 1.0, duration: 0.5)) {
+        background.run(SKAction.fadeAlpha(to: 1, duration: 0.5)) {
             self.stateMachine?.enter(WatchingState.self)
         }
     }

@@ -106,8 +106,7 @@ class MultiplayerService: NSObject {
             
             if let node = player.component(ofType: SpriteComponent.self)?.node {
                 node.physicsBody?.isDynamic = false;
-                node.physicsBody?.categoryBitMask = CategoryMask.none;
-                node.physicsBody?.collisionBitMask = CategoryMask.none;
+
             }
             
             let playerCopy = Fighter(playerID: GKLocalPlayer.local.playerID, playerAlias: GKLocalPlayer.local.alias)
@@ -119,10 +118,8 @@ class MultiplayerService: NSObject {
             scene.entityManager.add(entity: playerCopy)
             scene.fighterCopy = playerCopy
     
-            if let _ = playerCopy.component(ofType: SpriteComponent.self)?.node {
-                //uncomment this lines to activate collision between players
-                //node.physicsBody?.categoryBitMask = CategoryMask.playerCopy
-                //node.physicsBody?.collisionBitMask = CategoryMask.player
+            if let nodeCopy = playerCopy.component(ofType: SpriteComponent.self)?.node {
+                nodeCopy.physicsBody?.categoryBitMask = CategoryMask.playerCopy
             }
         }else{
             
@@ -136,8 +133,7 @@ class MultiplayerService: NSObject {
 
             if let node = player.component(ofType: SpriteComponent.self)?.node {
                 node.physicsBody?.isDynamic = false;
-                node.physicsBody?.categoryBitMask = CategoryMask.none;
-                node.physicsBody?.collisionBitMask = CategoryMask.none;
+                
             }
             
             let playerCopy = Fighter(playerID: GKLocalPlayer.local.playerID, playerAlias: GKLocalPlayer.local.alias)
@@ -147,9 +143,21 @@ class MultiplayerService: NSObject {
             scene.entityManager.add(entity: playerCopy)
             scene.fighterCopy = playerCopy
 
+            if let nodeCopy = playerCopy.component(ofType: SpriteComponent.self)?.node {
+                nodeCopy.physicsBody?.categoryBitMask = CategoryMask.playerCopy
+                //nodeCopy.physicsBody?.contactTestBitMask = CategoryMask.none
+                //nodeCopy.physicsBody?.collisionBitMask = CategoryMask.none
+            }
+            
             let player2 = Fighter(playerID: "1234", playerAlias: "MOCK")
+
             allPlayers[1234] = player2
             scene.entityManager.add(entity: player2)
+            
+            if let node2 = player2.component(ofType: SpriteComponent.self)?.node {
+                node2.physicsBody?.isDynamic = false;
+                node2.position.y = -28
+            }
 
         }
         return allPlayers

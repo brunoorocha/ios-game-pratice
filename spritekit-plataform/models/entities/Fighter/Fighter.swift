@@ -56,6 +56,8 @@ class Fighter: GKEntity {
             }
         }
     }
+    var lastAttackPlayer: Fighter?
+    var countKills : Int = 0
     var damage : CGFloat = 10
     var forcePush : CGFloat = 5
     var jumpForce: CGFloat = 12.0
@@ -184,6 +186,7 @@ class Fighter: GKEntity {
             node.physicsBody?.collisionBitMask = CategoryMask.ground
             node.physicsBody?.collisionBitMask &= ~CategoryMask.player
             node.physicsBody?.collisionBitMask &= ~CategoryMask.suicideArea
+    
         }
     }
     
@@ -404,8 +407,10 @@ class Fighter: GKEntity {
             let damageArea = self.insertDamageArea(node: node)
             // Filter for fights to hit
             for (i, fighter) in scene.allPlayers.enumerated() {
+                
                 if let fighterNode = fighter.value.component(ofType: SpriteComponent.self)?.node {
-                    if fighterNode.intersects(damageArea) && fighter.value.playerID != self.playerID {
+                    if fighterNode.intersects(damageArea) && fighter.value.playerID != self.playerID && fighter.value.health > 0 {
+                        fighter.value.lastAttackPlayer = self //set last attacker, if player dies, last attacker is the killer
                         playersHitted[i] = fighter.value.playerID.toInt()
                         //fighter.receiveDamage(damage: self.damage)
                     }
@@ -480,6 +485,7 @@ class Fighter: GKEntity {
     }
     
     func suicide(){
+        self.health = 0
         self.stateMachine?.enter(FighterDieState.self)
     }
     

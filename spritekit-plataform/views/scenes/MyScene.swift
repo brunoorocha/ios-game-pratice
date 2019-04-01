@@ -75,7 +75,7 @@ class MyScene: SKScene {
         }
         
         if let nodeCopy = self.fighterCopy.component(ofType: SpriteComponent.self)?.node  {
-            nodeCopy.alpha = 0.01;
+            nodeCopy.alpha = 0.5;
             self.playerNodeCopy = nodeCopy
         }
         
@@ -89,11 +89,11 @@ class MyScene: SKScene {
         let pausedState = PausedState(withScene: self)
         let loseState = LoseState(withScene: self)
         let watchingState = WatchingState(withScene: self)
+        let endState = EndState(withScene: self)
+        self.stateMachine = GKStateMachine(states: [prepareState, fightingState, pausedState, loseState, watchingState, endState])
         
-        self.stateMachine = GKStateMachine(states: [prepareState, fightingState, pausedState, loseState, watchingState])
-
         self.stateMachine.enter(PrepareFightState.self)
-//        self.stateMachine.enter(FightingState.self)
+        //self.stateMachine.enter(FightingState.self)
     }
     
     func configurePhysics() {
@@ -116,15 +116,19 @@ class MyScene: SKScene {
     
     private func suicideArea(){
         let width = self.size.width*5
-        let area = SKShapeNode(rect: CGRect(x: (-self.size.width/2 - width/2), y: -self.size.height/2 - 20, width: width, height: 0))
-        area.fillColor = .lightGray
-        area.physicsBody = SKPhysicsBody(edgeLoopFrom: area.frame)
+        let area = SKSpriteNode(color: .red, size: CGSize(width: width, height: 10))
+        area.position = CGPoint(x: 0, y: -self.size.height/2 - 20)
+        area.physicsBody = SKPhysicsBody(rectangleOf: area.size)
         area.physicsBody?.categoryBitMask = CategoryMask.suicideArea
         area.physicsBody?.contactTestBitMask = CategoryMask.player
+        area.physicsBody?.collisionBitMask = CategoryMask.none
+        area.physicsBody?.usesPreciseCollisionDetection = true
         area.physicsBody?.affectedByGravity = false
+        area.physicsBody?.allowsRotation = false
         area.physicsBody?.restitution = 0
         area.physicsBody?.friction = 0
-        area.isHidden = true
+        area.zPosition = 40
+        area.alpha = 0.01
         self.addChild(area)
     }
     
@@ -200,6 +204,10 @@ class MyScene: SKScene {
         nodePosition = nodeCopy.position
         self.map.updateParallaxBackground()
 
+//        self.allPlayers.forEach { (i,fighter) in
+//            print("\(fighter.playerAlias) kills: \(fighter.countKills)")
+//        }
+        
     }
     
     func copyStatesAndSend() {
@@ -215,13 +223,14 @@ class MyScene: SKScene {
         let originalState = self.fighter.stateMachine.currentState
         
         multiplayerService.sendActionMessage(isMoving: true, clientMessage: clientMessage, hostMessage: hostMessage, sendDataMode: .unreliable) {
+            
             self.fighter.changePlayerPosition(position: currentPosition)
             self.fighter.repeatCopyMove(originalState: originalState, copy: copy)
         }
     }
     
     func attackTap() {
-        
+        if self.fighter.health <= 0 {return}
         let hittedPlayersArray = self.fighterCopy.attack(playAnim: true)
         var hittedPlayers = HittedPlayers()
         
@@ -241,12 +250,32 @@ class MyScene: SKScene {
                 let _ = self.fighter.attack(playAnim: true)
                 if let hittedPlayer = self.allPlayers[playerID] {
                     hittedPlayer.receiveDamage(damage: self.fighter.damage)
-                        if self.fighterCopy.stateMachine.currentState is FighterAttack3State {
-                            //hittedPlayer.reiceivePushDamage(force: self.fighterCopy.forcePush, direction: self.fighterCopy.fighterDirection)
-                        }
+                    if hittedPlayer.health <= 0 {
+                        self.fighter.countKills += 1
+                        let _ = self.checkForWinner()
+                    }
                 }
             }
         }
+    }
+    
+    func checkForWinner() -> Bool {
+        var playersLive: Int = 0
+        var winnerPlayer: Fighter?
+        self.allPlayers.forEach { (i,fighter) in
+            if fighter.health > 0 {
+                winnerPlayer = fighter
+                playersLive += 1
+            }
+        }
+        print("playerLive: \(playersLive)")
+        if playersLive == 1, let winner = winnerPlayer  {
+            self.stateMachine.state(forClass: EndState.self)?.winnerAlias = winner.playerAlias
+            self.stateMachine.enter(EndState.self)
+            return true
+        }
+        
+        return false
     }
     
     func showBackButton() {
@@ -295,17 +324,26 @@ extension MyScene: GesturePadDelegate {
 extension MyScene: SKPhysicsContactDelegate {
     func didBegin(_ contact: SKPhysicsContact) {
         let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
-        if ( collision == CategoryMask.player | CategoryMask.suicideArea ) {            
-            self.stateMachine.enter(LoseState.self)
+        
+        if ( collision == CategoryMask.player | CategoryMask.suicideArea ) {
+            if let killer = self.fighter.lastAttackPlayer {
+                self.stateMachine.state(forClass: LoseState.self)?.killerAlias = killer.playerAlias
+            }
+            
             print("Commited suicide")
             let playerNode = contact.bodyA.categoryBitMask == CategoryMask.player ? contact.bodyA.node : contact.bodyB.node
-            self.fighters.forEach({
-                if let node = $0.component(ofType: SpriteComponent.self)?.node {
-                    if (node == playerNode){
-                        $0.suicide()
-                    }
+            
+            
+            self.allPlayers.forEach { (i,fighter) in
+                if let node = fighter.component(ofType: SpriteComponent.self)?.node, node == playerNode {
+                        print("suicide")
+                        fighter.suicide()
                 }
-            })
+            }
+
+            if !self.checkForWinner() {
+                self.stateMachine.enter(LoseState.self)
+            }
         }
     }
 }
@@ -347,7 +385,7 @@ extension MyScene: UpdateSceneDelegate {
     }
     
     func updateAttackPlayerRequest(attackerID: Int) -> [Int] {
-        if let player = allPlayers[attackerID] {
+        if let player = allPlayers[attackerID], player.health > 0 {
             return player.attack(playAnim: false)
         }
         
@@ -364,11 +402,27 @@ extension MyScene: UpdateSceneDelegate {
         receivedAttackIDs.forEach { (playerID) in
             if let hittedPlayer = allPlayers[playerID] {
                 hittedPlayer.receiveDamage(damage: attackerPlayer.damage)
-//                if let attacker = self.allPlayers[self.selfPlayerID]{
-//                    if attacker.stateMachine.currentState is FighterAttack3State{
-//                        //hittedPlayer.reiceivePushDamage(force: attacker.forcePush, direction: attacker.fighterDirection)
-//                    }
-//                }
+                
+                if hittedPlayer.health <= 0 && hittedPlayer.playerID == GKLocalPlayer.local.playerID {
+                    if let hittedNodeCopy = self.fighterCopy.component(ofType: SpriteComponent.self)?.node {
+                        self.run(SKAction.wait(forDuration: 1)) {
+                            hittedNodeCopy.removeFromParent()
+                        }
+                    }
+                    attackerPlayer.countKills += 1
+                    
+                    if let killer = hittedPlayer.lastAttackPlayer {
+                        self.stateMachine.state(forClass: LoseState.self)?.killerAlias = killer.playerAlias
+                    }
+                    
+                    if !self.checkForWinner() {
+                        self.stateMachine.enter(LoseState.self)
+                    }
+                    
+                }
+        
+                let _ = self.checkForWinner()
+                
                 if hittedPlayer.playerID == GKLocalPlayer.local.playerID && state == .attack3 {
                     guard let attacker = self.allPlayers[attackerID] else {return}
                     self.fighterCopy.reiceivePushDamage(force: attacker.forcePush, direction: attacker.fighterDirection)
