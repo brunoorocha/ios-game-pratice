@@ -101,13 +101,13 @@ extension GameCenterService: GKMatchDelegate {
             if case .startGame(let randomNumber) = d.messageType {
                 
                 MultiplayerService.shared.addPlayer(with: player.playerID, randomNumber: randomNumber)
-            
-                let allPlayersIsInTheMatch: Bool = match.players.count >= MultiplayerService.shared.allPlayers.count - 1
-                
-                if allPlayersIsInTheMatch {
-                    
-                    MultiplayerService.shared.setHostPlayer()
-                }
+                MultiplayerService.shared.setHostPlayer()
+//                let allPlayersIsInTheMatch: Bool = match.players.count >= MultiplayerService.shared.allPlayers.count - 1
+//
+//                if allPlayersIsInTheMatch {
+//
+//
+//                }
                 
             }
         }

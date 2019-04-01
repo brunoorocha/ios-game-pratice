@@ -31,7 +31,7 @@ class EndState: GKState {
         let background = SKShapeNode(rectOf: view.frame.size)
         background.fillColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
         background.strokeColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
-        background.zPosition = 20
+        background.zPosition = 40
         background.alpha = 0
         
         let titleLabel = SKLabelNode(text: "END GAME!")
@@ -39,7 +39,7 @@ class EndState: GKState {
         titleLabel.color = .white
         titleLabel.fontSize = 18
         titleLabel.position.y = 24
-        titleLabel.zPosition = 20
+        titleLabel.zPosition = 41
         
         
         if let winner = winnerAlias {
@@ -48,7 +48,7 @@ class EndState: GKState {
             subTitleLabel.color = .white
             subTitleLabel.fontSize = 32
             subTitleLabel.position.y = -15
-            subTitleLabel.zPosition = 20
+            subTitleLabel.zPosition = 41
             background.addChild(subTitleLabel)
         }
         
@@ -57,7 +57,7 @@ class EndState: GKState {
         
         let returnButton = ButtonNode.makeButton(withText: "RETURN TO MENU")
         returnButton.position.y = -(marginTop + returnButton.size.height + 20)
-        returnButton.zPosition = 20
+        returnButton.zPosition = 41
         returnButton.actionBlock = {
             let menuScene = MenuScene(size: view.frame.size)
             menuScene.anchorPoint = CGPoint(x: 0.5, y: 0.5)

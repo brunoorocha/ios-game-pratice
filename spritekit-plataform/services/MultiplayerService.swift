@@ -187,9 +187,8 @@ class MultiplayerService: NSObject {
     
     func setHostPlayer(){
         
-        guard let hostPlayerID = (allPlayers.sorted { $0.1 < $1.1 }).first?.key else {return}
+        guard let hostPlayerID = allPlayers.sorted(by: <).first?.key else {return}
 
-        
         
         GKPlayer.loadPlayers(forIdentifiers: [hostPlayerID]) { (players, error) in
             if let host = players?.first {

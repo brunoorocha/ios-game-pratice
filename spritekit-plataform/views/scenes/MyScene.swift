@@ -43,7 +43,7 @@ class MyScene: SKScene {
         self.entityManager = EntityManager(withScene: self)
         self.configureCamera()
         self.configureStates()
-        self.configureUI()
+        //self.configureUI()
         self.configurePhysics()
         self.suicideArea()
         self.showBackButton()
@@ -444,13 +444,13 @@ extension MyScene: UpdateSceneDelegate {
     func showPing(ping: Int, host: GKPlayer) {
         
         //update Ping every second
-        let currentDate = Int((Date().timeIntervalSince1970))
-        if currentDate % 2 == 1 && canSendPing {
-            pingLabel.text = "ping: \(ping)ms, host player:\(host.alias)"
-            canSendPing = false
-        }else if currentDate % 2 != 1{
-            canSendPing = true
-        }
+//        let currentDate = Int((Date().timeIntervalSince1970))
+//        if currentDate % 2 == 1 && canSendPing {
+//            pingLabel.text = "ping: \(ping)ms, host player:\(host.alias)"
+//            canSendPing = false
+//        }else if currentDate % 2 != 1{
+//            canSendPing = true
+//        }
 
     }
 }
