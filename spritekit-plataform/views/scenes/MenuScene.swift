@@ -97,9 +97,9 @@ class MenuScene: SKScene {
     func setupUserNickname() {
         if (PlayerDefaults.playerAlias == "") { return }
         
-        guard let skView = self.view else {return}
-        let topLeftCornerX = -((skView.frame.width) / 2)
-        let topLeftCornerY = ((skView.frame.height) / 2)
+        guard let view = self.view else { return }
+        let topLeftCornerX = -(view.frame.width / 2)
+        let topLeftCornerY = (view.frame.height / 2)
         let userIcon = SKSpriteNode(texture: SKTexture(imageNamed: "user-icon"), size: CGSize(width: 24, height: 24))
         userIcon.position.x = topLeftCornerX + 48
         userIcon.position.y = topLeftCornerY - 40
