@@ -35,9 +35,9 @@ class Map1 {
     }
 	
 	private func drawBackground(_ background: String, withLayer layer: Int) {
-		let parallaxNode = SKSpriteNode(texture: SKTexture(imageNamed: "sky"))
+		let parallaxNode = SKSpriteNode(texture: SKTexture(imageNamed: background))
 		parallaxNode.size.height = self.scene.size.height
-		parallaxNode.setScale(1.2)
+		parallaxNode.setScale(1.4)
 		parallaxNode.position = CGPoint(x: 0, y: 50)
 		parallaxNode.texture?.filteringMode = .nearest
 		parallaxNode.zPosition = CGFloat(layer)
