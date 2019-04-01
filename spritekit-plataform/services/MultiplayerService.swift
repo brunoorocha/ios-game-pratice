@@ -31,6 +31,7 @@ class MultiplayerService: NSObject {
     }
     
     func setRandomNumber(){
+        allPlayers = [String : Float]()
         let randomNumber = GKRandomSource.sharedRandom().nextUniform()
         allPlayers[GKLocalPlayer.local.playerID] = randomNumber
     }
@@ -189,8 +190,12 @@ class MultiplayerService: NSObject {
         guard let hostPlayerID = (allPlayers.sorted { $0.1 < $1.1 }).first?.key else {return}
 
         
+        
         GKPlayer.loadPlayers(forIdentifiers: [hostPlayerID]) { (players, error) in
-            self.hostPlayer = (players?.first)!
+            if let host = players?.first {
+                self.hostPlayer = host
+            }
+
         }
         
     }

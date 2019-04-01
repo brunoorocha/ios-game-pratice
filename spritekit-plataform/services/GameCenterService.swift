@@ -105,6 +105,7 @@ extension GameCenterService: GKMatchDelegate {
                 let allPlayersIsInTheMatch: Bool = match.players.count >= MultiplayerService.shared.allPlayers.count - 1
                 
                 if allPlayersIsInTheMatch {
+                    
                     MultiplayerService.shared.setHostPlayer()
                 }
                 

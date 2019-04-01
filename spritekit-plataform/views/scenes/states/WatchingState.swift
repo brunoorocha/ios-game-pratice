@@ -17,7 +17,7 @@ class WatchingState: GKState {
     }
     
     override func isValidNextState(_ stateClass: AnyClass) -> Bool {
-        return stateClass is PausedState.Type
+        return stateClass is PausedState.Type || stateClass is EndState.Type
     }
     
     override func didEnter(from previousState: GKState?) {

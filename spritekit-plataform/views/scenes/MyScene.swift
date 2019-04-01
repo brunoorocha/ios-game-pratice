@@ -43,7 +43,7 @@ class MyScene: SKScene {
         self.entityManager = EntityManager(withScene: self)
         self.configureCamera()
         self.configureStates()
-        //self.configureUI()
+        self.configureUI()
         self.configurePhysics()
         self.suicideArea()
         self.showBackButton()
@@ -75,7 +75,7 @@ class MyScene: SKScene {
         }
         
         if let nodeCopy = self.fighterCopy.component(ofType: SpriteComponent.self)?.node  {
-            nodeCopy.alpha = 0.5;
+            nodeCopy.alpha = 0.01;
             self.playerNodeCopy = nodeCopy
         }
         
@@ -183,6 +183,12 @@ class MyScene: SKScene {
             guard let node = self.fighter.component(ofType: SpriteComponent.self)?.node else {return}
             let move = SKAction.move(to: node.position, duration: 0.3)
             self.camera?.run(move)
+            
+            
+        }else{
+            if let controller = inputController {
+                controller.alpha = 0.01
+            }
         }
         
         
@@ -270,6 +276,7 @@ class MyScene: SKScene {
         }
         print("playerLive: \(playersLive)")
         if playersLive == 1, let winner = winnerPlayer  {
+            print("winner: \(winner.playerAlias)")
             self.stateMachine.state(forClass: EndState.self)?.winnerAlias = winner.playerAlias
             self.stateMachine.enter(EndState.self)
             return true
@@ -336,14 +343,16 @@ extension MyScene: SKPhysicsContactDelegate {
             
             self.allPlayers.forEach { (i,fighter) in
                 if let node = fighter.component(ofType: SpriteComponent.self)?.node, node == playerNode {
-                        print("suicide")
-                        fighter.suicide()
+                    
+                    fighter.suicide()
+                    
+                    if !self.checkForWinner() && fighter.playerID == GKLocalPlayer.local.playerID {
+                        self.stateMachine.enter(LoseState.self)
+                    }
                 }
             }
 
-            if !self.checkForWinner() {
-                self.stateMachine.enter(LoseState.self)
-            }
+            let _ = checkForWinner()
         }
     }
 }
@@ -435,13 +444,13 @@ extension MyScene: UpdateSceneDelegate {
     func showPing(ping: Int, host: GKPlayer) {
         
         //update Ping every second
-//        let currentDate = Int((Date().timeIntervalSince1970))
-//        if currentDate % 2 == 1 && canSendPing {
-//            pingLabel.text = "ping: \(ping)ms, host player:\(host.alias)"
-//            canSendPing = false
-//        }else if currentDate % 2 != 1{
-//            canSendPing = true
-//        }
+        let currentDate = Int((Date().timeIntervalSince1970))
+        if currentDate % 2 == 1 && canSendPing {
+            pingLabel.text = "ping: \(ping)ms, host player:\(host.alias)"
+            canSendPing = false
+        }else if currentDate % 2 != 1{
+            canSendPing = true
+        }
 
     }
 }
